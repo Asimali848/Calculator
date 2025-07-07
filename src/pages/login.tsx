@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Chrome, LogIn, Mail } from "lucide-react";
+import { LogIn, Mail } from "lucide-react";
 
 import LoginEffect from "@/assets/img/login-image.png";
 import Logo from "@/assets/img/logo.jpeg";
