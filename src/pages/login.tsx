@@ -19,15 +19,15 @@ const Login = () => {
   const isForgot = authMode === "forgot";
 
   return (
-    <div className="grid h-screen w-full grid-cols-2 overflow-hidden">
-      <div className="relative col-span-1 flex h-screen w-full items-center justify-center bg-transparent">
+    <div className="grid h-screen w-full grid-cols-1 overflow-hidden md:grid-cols-2">
+      <div className="relative col-span-1 hidden h-screen w-full items-center justify-center bg-transparent md:flex">
         <img className="h-screen" src={LoginEffect} alt="login-effect" />
       </div>
       <div className="relative flex h-screen w-full items-center justify-center">
         <div className="absolute right-5 top-5">
           <ThemeToggle />
         </div>
-        <form className="flex w-1/2 flex-col items-center justify-center">
+        <form className="flex flex-col items-center justify-center md:w-1/2">
           <img src={Logo} alt="logo" className="w-24 rounded-xl" />
           <div className="my-10 flex w-full flex-col items-center justify-center gap-2.5">
             <span className="w-full text-center text-[30px] font-bold leading-[30px]">

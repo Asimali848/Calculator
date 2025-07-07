@@ -26,7 +26,7 @@ export function CaseList({
   }
 
   return (
-    <Card className="h-full overflow-auto dark:bg-white/10">
+    <Card className="h-full max-h-[calc(100dvh-61px)] overflow-auto dark:bg-white/10">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="text-xl font-bold">Active Cases</CardTitle>
         <Button

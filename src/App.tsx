@@ -12,11 +12,10 @@ const App = () => {
       <Route
         element={
           // <RouteGuard>
-            <GlobalLayout />
+          <GlobalLayout />
           // </RouteGuard>
         }
       >
-        
         <Route path="/home" element={<Home />} />
       </Route>
     </Routes>
