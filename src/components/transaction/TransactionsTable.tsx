@@ -73,48 +73,53 @@ export function TransactionsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.map((transaction) => (
-              <TableRow key={transaction.id} className="hover:bg-muted/50">
-                <TableCell className="font-medium text-green-600">
-                  {formatDate(transaction.date)}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant="secondary"
-                    className={getTransactionTypeColor(transaction.type)}
-                  >
-                    {transaction.type}
-                  </Badge>
-                </TableCell>
-                <TableCell className="font-medium">
-                  {formatCurrency(transaction.amount)}
-                </TableCell>
-                <TableCell className="font-medium">
-                  {formatCurrency(transaction.accruedInterest)}
-                </TableCell>
-                <TableCell className="font-bold">
-                  {formatCurrency(transaction.principalBalance)}
-                </TableCell>
-                <TableCell>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onEditTransaction(transaction)}
+            {transactions
+              .sort(
+                (a, b) =>
+                  new Date(a.date).getTime() - new Date(b.date).getTime()
+              )
+              .map((transaction) => (
+                <TableRow key={transaction.id} className="hover:bg-muted/50">
+                  <TableCell className="font-medium text-green-600">
+                    {formatDate(transaction.date)}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="secondary"
+                      className={getTransactionTypeColor(transaction.type)}
                     >
-                      <Edit className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onDeleteTransaction(transaction.id)}
-                    >
-                      <Trash2 className="h-4 w-4 text-red-500 dark:text-red-400" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                      {transaction.type}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {formatCurrency(transaction.amount)}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {formatCurrency(transaction.accruedInterest)}
+                  </TableCell>
+                  <TableCell className="font-bold">
+                    {formatCurrency(transaction.principalBalance)}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onEditTransaction(transaction)}
+                      >
+                        <Edit className="h-4 w-4 text-green-600 dark:text-green-400" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onDeleteTransaction(transaction.id)}
+                      >
+                        <Trash2 className="h-4 w-4 text-red-500 dark:text-red-400" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </CardContent>
