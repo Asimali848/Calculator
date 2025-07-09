@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -59,8 +59,6 @@ export function TransactionForm({
   caseData,
   editTransaction,
 }: TransactionFormProps) {
-  const [calculatorDisplay, _] = useState("0");
-
   const form = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema as any),
     defaultValues: {
@@ -85,13 +83,6 @@ export function TransactionForm({
       });
     }
   }, [editTransaction, form]);
-
-  const useCalculatorValue = () => {
-    const value = parseFloat(calculatorDisplay);
-    if (!isNaN(value)) {
-      form.setValue("amount", value);
-    }
-  };
 
   // Real-time calculations
   const calculatedInterest = calculateInterest(
@@ -180,14 +171,6 @@ export function TransactionForm({
                             }
                           />
                         </FormControl>
-                        <Button
-                          type="button"
-                          onClick={useCalculatorValue}
-                          variant="outline"
-                          size="sm"
-                        >
-                          Use Calc
-                        </Button>
                       </div>
                       <FormMessage />
                     </FormItem>

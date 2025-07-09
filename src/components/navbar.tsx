@@ -1,7 +1,7 @@
 import { Home, LogOut, UserPen, Wallet } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import logo from "@/assets/img/logo.jpeg";
+import logo from "@/assets/img/logo.png";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -38,13 +38,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="h-fit w-full px-5 text-center">
+    <nav className="h-fit w-full px-5 py-2 text-center">
       <div className="flex items-center justify-between gap-5">
         <div className="flex items-start justify-center gap-2.5">
           <img
             src={logo}
             alt="justicalc"
-            className="size-16 rounded-xl md:size-20"
+            className="h-16 w-full rounded-md p-2 dark:bg-white md:h-20"
           />
         </div>
         <div className="flex w-full items-center justify-end gap-2.5">

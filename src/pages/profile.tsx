@@ -6,17 +6,16 @@ import {
   Calendar,
   Edit,
   Globe,
+  LockKeyholeOpen,
   Mail,
   MapPin,
   Phone,
-  Plus,
   Save,
-  Shield,
   Star,
-  User,
   X,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -73,25 +72,26 @@ type UserProfileFormData = z.infer<typeof userProfileSchema>;
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
-  const [newSpecialty, setNewSpecialty] = useState("");
-  const [availableSpecialties] = useState([
-    "Content Creation",
-    "Social Media",
-    "Marketing",
-    "SEO",
-    "Analytics",
-    "Strategy",
-    "Design",
-    "Copywriting",
-  ]);
+  // const [newSpecialty, setNewSpecialty] = useState("");
+  // const [availableSpecialties] = useState([
+  //   "Content Creation",
+  //   "Social Media",
+  //   "Marketing",
+  //   "SEO",
+  //   "Analytics",
+  //   "Strategy",
+  //   "Design",
+  //   "Copywriting",
+  // ]);
 
   const form = useForm<UserProfileFormData>({
     resolver: zodResolver(userProfileSchema),
     defaultValues: {
-      name: "Task Creator",
-      email: "uploader@taskflow.com",
+      name: "Judgment Calculator",
+      email: "example@gmail.com",
       bio: "Experienced task creator focused on quality content and social media projects.",
       company: "Digital Marketing Agency",
       location: "New York, NY",
@@ -109,40 +109,40 @@ const Profile = () => {
       confirmPassword: "",
     },
   });
-  const watchedSpecialties = form.watch("specialties") || [];
+  // const watchedSpecialties = form.watch("specialties") || [];
 
-  const handleSpecialtyToggle = (specialty: string) => {
-    const currentSpecialties = watchedSpecialties;
-    const updatedSpecialties = currentSpecialties.includes(specialty)
-      ? currentSpecialties.filter((s) => s !== specialty)
-      : [...currentSpecialties, specialty];
+  // const handleSpecialtyToggle = (specialty: string) => {
+  //   const currentSpecialties = watchedSpecialties;
+  //   const updatedSpecialties = currentSpecialties.includes(specialty)
+  //     ? currentSpecialties.filter((s) => s !== specialty)
+  //     : [...currentSpecialties, specialty];
 
-    form.setValue("specialties", updatedSpecialties);
-  };
+  //   form.setValue("specialties", updatedSpecialties);
+  // };
 
-  const handleAddSpecialty = () => {
-    if (
-      newSpecialty.trim() &&
-      !watchedSpecialties.includes(newSpecialty.trim())
-    ) {
-      const updatedSpecialties = [...watchedSpecialties, newSpecialty.trim()];
-      form.setValue("specialties", updatedSpecialties);
-      setNewSpecialty("");
-      toast.success("Specialty added successfully", {
-        className: "bg-primary text-white p-3",
-      });
-    }
-  };
+  // const handleAddSpecialty = () => {
+  //   if (
+  //     newSpecialty.trim() &&
+  //     !watchedSpecialties.includes(newSpecialty.trim())
+  //   ) {
+  //     const updatedSpecialties = [...watchedSpecialties, newSpecialty.trim()];
+  //     form.setValue("specialties", updatedSpecialties);
+  //     setNewSpecialty("");
+  //     toast.success("Specialty added successfully", {
+  //       className: "bg-primary text-white p-3",
+  //     });
+  //   }
+  // };
 
-  const handleRemoveSpecialty = (specialty: string) => {
-    const updatedSpecialties = watchedSpecialties.filter(
-      (s) => s !== specialty
-    );
-    form.setValue("specialties", updatedSpecialties);
-    toast.success("Specialty removed successfully", {
-      className: "bg-primary text-white p-3",
-    });
-  };
+  // const handleRemoveSpecialty = (specialty: string) => {
+  //   const updatedSpecialties = watchedSpecialties.filter(
+  //     (s) => s !== specialty
+  //   );
+  //   form.setValue("specialties", updatedSpecialties);
+  //   toast.success("Specialty removed successfully", {
+  //     className: "bg-primary text-white p-3",
+  //   });
+  // };
   const handleSubmit = (data: UserProfileFormData) => {
     console.log("Profile updated:", data);
     toast.success("Profile updated successfully", {
@@ -155,7 +155,9 @@ const Profile = () => {
     console.log("Password change requested:", {
       currentPassword: data.currentPassword,
     });
-    toast.success("Password changed successfully");
+    toast.success("Password changed successfully", {
+      className: "bg-primary text-white p-3",
+    });
     passwordForm.reset();
     setIsPasswordDialogOpen(false);
   };
@@ -214,40 +216,23 @@ const Profile = () => {
             >
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {/* Left Column - Profile Header */}
-                <div className="space-y-8 lg:col-span-1">
+                <div className="space-y-4 lg:col-span-1">
                   <Card>
                     <CardContent className="pt-6">
-                      <div className="flex flex-col items-center space-y-12 text-center">
+                      <div className="flex flex-col items-center space-y-3 text-center">
                         <Avatar className="h-24 w-24">
-                          <AvatarImage src="" />
+                          <AvatarImage src="https://github.com/leerob.png" />
                           <AvatarFallback className="bg-primary/10 text-2xl text-primary">
                             {getInitials(form.watch("name") || "TC")}
                           </AvatarFallback>
                         </Avatar>
 
-                        <div className="space-y-4">
-                          <div className="flex items-center gap-2">
-                            <Badge
-                              variant="outline"
-                              className="border-blue-200 text-blue-600"
-                            >
-                              <User className="mr-1 h-3 w-3" />
-                              Task Creator
-                            </Badge>
-                            <Badge className="bg-blue-600 text-white">
-                              <Star className="mr-1 h-3 w-3" />
-                              Starter
-                            </Badge>
-                            <Badge className="bg-green-100 text-green-800">
-                              Active
-                            </Badge>
-                          </div>
-
+                        <div className="space-y-2">
                           <h1 className="text-2xl font-bold text-foreground">
                             {form.watch("name")}
                           </h1>
 
-                          <div className="flex items-center gap-2 text-muted-foreground">
+                          <div className="flex items-center justify-center gap-2 text-muted-foreground">
                             <Mail className="h-4 w-4" />
                             <span className="text-sm">
                               {form.watch("email")}
@@ -263,18 +248,30 @@ const Profile = () => {
                     <CardHeader>
                       <CardTitle className="text-lg">Account Details</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-10">
-                      <div>
-                        <h4 className="mb-2 font-medium text-foreground">
-                          Subscription Plan
-                        </h4>
-                        <Badge
-                          variant="outline"
-                          className="border-blue-200 text-blue-600"
+                    <CardContent className="space-y-5">
+                      <div className="">
+                        <div className="flex items-center justify-between">
+                          <h4 className="mb-2 font-medium text-foreground">
+                            Subscription Plan
+                          </h4>
+                          <Badge
+                            variant="outline"
+                            className="border-blue-200 text-blue-600"
+                          >
+                            <Star className="mr-1 h-3 w-3" />
+                            Starter
+                          </Badge>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            navigate("/billing");
+                          }}
+                          type="button"
+                          variant="default"
+                          className=""
                         >
-                          <Star className="mr-1 h-3 w-3" />
-                          Starter
-                        </Badge>
+                          Upgrade the Plan
+                        </Button>
                       </div>
 
                       <div>
@@ -300,8 +297,12 @@ const Profile = () => {
                             onOpenChange={setIsPasswordDialogOpen}
                           >
                             <DialogTrigger asChild>
-                              <Button variant="outline" size="sm">
-                                <Shield className="mr-2 h-4 w-4" />
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="hover:bg-primary hover:text-white"
+                              >
+                                <LockKeyholeOpen className="mr-2 h-4 w-4" />
                                 Change Password
                               </Button>
                             </DialogTrigger>
@@ -329,7 +330,7 @@ const Profile = () => {
                                         <FormControl>
                                           <Input
                                             {...field}
-                                            type="password"
+                                            type="input"
                                             placeholder="Enter current password"
                                           />
                                         </FormControl>
@@ -346,7 +347,7 @@ const Profile = () => {
                                         <FormControl>
                                           <Input
                                             {...field}
-                                            type="password"
+                                            type="input"
                                             placeholder="Enter new password"
                                           />
                                         </FormControl>
@@ -365,7 +366,7 @@ const Profile = () => {
                                         <FormControl>
                                           <Input
                                             {...field}
-                                            type="password"
+                                            type="input"
                                             placeholder="Confirm new password"
                                           />
                                         </FormControl>
@@ -399,14 +400,14 @@ const Profile = () => {
                 </div>
 
                 {/* Right Column - Personal Information */}
-                <div className="space-y-6 lg:col-span-2">
+                <div className="h-full space-y-6 lg:col-span-2">
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-xl">
                         Personal Information
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="space-y-10 pb-8">
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <FormField
                           control={form.control}
@@ -550,9 +551,9 @@ const Profile = () => {
                           control={form.control}
                           name="bio"
                           render={({ field }) => (
-                            <FormItem>
+                            <FormItem className="col-span-2 pt-4">
                               <FormLabel>Bio</FormLabel>
-                              <FormControl className="col-span-2">
+                              <FormControl>
                                 <Textarea
                                   {...field}
                                   placeholder="Tell us about yourself..."
@@ -572,7 +573,7 @@ const Profile = () => {
                   </Card>
 
                   {/* Specialties */}
-                  <Card>
+                  {/* <Card>
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-xl">Specialties</CardTitle>
@@ -609,7 +610,6 @@ const Profile = () => {
                         render={() => (
                           <FormItem>
                             <div className="flex flex-wrap gap-2">
-                              {/* User's current specialties */}
                               {watchedSpecialties.map((specialty) => (
                                 <Badge
                                   key={specialty}
@@ -634,7 +634,6 @@ const Profile = () => {
                                 </Badge>
                               ))}
 
-                              {/* Available specialties to add (only show in edit mode) */}
                               {isEditing &&
                                 availableSpecialties
                                   .filter(
@@ -660,7 +659,7 @@ const Profile = () => {
                         )}
                       />
                     </CardContent>
-                  </Card>
+                  </Card> */}
                 </div>
               </div>
             </form>
