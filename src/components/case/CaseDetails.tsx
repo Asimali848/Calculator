@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { formatCurrency, formatDate } from "@/lib/calculations";
-import { CaseData } from "@/types/case";
 
 interface CaseDetailsProps {
   case: CaseData;

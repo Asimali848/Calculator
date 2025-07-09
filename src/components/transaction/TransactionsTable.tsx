@@ -12,7 +12,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrency, formatDate } from "@/lib/calculations";
-import { Transaction } from "@/types/case";
 
 interface TransactionsTableProps {
   transactions: Transaction[];

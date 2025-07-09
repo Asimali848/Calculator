@@ -35,7 +35,6 @@ import {
   calculateNewBalance,
   formatCurrency,
 } from "@/lib/calculations";
-import { CaseData, Transaction, TransactionFormData } from "@/types/case";
 
 const transactionSchema = z.object({
   type: z.enum(["PAYMENT", "COST", "INTEREST"]),
