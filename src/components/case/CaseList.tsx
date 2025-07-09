@@ -2,7 +2,6 @@ import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CaseData } from "@/types/case";
 
 import { CaseCard } from "./CaseCard";
 import { EmptyState } from "./EmptyState";

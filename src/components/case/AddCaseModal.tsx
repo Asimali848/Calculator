@@ -24,10 +24,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/calculations";
-import { CaseData } from "@/types/case";
 
 const caseSchema = z.object({
   caseName: z.string().min(1, "Case name is required"),
+  courtName: z.string().min(1, "Court name is required"), // ✅ New field
   courtCaseNumber: z.string().min(1, "Court case number is required"),
   judgmentAmount: z
     .number()
@@ -67,6 +67,7 @@ export function AddCaseModal({
     resolver: zodResolver(caseSchema),
     defaultValues: {
       caseName: "",
+      courtName: "", // ✅
       courtCaseNumber: "",
       judgmentAmount: 0,
       interestRate: 10,
@@ -79,12 +80,13 @@ export function AddCaseModal({
 
   const watchedValues = form.watch();
 
-  // Calculate results when form values change
   React.useEffect(() => {
-    const judgmentAmount = watchedValues.judgmentAmount || 0;
-    const interestRate = watchedValues.interestRate || 10;
-    const paymentAmount = watchedValues.paymentAmount || 0;
-    const cost = watchedValues.cost || 0;
+    const {
+      judgmentAmount = 0,
+      interestRate = 10,
+      paymentAmount = 0,
+      cost = 0,
+    } = watchedValues;
     const judgmentDate = new Date(watchedValues.judgmentDate || new Date());
     const endDate = new Date(watchedValues.endDate || new Date());
 
@@ -98,8 +100,7 @@ export function AddCaseModal({
     const interestAccrued = dailyInterest * days;
     const principalReduction = paymentAmount;
     const principalBalance = judgmentAmount - principalReduction + cost;
-    const interestToDate = interestAccrued;
-    const totalInterest = interestToDate;
+    const totalInterest = interestAccrued;
     const grandTotal = principalBalance + totalInterest;
 
     setCalculationResults({
@@ -109,7 +110,7 @@ export function AddCaseModal({
       costsAfterJudgment: cost,
       dailyInterest,
       interestAccrued,
-      interestToDate,
+      interestToDate: interestAccrued,
       totalInterest,
       days,
       grandTotal,
@@ -120,6 +121,7 @@ export function AddCaseModal({
     const newCase: CaseData = {
       id: Date.now().toString(),
       caseName: data.caseName,
+      courtName: data.courtName, // ✅ include courtName
       courtCaseNumber: data.courtCaseNumber,
       judgmentAmount: data.judgmentAmount,
       judgmentDate: data.judgmentDate,
@@ -135,15 +137,8 @@ export function AddCaseModal({
     onOpenChange(false);
   };
 
-  const handleCalculate = () => {
-    // Trigger recalculation by updating the form
-    form.trigger();
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
-
+  const handleCalculate = () => form.trigger();
+  const handlePrint = () => window.print();
   const handleStartOver = () => {
     form.reset();
     setCalculationResults({
@@ -159,10 +154,7 @@ export function AddCaseModal({
       grandTotal: 0,
     });
   };
-
-  const handleExit = () => {
-    onOpenChange(false);
-  };
+  const handleExit = () => onOpenChange(false);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -179,7 +171,7 @@ export function AddCaseModal({
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-6"
           >
-            {/* Judgment Information Section */}
+            {/* Judgment Information */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg text-primary">
@@ -197,6 +189,23 @@ export function AddCaseModal({
                         <FormLabel>Case Name</FormLabel>
                         <FormControl>
                           <Input placeholder="Enter case name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="courtName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Court Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g. Orange County Superior Court"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -228,7 +237,7 @@ export function AddCaseModal({
                         <FormLabel>Judgment Amount</FormLabel>
                         <FormControl>
                           <Input
-                            type="input"
+                            type="number"
                             step="0.01"
                             placeholder="0.00"
                             {...field}
@@ -250,7 +259,7 @@ export function AddCaseModal({
                         <FormLabel>Interest Rate (%)</FormLabel>
                         <FormControl>
                           <Input
-                            type="input"
+                            type="number"
                             step="0.01"
                             placeholder="10.00"
                             {...field}
@@ -295,7 +304,7 @@ export function AddCaseModal({
               </CardContent>
             </Card>
 
-            {/* Payment and/or Cost Section */}
+            {/* Payment/Cost */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg text-primary">
@@ -313,7 +322,7 @@ export function AddCaseModal({
                         <FormLabel>Payment Amount</FormLabel>
                         <FormControl>
                           <Input
-                            type="input"
+                            type="number"
                             step="0.01"
                             placeholder="0.00"
                             {...field}
@@ -335,7 +344,7 @@ export function AddCaseModal({
                         <FormLabel>Cost</FormLabel>
                         <FormControl>
                           <Input
-                            type="input"
+                            type="number"
                             step="0.01"
                             placeholder="0.00"
                             {...field}
@@ -362,7 +371,7 @@ export function AddCaseModal({
               </CardContent>
             </Card>
 
-            {/* Action Buttons */}
+            {/* Actions */}
             <div className="flex flex-wrap justify-center gap-2">
               <Button type="button" onClick={handleCalculate} variant="outline">
                 Calculate
@@ -378,7 +387,7 @@ export function AddCaseModal({
               </Button>
             </div>
 
-            {/* Results Section */}
+            {/* Results */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-center text-lg">Results</CardTitle>

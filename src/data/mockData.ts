@@ -1,9 +1,8 @@
-import { CaseData, Transaction } from "@/types/case";
-
 export const mockCases: CaseData[] = [
   {
     id: "1",
     caseName: "Smith v. Jones",
+    courtName: "Supreme Court",
     courtCaseNumber: "17SMCV90351",
     judgmentAmount: 205750.0,
     judgmentDate: "2019-03-15",
@@ -16,6 +15,7 @@ export const mockCases: CaseData[] = [
   {
     id: "2",
     caseName: "Johnson v. Acme Corp.",
+    courtName: "Supreme Court",
     courtCaseNumber: "18LACV85629",
     judgmentAmount: 325000.0,
     judgmentDate: "2018-08-22",
@@ -28,6 +28,7 @@ export const mockCases: CaseData[] = [
   {
     id: "3",
     caseName: "DC Group LLC v. Paramount",
+    courtName: "Supreme Court",
     courtCaseNumber: "19SMCV12847",
     judgmentAmount: 2500000.0,
     judgmentDate: "2019-11-08",
@@ -40,6 +41,7 @@ export const mockCases: CaseData[] = [
   {
     id: "4",
     caseName: "Palmer v. OG Restaurants",
+    courtName: "Supreme Court",
     courtCaseNumber: "20LACV73951",
     judgmentAmount: 85000.0,
     judgmentDate: "2020-06-12",
@@ -52,6 +54,7 @@ export const mockCases: CaseData[] = [
   {
     id: "5",
     caseName: "Kelly v. Sabine Agr. LLC",
+    courtName: "Supreme Court",
     courtCaseNumber: "21SMCV45623",
     judgmentAmount: 195000.0,
     judgmentDate: "2021-02-18",

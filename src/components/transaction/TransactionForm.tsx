@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calculator, Equal, Minus, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -61,10 +60,7 @@ export function TransactionForm({
   caseData,
   editTransaction,
 }: TransactionFormProps) {
-  const [calculatorDisplay, setCalculatorDisplay] = useState("0");
-  const [calculatorInput, setCalculatorInput] = useState("");
-  const [operation, setOperation] = useState<string | null>(null);
-  const [waitingForInput, setWaitingForInput] = useState(false);
+  const [calculatorDisplay, _] = useState("0");
 
   const form = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema as any),
@@ -90,59 +86,6 @@ export function TransactionForm({
       });
     }
   }, [editTransaction, form]);
-
-  // Calculator functions
-  const handleCalculatorNumber = (num: string) => {
-    if (waitingForInput) {
-      setCalculatorDisplay(num);
-      setWaitingForInput(false);
-    } else {
-      setCalculatorDisplay(
-        calculatorDisplay === "0" ? num : calculatorDisplay + num
-      );
-    }
-  };
-
-  const handleCalculatorOperation = (op: string) => {
-    setCalculatorInput(calculatorDisplay);
-    setOperation(op);
-    setWaitingForInput(true);
-  };
-
-  const handleCalculatorEquals = () => {
-    if (operation && calculatorInput) {
-      const prev = parseFloat(calculatorInput);
-      const current = parseFloat(calculatorDisplay);
-      let result = 0;
-
-      switch (operation) {
-        case "+":
-          result = prev + current;
-          break;
-        case "-":
-          result = prev - current;
-          break;
-        case "*":
-          result = prev * current;
-          break;
-        case "/":
-          result = prev / current;
-          break;
-      }
-
-      setCalculatorDisplay(result.toString());
-      setOperation(null);
-      setCalculatorInput("");
-      setWaitingForInput(true);
-    }
-  };
-
-  const handleCalculatorClear = () => {
-    setCalculatorDisplay("0");
-    setCalculatorInput("");
-    setOperation(null);
-    setWaitingForInput(false);
-  };
 
   const useCalculatorValue = () => {
     const value = parseFloat(calculatorDisplay);
@@ -213,7 +156,6 @@ export function TransactionForm({
                         <SelectContent>
                           <SelectItem value="PAYMENT">Payment</SelectItem>
                           <SelectItem value="COST">Cost</SelectItem>
-                          <SelectItem value="INTEREST">Interest</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -267,27 +209,29 @@ export function TransactionForm({
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="interestRate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Interest Rate (%)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          placeholder="10.00"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value) || 0)
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {!editTransaction && (
+                  <FormField
+                    control={form.control}
+                    name="interestRate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Interest Rate (%)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            placeholder="10.00"
+                            {...field}
+                            onChange={(e) =>
+                              field.onChange(parseFloat(e.target.value) || 0)
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 <FormField
                   control={form.control}
@@ -327,7 +271,7 @@ export function TransactionForm({
                   </CardContent>
                 </Card>
 
-                <div className="flex flex-col space-y-2 pt-4 sm:flex-row sm:space-x-2 sm:space-y-0">
+                <div className="flex space-y-2 pt-5 sm:flex-row sm:space-x-2 sm:space-y-0">
                   <Button type="submit" className="flex-1">
                     {editTransaction ? "Update Transaction" : "Add Transaction"}
                   </Button>
@@ -344,7 +288,7 @@ export function TransactionForm({
           </div>
 
           {/* Calculator */}
-          <div className="xl:block">
+          {/* <div className="xl:block">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -452,7 +396,7 @@ export function TransactionForm({
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </div> */}
         </div>
       </SheetContent>
     </Sheet>

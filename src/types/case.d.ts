@@ -1,6 +1,7 @@
-export interface CaseData {
+declare type CaseData = {
   id: string;
   caseName: string;
+  courtName: string;
   courtCaseNumber: string;
   judgmentAmount: number;
   judgmentDate: string;
@@ -9,9 +10,9 @@ export interface CaseData {
   accruedInterest: number;
   principalBalance: number;
   payoffAmount: number;
-}
+};
 
-export interface Transaction {
+declare type Transaction = {
   id: string;
   caseId: string;
   date: string;
@@ -20,9 +21,9 @@ export interface Transaction {
   accruedInterest: number;
   principalBalance: number;
   description?: string;
-}
+};
 
-export interface TransactionFormData {
+declare type TransactionFormData = {
   type: "PAYMENT" | "COST" | "INTEREST";
   amount: number;
   date: string;
@@ -30,4 +31,4 @@ export interface TransactionFormData {
   interestRate: number;
   calculatedInterest: number;
   newBalance: number;
-}
+};

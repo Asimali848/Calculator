@@ -1,9 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 
 import GlobalLayout from "./components/global-layout";
+import Billing from "./pages/billing";
 // import RouteGuard from "./components/route-guard";
 import Home from "./pages/home";
 import Login from "./pages/login";
+import Profile from "./pages/profile";
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
         }
       >
         <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/billing" element={<Billing />} />
       </Route>
     </Routes>
   );

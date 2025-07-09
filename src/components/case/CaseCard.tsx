@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/calculations";
 import { cn } from "@/lib/utils";
-import { CaseData } from "@/types/case";
 
 interface CaseCardProps {
   case: CaseData;
@@ -27,6 +26,9 @@ export function CaseCard({
       <CardHeader className="pb-2">
         <h3 className="text-sm font-semibold text-primary">
           {caseData.caseName}
+        </h3>
+        <h3 className="text-sm text-primary">
+          {caseData.courtName} - {caseData.courtCaseNumber}
         </h3>
       </CardHeader>
       <CardContent className="pt-0">

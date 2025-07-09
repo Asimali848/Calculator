@@ -6,11 +6,9 @@ import { AddCaseModal } from "@/components/case/AddCaseModal";
 import { CaseDetails } from "@/components/case/CaseDetails";
 import { CaseList } from "@/components/case/CaseList";
 import { EmptyState } from "@/components/case/EmptyState";
-import Navbar from "@/components/navbar";
 import { TransactionForm } from "@/components/transaction/TransactionForm";
 import { TransactionsTable } from "@/components/transaction/TransactionsTable";
 import { mockCases, mockTransactions } from "@/data/mockData";
-import { CaseData, Transaction, TransactionFormData } from "@/types/case";
 
 const Home = () => {
   const [cases, setCases] = useState<CaseData[]>(mockCases);
@@ -144,8 +142,6 @@ const Home = () => {
     return (
       <div className="mx-auto h-screen w-full overflow-auto bg-background p-4 md:p-10">
         <div className="mx-auto max-w-7xl">
-          <Navbar />
-
           <EmptyState onAddNewCase={handleAddNewCase} />
 
           <AddCaseModal
@@ -160,9 +156,8 @@ const Home = () => {
   }
 
   return (
-    <div className="mx-auto h-screen w-full overflow-auto bg-background p-4 md:p-6">
-      <div className="mx-auto max-w-7xl space-y-6">
-        <Navbar />
+    <div className="mx-auto h-screen w-full overflow-auto bg-background p-4 md:p-9">
+      <div className="max-w-8xl mx-auto space-y-6">
         <div className="z-10 mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <CaseList
             cases={cases}
