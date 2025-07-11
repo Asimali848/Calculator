@@ -10,6 +10,7 @@ declare type CaseData = {
   accruedInterest: number;
   principalBalance: number;
   payoffAmount: number;
+  isEnded?: boolean;
 };
 
 declare type Transaction = {

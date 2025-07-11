@@ -253,7 +253,7 @@ export function TransactionForm({
                   </CardContent>
                 </Card>
 
-                <div className="flex space-y-2 pt-5 sm:flex-row sm:space-x-2 sm:space-y-0">
+                <div className="flex flex-col space-y-2 pt-5 sm:space-x-2 sm:space-y-0 md:flex-row">
                   <Button type="submit" className="flex-1">
                     {editTransaction ? "Update Transaction" : "Add Transaction"}
                   </Button>

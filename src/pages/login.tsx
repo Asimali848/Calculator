@@ -18,11 +18,11 @@ const Login = () => {
   const isForgot = authMode === "forgot";
 
   return (
-    <div className="mx-auto flex h-screen w-1/2 items-center justify-center">
+    <div className="mx-auto flex h-screen w-full items-center justify-center md:w-1/2">
       <div className="absolute right-5 top-5">
         <ThemeToggle />
       </div>
-      <form className="flex flex-col items-center justify-center md:w-1/2">
+      <form className="flex w-full flex-col items-center justify-center p-10 md:w-1/2 md:p-0">
         <img src={Logo} alt="logo" className="w-24 rounded-xl" />
         <div className="my-10 flex w-full flex-col items-center justify-center gap-2.5">
           <span className="w-full text-center text-[30px] font-bold leading-[30px]">

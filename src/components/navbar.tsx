@@ -1,8 +1,7 @@
-import { Home, LogOut, UserPen, Wallet } from "lucide-react";
+import { Home, Landmark, LogOut, UserPen, Wallet } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import logo from "@/assets/img/Logo.png";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { ThemeToggle } from "./theme-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -51,13 +51,19 @@ const Navbar = () => {
           <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Avatar>
-                <AvatarImage src="https://github.com/leerob.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <span className="flex items-center justify-center gap-1 rounded-full bg-primary p-2 dark:bg-primary">
+                {/* <ChevronDown className="text-white size-4" />  */}
+                <Landmark className="text-white" />
+              </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-4">
-              <DropdownMenuLabel>User</DropdownMenuLabel>
+              <DropdownMenuLabel className="flex items-center justify-between">
+                User
+                <Avatar>
+                  <AvatarImage src="https://github.com/leerob.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleHome}>
                 <Home className="mr-2 h-4 w-4" />

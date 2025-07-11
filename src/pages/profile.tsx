@@ -537,9 +537,9 @@ const Profile = () => {
                           name="bio"
                           //@ts-ignore
                           render={({ field }) => (
-                            <FormItem className="col-span-2 pt-4">
+                            <FormItem className="pt-4 md:col-span-2">
                               <FormLabel></FormLabel>
-                              <FormControl className="flex min-h-[90px] flex-col gap-4">
+                              <FormControl className="flex flex-col gap-4 md:min-h-[90px]">
                                 <div className=""></div>
                               </FormControl>
                               <FormMessage />
