@@ -191,7 +191,7 @@ export function TransactionForm({
                   )}
                 />
 
-                {!editTransaction && (
+                {/* {!editTransaction && (
                   <FormField
                     control={form.control}
                     name="interestRate"
@@ -213,7 +213,7 @@ export function TransactionForm({
                       </FormItem>
                     )}
                   />
-                )}
+                )} */}
 
                 <FormField
                   control={form.control}
