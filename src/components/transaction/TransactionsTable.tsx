@@ -67,6 +67,9 @@ export function TransactionsTable({
                 PRINCIPAL BALANCE
               </TableHead>
               <TableHead className="font-bold text-foreground">
+                DESCRIPTION
+              </TableHead>
+              <TableHead className="font-bold text-foreground">
                 ACTIONS
               </TableHead>
             </TableRow>
@@ -98,6 +101,9 @@ export function TransactionsTable({
                   </TableCell>
                   <TableCell className="font-bold">
                     {formatCurrency(transaction.principalBalance)}
+                  </TableCell>
+                  <TableCell className="font-bold">
+                    {transaction.description || "No description"}
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
