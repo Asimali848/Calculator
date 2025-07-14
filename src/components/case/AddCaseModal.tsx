@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,9 +25,11 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/calculations";
 
+import { Textarea } from "../ui/textarea";
+
 const caseSchema = z.object({
   caseName: z.string().min(1, "Case name is required"),
-  courtName: z.string().min(1, "Court name is required"), // ✅ New field
+  courtName: z.string().min(1, "Court name is required"),
   courtCaseNumber: z.string().min(1, "Court case number is required"),
   judgmentAmount: z
     .number()
@@ -80,7 +82,7 @@ export function AddCaseModal({
 
   const watchedValues = form.watch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const {
       judgmentAmount = 0,
       interestRate = 10,
@@ -121,7 +123,7 @@ export function AddCaseModal({
     const newCase: CaseData = {
       id: Date.now().toString(),
       caseName: data.caseName,
-      courtName: data.courtName, // ✅ include courtName
+      courtName: data.courtName,
       courtCaseNumber: data.courtCaseNumber,
       judgmentAmount: data.judgmentAmount,
       judgmentDate: data.judgmentDate,
@@ -138,23 +140,6 @@ export function AddCaseModal({
   };
 
   const handleCalculate = () => form.trigger();
-  const handlePrint = () => window.print();
-  const handleStartOver = () => {
-    form.reset();
-    setCalculationResults({
-      judgmentAmount: 0,
-      principalReduction: 0,
-      principalBalance: 0,
-      costsAfterJudgment: 0,
-      dailyInterest: 0,
-      interestAccrued: 0,
-      interestToDate: 0,
-      totalInterest: 0,
-      days: 0,
-      grandTotal: 0,
-    });
-  };
-  const handleExit = () => onOpenChange(false);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -237,7 +222,7 @@ export function AddCaseModal({
                         <FormLabel>Judgment Amount</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
+                            type="input"
                             step="0.01"
                             placeholder="0.00"
                             {...field}
@@ -259,7 +244,7 @@ export function AddCaseModal({
                         <FormLabel>Interest Rate (%)</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
+                            type="input"
                             step="0.01"
                             placeholder="10.00"
                             {...field}
@@ -308,7 +293,7 @@ export function AddCaseModal({
                         <FormLabel>Payment Amount</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
+                            type="input"
                             step="0.01"
                             placeholder="0.00"
                             {...field}
@@ -330,7 +315,7 @@ export function AddCaseModal({
                         <FormLabel>Cost</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
+                            type="input"
                             step="0.01"
                             placeholder="0.00"
                             {...field}
@@ -358,20 +343,20 @@ export function AddCaseModal({
             </Card>
 
             {/* Actions */}
-            <div className="flex flex-wrap justify-center gap-2">
-              <Button type="button" onClick={handleCalculate} variant="outline">
-                Calculate
-              </Button>
-              <Button type="button" onClick={handlePrint} variant="outline">
-                Print
-              </Button>
-              <Button type="button" onClick={handleStartOver} variant="outline">
-                Start Over
-              </Button>
-              <Button type="button" onClick={handleExit} variant="outline">
-                Exit
-              </Button>
-            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg text-primary">
+                  Debtor Contact Info
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Textarea
+                  placeholder="Enter any additional notes or actions here"
+                  className="w-full md:w-1/2 lg:w-full"
+                  rows={3}
+                />
+              </CardContent>
+            </Card>
 
             {/* Results */}
             <Card>

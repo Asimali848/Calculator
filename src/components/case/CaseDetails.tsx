@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   Calendar,
   Download,
-  MoreVertical,
+  EllipsisVertical,
   Plus,
   Trash2,
   TriangleAlert,
@@ -12,6 +12,8 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency, formatDate } from "@/lib/calculations";
+
 import {
   Dialog,
   DialogClose,
@@ -20,191 +22,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { formatCurrency, formatDate } from "@/lib/calculations";
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
-interface CaseDetailsProps {
-  case: CaseData;
-  onAddTransaction: () => void;
-  onDeleteCase: (caseId: string) => void;
-}
-
-export function CaseDetails({
-  case: caseData,
-  onAddTransaction,
-  onDeleteCase,
-}: CaseDetailsProps) {
-  const [isEndCaseDialogOpen, setIsEndCaseDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [payoffDate, setPayoffDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [isCaseEnded, setIsCaseEnded] = useState(!!caseData.isEnded);
-
-  const handleDownloadPayoffLetter = () => {
-    const content = `
-PAYOFF STATEMENT
-
-Case Name: ${caseData.caseName}
-Court Case Number: ${caseData.courtCaseNumber}
-Judgment Date: ${formatDate(caseData.judgmentDate)}
-Judgment Amount: ${formatCurrency(caseData.judgmentAmount)}
-
-Principal Balance: ${formatCurrency(caseData.principalBalance)}
-Accrued Interest: ${formatCurrency(caseData.accruedInterest)}
-Total Payoff Amount: ${formatCurrency(caseData.payoffAmount)}
-
-Payoff Date: ${formatDate(payoffDate)}
-    `;
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${caseData.caseName}_payoff_statement.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  const handleEndCase = () => {
-    toast.success(
-      `Case "${caseData.caseName}" has been marked as ended with payoff date: ${formatDate(payoffDate)}`,
-      { className: "bg-primary text-white p-3" }
-    );
-    setIsCaseEnded(true);
-    setIsEndCaseDialogOpen(false);
-  };
-
-  return (
-    <Card className="h-full dark:bg-white/10">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 pb-4">
-        <CardTitle className="text-xl font-bold">Case Details</CardTitle>
-
-        {/* Desktop Actions */}
-        <div className="hidden gap-2 sm:flex">
-          <EndCaseDialog
-            open={isEndCaseDialogOpen}
-            onOpenChange={setIsEndCaseDialogOpen}
-            disabled={isCaseEnded}
-            payoffDate={payoffDate}
-            setPayoffDate={setPayoffDate}
-            caseData={caseData}
-            onEndCase={handleEndCase}
-            onDownload={handleDownloadPayoffLetter}
-          />
-
-          <Button
-            onClick={onAddTransaction}
-            size="sm"
-            disabled={isCaseEnded}
-            className="bg-primary text-white hover:bg-primary/80"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            {isCaseEnded ? "Case Ended" : "New Cost/Payment"}
-          </Button>
-
-          <DeleteCaseDialog
-            open={isDeleteDialogOpen}
-            onOpenChange={setIsDeleteDialogOpen}
-            caseData={caseData}
-            onDelete={onDeleteCase}
-          />
-        </div>
-
-        {/* Mobile Actions */}
-        <div className="md:hidden">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <MoreVertical className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-fit">
-              <DropdownMenuItem
-                onSelect={onAddTransaction}
-                disabled={isCaseEnded}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                {isCaseEnded ? "Case Ended" : "New Cost/Payment"}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => setIsEndCaseDialogOpen(true)}
-                disabled={isCaseEnded}
-              >
-                <Calendar className="mr-2 h-4 w-4" />
-                End Case
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => setIsDeleteDialogOpen(true)}
-                className="text-destructive"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete Case
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardHeader>
-
-      <CardContent className="space-y-4">
-        <div className="my-6 text-center">
-          <h2 className="text-2xl font-bold text-primary">
-            {caseData.caseName}
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4">
-          <div className="space-y-4">
-            <CaseDetail
-              label="Court Case No."
-              value={caseData.courtCaseNumber}
-            />
-            <CaseDetail
-              label="Judgment Amount"
-              value={formatCurrency(caseData.judgmentAmount)}
-            />
-            <CaseDetail
-              label="Judgment Date"
-              value={formatDate(caseData.judgmentDate)}
-            />
-            <CaseDetail
-              label="Last Payment Date"
-              value={formatDate(caseData.lastPaymentDate)}
-            />
-          </div>
-
-          <div className="space-y-4">
-            <CaseDetail
-              label="Total Payments to Date"
-              value={formatCurrency(caseData.totalPayments)}
-            />
-            <CaseDetail
-              label="Accrued Interest"
-              value={formatCurrency(caseData.accruedInterest)}
-            />
-            <CaseDetail
-              label="Today's Payoff"
-              value={formatCurrency(caseData.payoffAmount)}
-              bold
-              primary
-            />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// Reusable component for the End Case Dialog
 function EndCaseDialog({
   open,
   onOpenChange,
@@ -276,13 +97,13 @@ function EndCaseDialog({
   );
 }
 
-// Reusable component for the Delete Case Dialog
 function DeleteCaseDialog({ open, onOpenChange, caseData, onDelete }: any) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="destructive" size="icon">
+        <Button variant="destructive" size="sm">
           <Trash2 className="h-4 w-4" />
+          <span className="lg:hidden">&nbsp;&nbsp;Delete Case</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -342,5 +163,206 @@ function CaseDetail({
         {value}
       </span>
     </div>
+  );
+}
+
+interface CaseDetailsProps {
+  case: CaseData;
+  onAddTransaction: () => void;
+  onDeleteCase: (caseId: string) => void;
+}
+
+export function CaseDetails({
+  case: caseData,
+  onAddTransaction,
+  onDeleteCase,
+}: CaseDetailsProps) {
+  const [isEndCaseDialogOpen, setIsEndCaseDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [payoffDate, setPayoffDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [isCaseEnded, setIsCaseEnded] = useState(!!caseData.isEnded);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleDownloadPayoffLetter = () => {
+    const content = `
+PAYOFF STATEMENT
+
+Case Name: ${caseData.caseName}
+Court Case Number: ${caseData.courtCaseNumber}
+Judgment Date: ${formatDate(caseData.judgmentDate)}
+Judgment Amount: ${formatCurrency(caseData.judgmentAmount)}
+
+Principal Balance: ${formatCurrency(caseData.principalBalance)}
+Accrued Interest: ${formatCurrency(caseData.accruedInterest)}
+Total Payoff Amount: ${formatCurrency(caseData.payoffAmount)}
+
+Payoff Date: ${formatDate(payoffDate)}
+    `;
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${caseData.caseName}_payoff_statement.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleEndCase = () => {
+    toast.success(
+      `Case "${caseData.caseName}" has been marked as ended with payoff date: ${formatDate(payoffDate)}`,
+      { className: "bg-primary text-white p-3" }
+    );
+    setIsCaseEnded(true);
+    setIsEndCaseDialogOpen(false);
+  };
+
+  return (
+    <Card className="h-full dark:bg-white/10">
+      <CardHeader className="flex flex-row items-center justify-between gap-4 pb-4">
+        <CardTitle className="text-xl font-bold">Case Details</CardTitle>
+
+        {/* Actions Menu for All Screens */}
+        <div className="relative" ref={menuRef}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="bg-primary text-white"
+            onClick={() => {
+              console.log("Toggling menu from:", showMenu);
+              setShowMenu((prev) => !prev);
+            }}
+          >
+            <EllipsisVertical className="h-5 w-5" />
+          </Button>
+          {showMenu && (
+            <div className="absolute right-0 z-10 mt-2 w-56 rounded-md border bg-white p-2 shadow-md dark:bg-background">
+              <Button
+              variant="ghost"
+              size="sm"
+                onClick={() => {
+                  setShowMenu(false);
+                  if (!isCaseEnded) onAddTransaction();
+                }}
+                className="flex w-full items-center justify-start gap-2 rounded px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"
+                disabled={isCaseEnded}
+              >
+                <Plus className="h-4 w-4" />
+                {isCaseEnded ? "Case Ended" : "New Cost/Payment"}
+              </Button>
+              <Button
+              variant="ghost"
+              size="sm"
+                onClick={() => {
+                  setShowMenu(false);
+                  if (!isCaseEnded) {
+                    setIsEndCaseDialogOpen(false);
+                    setTimeout(() => setIsEndCaseDialogOpen(true), 10);
+                  }
+                }}
+                className="flex w-full items-center justify-start gap-2 rounded px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"
+                disabled={isCaseEnded}
+              >
+                <Calendar className="h-4 w-4" /> Payoff Demand
+              </Button>
+              <Button
+              variant="ghost"
+              size="sm"
+                onClick={() => {
+                  setShowMenu(false);
+                  setIsDeleteDialogOpen(false);
+                  setTimeout(() => setIsDeleteDialogOpen(true), 10);
+                }}
+                className="flex w-full items-center justify-start gap-2 rounded px-3 py-2 text-sm hover:bg-muted"
+              >
+                <Trash2 className="h-4 w-4 text-red-500" />
+                Delete Case
+              </Button>
+            </div>
+          )}
+
+          <div className="hidden">
+            <EndCaseDialog
+              open={isEndCaseDialogOpen}
+              onOpenChange={setIsEndCaseDialogOpen}
+              disabled={isCaseEnded}
+              payoffDate={payoffDate}
+              setPayoffDate={setPayoffDate}
+              caseData={caseData}
+              onEndCase={handleEndCase}
+              onDownload={handleDownloadPayoffLetter}
+            />
+
+            <DeleteCaseDialog
+              open={isDeleteDialogOpen}
+              onOpenChange={setIsDeleteDialogOpen}
+              caseData={caseData}
+              onDelete={onDeleteCase}
+            />
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-4">
+        <div className="my-6 text-center">
+          <h2 className="text-2xl font-bold text-primary">
+            {caseData.caseName}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-4">
+            <CaseDetail
+              label="Court Case No."
+              value={caseData.courtCaseNumber}
+            />
+            <CaseDetail
+              label="Judgment Amount"
+              value={formatCurrency(caseData.judgmentAmount)}
+            />
+            <CaseDetail
+              label="Judgment Date"
+              value={formatDate(caseData.judgmentDate)}
+            />
+            <CaseDetail
+              label="Last Payment Date"
+              value={formatDate(caseData.lastPaymentDate)}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <CaseDetail
+              label="Total Payments to Date"
+              value={formatCurrency(caseData.totalPayments)}
+            />
+            <CaseDetail
+              label="Accrued Interest"
+              value={formatCurrency(caseData.accruedInterest)}
+            />
+            <CaseDetail
+              label="Today's Payoff"
+              value={formatCurrency(caseData.payoffAmount)}
+              bold
+              primary
+            />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

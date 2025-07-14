@@ -162,7 +162,7 @@ export function TransactionForm({
                       <div className="flex space-x-2">
                         <FormControl>
                           <Input
-                            type="number"
+                            type="input"
                             step="0.01"
                             placeholder="0.00"
                             {...field}
