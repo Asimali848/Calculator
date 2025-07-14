@@ -180,6 +180,7 @@ const Home = () => {
           <TransactionsTable
             transactions={caseTransactions}
             caseName={selectedCase.caseName}
+            //@ts-ignore
             onEditTransaction={handleEditTransaction}
             onDeleteTransaction={handleDeleteTransaction}
           />
