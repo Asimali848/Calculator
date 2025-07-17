@@ -6,17 +6,14 @@ interface CaseCardProps {
   case: CaseData;
   isSelected: boolean;
   onClick: () => void;
+  onDelete: () => void;
 }
 
-export function CaseCard({
-  case: caseData,
-  isSelected,
-  onClick,
-}: CaseCardProps) {
+const CaseCard = ({ case: caseData, isSelected, onClick }: CaseCardProps) => {
   return (
     <Card
       className={cn(
-        "cursor-pointer border-2 transition-all duration-200 hover:shadow-md",
+        "relative cursor-pointer border-2 transition-all duration-200 hover:shadow-md",
         isSelected
           ? "border-primary bg-primary/5 shadow-md"
           : "border-border hover:border-primary/50"
@@ -41,4 +38,6 @@ export function CaseCard({
       </CardContent>
     </Card>
   );
-}
+};
+
+export default CaseCard;

@@ -1,11 +1,23 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
-import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { Loader2 } from "lucide-react";
 import { Navigate } from "react-router-dom";
 
 const RouteGuard = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated, isLoading } = useKindeAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsLoading(true);
+      // Check for access token in localStorage
+      const token = localStorage.getItem("authToken");
+      setIsAuthenticated(!!token);
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, []);
 
   if (isLoading) {
     return (
@@ -19,7 +31,7 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
     return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default RouteGuard;

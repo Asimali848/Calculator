@@ -56,7 +56,7 @@ export function EmptyState({ onAddNewCase }: EmptyStateProps) {
             </div>
             <div className="text-center">
               <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30">
-                <Plus className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <Plus className="h-4 w-4 text-primary dark:text-primary" />
               </div>
               <div className="text-xs text-muted-foreground">Add Payments</div>
             </div>

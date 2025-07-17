@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import GlobalLayout from "./components/global-layout";
+import RouteGuard from "./components/route-guard";
 import Billing from "./pages/billing";
 // import RouteGuard from "./components/route-guard";
 import Home from "./pages/home";
@@ -13,9 +14,9 @@ const App = () => {
       <Route path="/" element={<Login />} />
       <Route
         element={
-          // <RouteGuard>
-          <GlobalLayout />
-          // </RouteGuard>
+          <RouteGuard>
+            <GlobalLayout />
+          </RouteGuard>
         }
       >
         <Route path="/home" element={<Home />} />

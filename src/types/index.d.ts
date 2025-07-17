@@ -80,15 +80,12 @@ declare type GlobalStateProps = {
 };
 
 declare type UpdateUser = {
-  last_name: string;
-  first_name: string;
+  full_name: string;
+  location: string;
   phone_number: string;
-  state: string;
-  postal_code: string;
-  email: string;
-  country: string;
-  city: string;
-  profile_picture_url: string;
+  website: string;
+  company: string;
+  image: string;
 };
 
 declare type User = {
@@ -223,4 +220,34 @@ declare type Setting = {
   api_key: string;
   ai_language: string;
   tone: string;
+};
+
+// declare type Case = {
+//   case_name: string;
+//   court_name: string;
+//   court_case_number: string;
+//   judgment_amount: number;
+//   interest_rate: number;
+//   judgment_date: string;
+//   principal_reduction: number;
+//   costs_after_judgment: number;
+//   total_interest: number;
+//   grand_total_amount: number;
+//   debtor_info: string;
+// }
+declare type CaseData = {
+  id: string;
+  caseName: string;
+  courtName: string;
+  courtCaseNumber: string;
+  judgmentAmount: number;
+  judgmentDate: string;
+  lastPaymentDate: string;
+  totalPayments: number;
+  accruedInterest: number;
+  principalBalance: number;
+  payoffAmount: number;
+  isEnded?: boolean;
+  debtorInfo?: string; // ✅ Add this line
+  interestRate: number;
 };

@@ -10,9 +10,11 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import list from "@/assets/img/list.svg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatDate } from "@/lib/calculations";
+import { useDeleteCaseMutation } from "@/store/services/case";
 
 import {
   Dialog,
@@ -86,7 +88,7 @@ function EndCaseDialog({
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row">
-            <Button onClick={onDownload} variant="outline" className="flex-1">
+            <Button onClick={onDownload} variant="default" className="flex-1">
               <Download className="mr-2 h-4 w-4" />
               Download Statement
             </Button>
@@ -97,7 +99,13 @@ function EndCaseDialog({
   );
 }
 
-function DeleteCaseDialog({ open, onOpenChange, caseData, onDelete }: any) {
+function DeleteCaseDialog({
+  open,
+  onOpenChange,
+  caseData,
+  onDelete,
+  isDeleting,
+}: any) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -130,9 +138,10 @@ function DeleteCaseDialog({ open, onOpenChange, caseData, onDelete }: any) {
           <DialogClose asChild>
             <Button
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              onClick={() => onDelete(caseData.id)}
+              onClick={onDelete}
+              disabled={isDeleting}
             >
-              Delete Case
+              {isDeleting ? "Deleting..." : "Delete Case"}
             </Button>
           </DialogClose>
         </div>
@@ -172,11 +181,20 @@ interface CaseDetailsProps {
   onDeleteCase: (caseId: string) => void;
 }
 
-export function CaseDetails({
+const CaseDetails = ({
   case: caseData,
   onAddTransaction,
   onDeleteCase,
-}: CaseDetailsProps) {
+}: CaseDetailsProps) => {
+  if (!caseData) {
+    return (
+      <Card className="flex h-full flex-col items-center justify-center gap-2 p-10 text-muted-foreground">
+        <img src={list} alt="" className="size-10" />
+        <p className="text-md text-center">No Case Selected.</p>
+      </Card>
+    );
+  }
+
   const [isEndCaseDialogOpen, setIsEndCaseDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [payoffDate, setPayoffDate] = useState(
@@ -184,6 +202,7 @@ export function CaseDetails({
   );
   const [isCaseEnded, setIsCaseEnded] = useState(!!caseData.isEnded);
   const [showMenu, setShowMenu] = useState(false);
+  const [deleteCase, { isLoading: isDeleting }] = useDeleteCaseMutation();
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -232,29 +251,49 @@ Payoff Date: ${formatDate(payoffDate)}
     setIsEndCaseDialogOpen(false);
   };
 
+  const handleDeleteCase = async () => {
+    try {
+      const token = localStorage.getItem("access"); // or "accessToken", depending on your app
+
+      if (!token) {
+        toast.error("User not authenticated");
+        return;
+      }
+
+      //@ts-ignore
+      await deleteCase({ id: caseData.id, token }).unwrap();
+
+      onDeleteCase(caseData.id);
+
+      toast.success("Case deleted successfully", {
+        className: "bg-primary text-white p-3",
+      });
+    } catch (error) {
+      toast.error("Failed to delete case", {
+        className: "bg-destructive text-white p-3",
+      });
+    }
+  };
+
   return (
     <Card className="h-full dark:bg-white/10">
       <CardHeader className="flex flex-row items-center justify-between gap-4 pb-4">
         <CardTitle className="text-xl font-bold">Case Details</CardTitle>
 
-        {/* Actions Menu for All Screens */}
         <div className="relative" ref={menuRef}>
           <Button
-            variant="ghost"
+            variant="default"
             size="icon"
             className="bg-primary text-white"
-            onClick={() => {
-              console.log("Toggling menu from:", showMenu);
-              setShowMenu((prev) => !prev);
-            }}
+            onClick={() => setShowMenu((prev) => !prev)}
           >
             <EllipsisVertical className="h-5 w-5" />
           </Button>
           {showMenu && (
             <div className="absolute right-0 z-10 mt-2 w-56 rounded-md border bg-white p-2 shadow-md dark:bg-background">
               <Button
-              variant="ghost"
-              size="sm"
+                variant="ghost"
+                size="sm"
                 onClick={() => {
                   setShowMenu(false);
                   if (!isCaseEnded) onAddTransaction();
@@ -266,14 +305,11 @@ Payoff Date: ${formatDate(payoffDate)}
                 {isCaseEnded ? "Case Ended" : "New Cost/Payment"}
               </Button>
               <Button
-              variant="ghost"
-              size="sm"
+                variant="ghost"
+                size="sm"
                 onClick={() => {
                   setShowMenu(false);
-                  if (!isCaseEnded) {
-                    setIsEndCaseDialogOpen(false);
-                    setTimeout(() => setIsEndCaseDialogOpen(true), 10);
-                  }
+                  if (!isCaseEnded) setIsEndCaseDialogOpen(true);
                 }}
                 className="flex w-full items-center justify-start gap-2 rounded px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"
                 disabled={isCaseEnded}
@@ -281,12 +317,11 @@ Payoff Date: ${formatDate(payoffDate)}
                 <Calendar className="h-4 w-4" /> Payoff Demand
               </Button>
               <Button
-              variant="ghost"
-              size="sm"
+                variant="ghost"
+                size="sm"
                 onClick={() => {
                   setShowMenu(false);
-                  setIsDeleteDialogOpen(false);
-                  setTimeout(() => setIsDeleteDialogOpen(true), 10);
+                  setIsDeleteDialogOpen(true);
                 }}
                 className="flex w-full items-center justify-start gap-2 rounded px-3 py-2 text-sm hover:bg-muted"
               >
@@ -312,7 +347,8 @@ Payoff Date: ${formatDate(payoffDate)}
               open={isDeleteDialogOpen}
               onOpenChange={setIsDeleteDialogOpen}
               caseData={caseData}
-              onDelete={onDeleteCase}
+              onDelete={handleDeleteCase}
+              isDeleting={isDeleting}
             />
           </div>
         </div>
@@ -365,4 +401,6 @@ Payoff Date: ${formatDate(payoffDate)}
       </CardContent>
     </Card>
   );
-}
+};
+
+export default CaseDetails;

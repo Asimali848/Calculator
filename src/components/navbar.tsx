@@ -32,19 +32,24 @@ const Navbar = () => {
     window.location.reload(); // force a full reload (optional)
   };
   const handleLogout = () => {
-    // TODO: Clear auth tokens or session if applicable
+    // Clear all authentication tokens and user data from localStorage
+    localStorage.clear();
     navigate("/", { replace: true }); // go to login or home
     window.location.reload(); // force a full reload (optional)
   };
 
+  const userData = JSON.parse(localStorage.getItem("user") || "{}");
+  const username = userData?.username || "User";
+  const image = userData?.image || "https://github.com/leerob.png";
+
   return (
-    <nav className="h-fit w-full px-5 py-2 text-center">
+    <nav className="h-18 w-full px-5 py-2 text-center">
       <div className="flex items-center justify-between gap-5">
         <div className="flex items-start justify-center gap-2.5">
           <img
             src={logo}
             alt="justicalc"
-            className="h-16 w-full rounded-md p-2 dark:bg-white md:h-20"
+            className="h-16 w-full rounded-md p-2 dark:bg-white"
           />
         </div>
         <div className="flex w-full items-center justify-end gap-2.5">
@@ -58,9 +63,9 @@ const Navbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-4">
               <DropdownMenuLabel className="flex items-center justify-between">
-                User
+                <span className="capitalize">{username}</span>
                 <Avatar>
-                  <AvatarImage src="https://github.com/leerob.png" />
+                  <AvatarImage className="shrink-0 object-cover" src={image} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuLabel>

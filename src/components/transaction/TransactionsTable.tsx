@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-import { Edit, Printer, Trash2 } from "lucide-react";
+import { Edit, FileX, Printer, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -125,57 +125,74 @@ export function TransactionsTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions
-                .sort(
-                  (a, b) =>
-                    new Date(a.date).getTime() - new Date(b.date).getTime()
-                )
-                .map((transaction) => (
-                  <TableRow key={transaction.id} className="hover:bg-muted/50">
-                    <TableCell className="font-medium text-green-600">
-                      {formatDate(transaction.date)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="secondary"
-                        className={getTransactionTypeColor(transaction.type)}
-                      >
-                        {transaction.type}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {formatCurrency(transaction.amount)}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {formatCurrency(transaction.accruedInterest)}
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      {formatCurrency(transaction.principalBalance)}
-                    </TableCell>
-                    <TableCell className="truncate font-bold">
-                      {truncateString(transaction?.description, 20) ||
-                        "No description"}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => onEditTransaction(transaction)}
+              {transactions.length > 0 ? (
+                transactions
+                  .sort(
+                    (a, b) =>
+                      new Date(a.date).getTime() - new Date(b.date).getTime()
+                  )
+                  .map((transaction) => (
+                    <TableRow
+                      key={transaction.id}
+                      className="hover:bg-muted/50"
+                    >
+                      <TableCell className="font-medium text-green-600">
+                        {formatDate(transaction.date)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant="secondary"
+                          className={getTransactionTypeColor(transaction.type)}
                         >
-                          <Edit className="h-4 w-4 text-green-600 dark:text-green-400" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => onDeleteTransaction(transaction.id)}
-                        >
-                          <Trash2 className="h-4 w-4 text-red-500 dark:text-red-400" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          {transaction.type}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {formatCurrency(transaction.amount)}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {formatCurrency(transaction.accruedInterest)}
+                      </TableCell>
+                      <TableCell className="font-bold">
+                        {formatCurrency(transaction.principalBalance)}
+                      </TableCell>
+                      <TableCell className="truncate font-bold">
+                        {truncateString(transaction?.description, 20) ||
+                          "No description"}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => onEditTransaction(transaction)}
+                          >
+                            <Edit className="h-4 w-4 text-green-600 dark:text-green-400" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => onDeleteTransaction(transaction.id)}
+                          >
+                            <Trash2 className="h-4 w-4 text-red-500 dark:text-red-400" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="py-10 text-center text-muted-foreground"
+                  >
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <FileX className="size-10" />
+                      No transactions found.
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>

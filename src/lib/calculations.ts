@@ -42,7 +42,6 @@ export function formatDate(date: string): string {
   return new Date(date).toLocaleDateString("en-US");
 }
 
-
 type Transaction = {
   date: string; // format: YYYY-MM-DD
   type: "payment" | "cost";
@@ -87,18 +86,13 @@ export function calculateJudgmentInterest(params: {
   const start = new Date(judgment_date);
   const end = new Date(end_date);
 
-  for (
-    let d = new Date(start);
-    d <= end;
-    d.setDate(d.getDate() + 1)
-  ) {
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
     const currentDateStr = d.toISOString().split("T")[0];
 
     // Accrue daily interest
-    const dailyInterest =
-      truncateToTwoDecimals(
-        (currentPrincipal * annual_interest_rate) / (100 * 365)
-      );
+    const dailyInterest = truncateToTwoDecimals(
+      (currentPrincipal * annual_interest_rate) / (100 * 365)
+    );
     unpaidInterest += dailyInterest;
     totalAccruedInterest += dailyInterest;
 
@@ -140,4 +134,3 @@ export function calculateJudgmentInterest(params: {
     finalBalance: truncateToTwoDecimals(currentPrincipal + unpaidInterest),
   };
 }
-

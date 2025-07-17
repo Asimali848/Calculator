@@ -1,7 +1,483 @@
+// import { useEffect, useState } from "react";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { useForm } from "react-hook-form";
+// import { toast } from "sonner";
+// import * as z from "zod";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogDescription,
+//   DialogHeader,
+//   DialogTitle,
+// } from "@/components/ui/dialog";
+// import {
+//   Form,
+//   FormControl,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "@/components/ui/form";
+// import { Input } from "@/components/ui/input";
+// import { Separator } from "@/components/ui/separator";
+// import { formatCurrency } from "@/lib/calculations";
+// import { usePostCaseMutation } from "@/store/services/case";
+// import { Textarea } from "../ui/textarea";
+// const caseSchema = z.object({
+//   caseName: z.string().min(1, "Case name is required"),
+//   courtName: z.string().min(1, "Court name is required"),
+//   courtCaseNumber: z.string().min(1, "Court case number is required"),
+//   judgmentAmount: z
+//     .number()
+//     .min(0.01, "Judgment amount must be greater than 0"),
+//   interestRate: z.number().min(0, "Interest rate must be positive"),
+//   judgmentDate: z.string().min(1, "Judgment date is required"),
+//   endDate: z.string().optional(),
+//   paymentAmount: z.number().optional(),
+//   cost: z.number().optional(),
+// });
+// interface AddCaseModalProps {
+//   open: boolean;
+//   onOpenChange: (open: boolean) => void;
+//   onSubmit: (data: CaseData) => void;
+// }
+// const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
+//   const [calculationResults, setCalculationResults] = useState({
+//     judgmentAmount: 0,
+//     principalReduction: 0,
+//     principalBalance: 0,
+//     costsAfterJudgment: 0,
+//     dailyInterest: 0,
+//     interestAccrued: 0,
+//     interestToDate: 0,
+//     totalInterest: 0,
+//     days: 0,
+//     grandTotal: 0,
+//   });
+//   const form = useForm<z.infer<typeof caseSchema>>({
+//     resolver: zodResolver(caseSchema),
+//     defaultValues: {
+//       caseName: "",
+//       courtName: "", // ✅
+//       courtCaseNumber: "",
+//       judgmentAmount: 0,
+//       interestRate: 10,
+//       judgmentDate: new Date().toISOString().split("T")[0],
+//       endDate: new Date().toISOString().split("T")[0],
+//       paymentAmount: 0,
+//       cost: 0,
+//       debtorInfo: "",
+//     },
+//   });
+//   const watchedValues = form.watch();
+//   useEffect(() => {
+//     const {
+//       judgmentAmount = 0,
+//       interestRate = 10,
+//       paymentAmount = 0,
+//       cost = 0,
+//     } = watchedValues;
+//     const judgmentDate = new Date(watchedValues.judgmentDate || new Date());
+//     const endDate = new Date(watchedValues.endDate || new Date());
+//     const days = Math.max(
+//       0,
+//       Math.floor(
+//         (endDate.getTime() - judgmentDate.getTime()) / (1000 * 60 * 60 * 24)
+//       )
+//     );
+//     const dailyInterest = (judgmentAmount * (interestRate / 100)) / 365;
+//     const interestAccrued = dailyInterest * days;
+//     const principalReduction = paymentAmount;
+//     const principalBalance = judgmentAmount - principalReduction + cost;
+//     const totalInterest = interestAccrued;
+//     const grandTotal = principalBalance + totalInterest;
+//     setCalculationResults({
+//       judgmentAmount,
+//       principalReduction,
+//       principalBalance,
+//       costsAfterJudgment: cost,
+//       dailyInterest,
+//       interestAccrued,
+//       interestToDate: interestAccrued,
+//       totalInterest,
+//       days,
+//       grandTotal,
+//     });
+//   }, [watchedValues]);
+//   // const handleSubmit = (data: z.infer<typeof caseSchema>) => {
+//   //   const newCase: CaseData = {
+//   //     id: Date.now().toString(),
+//   //     caseName: data.caseName,
+//   //     courtName: data.courtName,
+//   //     courtCaseNumber: data.courtCaseNumber,
+//   //     judgmentAmount: data.judgmentAmount,
+//   //     judgmentDate: data.judgmentDate,
+//   //     lastPaymentDate: data.endDate || new Date().toISOString().split("T")[0],
+//   //     totalPayments: data.paymentAmount || 0,
+//   //     accruedInterest: calculationResults.totalInterest,
+//   //     principalBalance: calculationResults.principalBalance,
+//   //     payoffAmount: calculationResults.grandTotal,
+//   //   };
+//   //   onSubmit(newCase);
+//   //   form.reset();
+//   //   onOpenChange(false);
+//   // };
+//   const [postCase, { isLoading }] = usePostCaseMutation();
+//   const handleSubmit = async (data: z.infer<typeof caseSchema>) => {
+//     const token =
+//       localStorage.getItem("access") || localStorage.getItem("authToken") || "";
+//     const newCase: CaseData = {
+//       id: Date.now().toString(), // Your backend might auto-generate this, so you may omit it if unnecessary
+//       caseName: data.caseName,
+//       courtName: data.courtName,
+//       courtCaseNumber: data.courtCaseNumber,
+//       judgmentAmount: data.judgmentAmount,
+//       judgmentDate: data.judgmentDate,
+//       lastPaymentDate: data.endDate || new Date().toISOString().split("T")[0],
+//       totalPayments: data.paymentAmount || 0,
+//       accruedInterest: calculationResults.totalInterest,
+//       principalBalance: calculationResults.principalBalance,
+//       payoffAmount: calculationResults.grandTotal,
+//       interestRate: data.interestRate,
+//       isEnded: false,
+//       debtorInfo: data.debtorInfo || "",
+//     };
+//     try {
+//       const res = await postCase({ token, data: newCase }).unwrap();
+//       toast.success("Case added successfully!");
+//       //@ts-ignore
+//       onSubmit(res); // or `onSubmit(newCase)` depending on what you want to propagate up
+//       form.reset();
+//       onOpenChange(false);
+//     } catch (error: any) {
+//       toast.error(error?.data?.detail || "Failed to add case");
+//     }
+//   };
+//   const handleCalculate = () => form.trigger();
+//   return (
+//     <Dialog open={open} onOpenChange={onOpenChange}>
+//       <DialogContent className="max-h-[90dvh] max-w-6xl overflow-y-auto">
+//         <DialogHeader>
+//           <DialogTitle className="text-xl font-bold">New Case</DialogTitle>
+//           <DialogDescription>
+//             Enter judgment information and payment details to create a new case
+//           </DialogDescription>
+//         </DialogHeader>
+//         <Form {...form}>
+//           <form
+//             onSubmit={form.handleSubmit(handleSubmit)}
+//             className="space-y-6"
+//           >
+//             {/* Judgment Information */}
+//             <Card>
+//               <CardHeader>
+//                 <CardTitle className="text-lg text-primary">
+//                   Judgment Information{" "}
+//                   <span className="text-red-500">(Required)</span>
+//                 </CardTitle>
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+//                   <FormField
+//                     control={form.control}
+//                     name="caseName"
+//                     render={({ field }) => (
+//                       <FormItem>
+//                         <FormLabel>Case Name</FormLabel>
+//                         <FormControl>
+//                           <Input placeholder="Enter case name" {...field} />
+//                         </FormControl>
+//                         <FormMessage />
+//                       </FormItem>
+//                     )}
+//                   />
+//                   <FormField
+//                     control={form.control}
+//                     name="courtName"
+//                     render={({ field }) => (
+//                       <FormItem>
+//                         <FormLabel>Court Name</FormLabel>
+//                         <FormControl>
+//                           <Input
+//                             placeholder="e.g. Orange County Superior Court"
+//                             {...field}
+//                           />
+//                         </FormControl>
+//                         <FormMessage />
+//                       </FormItem>
+//                     )}
+//                   />
+//                   <FormField
+//                     control={form.control}
+//                     name="courtCaseNumber"
+//                     render={({ field }) => (
+//                       <FormItem>
+//                         <FormLabel>Court Case Number</FormLabel>
+//                         <FormControl>
+//                           <Input
+//                             placeholder="Enter court case number"
+//                             {...field}
+//                           />
+//                         </FormControl>
+//                         <FormMessage />
+//                       </FormItem>
+//                     )}
+//                   />
+//                   <FormField
+//                     control={form.control}
+//                     name="judgmentAmount"
+//                     render={({ field }) => (
+//                       <FormItem>
+//                         <FormLabel>Judgment Amount</FormLabel>
+//                         <FormControl>
+//                           <Input
+//                             type="input"
+//                             step="0.01"
+//                             placeholder="0.00"
+//                             {...field}
+//                             onChange={(e) =>
+//                               field.onChange(parseFloat(e.target.value) || 0)
+//                             }
+//                           />
+//                         </FormControl>
+//                         <FormMessage />
+//                       </FormItem>
+//                     )}
+//                   />
+//                   <FormField
+//                     control={form.control}
+//                     name="interestRate"
+//                     render={({ field }) => (
+//                       <FormItem>
+//                         <FormLabel>Interest Rate (%)</FormLabel>
+//                         <FormControl>
+//                           <Input
+//                             type="input"
+//                             step="0.01"
+//                             placeholder="10.00"
+//                             {...field}
+//                             onChange={(e) =>
+//                               field.onChange(parseFloat(e.target.value) || 0)
+//                             }
+//                           />
+//                         </FormControl>
+//                         <FormMessage />
+//                       </FormItem>
+//                     )}
+//                   />
+//                   <FormField
+//                     control={form.control}
+//                     name="judgmentDate"
+//                     render={({ field }) => (
+//                       <FormItem>
+//                         <FormLabel>Judgment Date</FormLabel>
+//                         <FormControl>
+//                           <Input type="date" {...field} />
+//                         </FormControl>
+//                         <FormMessage />
+//                       </FormItem>
+//                     )}
+//                   />
+//                 </div>
+//               </CardContent>
+//             </Card>
+//             {/* Payment/Cost */}
+//             <Card>
+//               <CardHeader>
+//                 <CardTitle className="text-lg text-primary">
+//                   Payment and/or Cost{" "}
+//                   <span className="text-muted-foreground">(Optional)</span>
+//                 </CardTitle>
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+//                   <FormField
+//                     control={form.control}
+//                     name="paymentAmount"
+//                     render={({ field }) => (
+//                       <FormItem>
+//                         <FormLabel>Payment Amount</FormLabel>
+//                         <FormControl>
+//                           <Input
+//                             type="input"
+//                             step="0.01"
+//                             placeholder="0.00"
+//                             {...field}
+//                             onChange={(e) =>
+//                               field.onChange(parseFloat(e.target.value) || 0)
+//                             }
+//                           />
+//                         </FormControl>
+//                         <FormMessage />
+//                       </FormItem>
+//                     )}
+//                   />
+//                   <FormField
+//                     control={form.control}
+//                     name="cost"
+//                     render={({ field }) => (
+//                       <FormItem>
+//                         <FormLabel>Cost</FormLabel>
+//                         <FormControl>
+//                           <Input
+//                             type="input"
+//                             step="0.01"
+//                             placeholder="0.00"
+//                             {...field}
+//                             onChange={(e) =>
+//                               field.onChange(parseFloat(e.target.value) || 0)
+//                             }
+//                           />
+//                         </FormControl>
+//                         <FormMessage />
+//                       </FormItem>
+//                     )}
+//                   />
+//                   <div className="flex items-end">
+//                     <Button
+//                       type="button"
+//                       onClick={handleCalculate}
+//                       className="w-full hover:bg-primary/80"
+//                     >
+//                       Add
+//                     </Button>
+//                   </div>
+//                 </div>
+//               </CardContent>
+//             </Card>
+//             {/* Actions */}
+//             <Card>
+//               <CardHeader>
+//                 <CardTitle className="text-lg text-primary">
+//                   Debtor Contact Info
+//                 </CardTitle>
+//               </CardHeader>
+//               <CardContent>
+//                 <FormField
+//                   control={form.control}
+//                   name="debtorInfo"
+//                   render={({ field }) => (
+//                     <FormItem className="w-full md:w-1/2 lg:w-full">
+//                       <FormLabel>Notes or Actions</FormLabel>
+//                       <FormControl>
+//                         <Textarea
+//                           placeholder="Enter any additional notes or actions here"
+//                           rows={3}
+//                           {...field}
+//                         />
+//                       </FormControl>
+//                       <FormMessage />
+//                     </FormItem>
+//                   )}
+//                 />
+//               </CardContent>
+//             </Card>
+//             {/* Results */}
+//             <Card>
+//               <CardHeader>
+//                 <CardTitle className="text-center text-lg">Results</CardTitle>
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+//                   <div className="space-y-4">
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Judgment Amount:</span>
+//                       <span>
+//                         {formatCurrency(calculationResults.judgmentAmount)}
+//                       </span>
+//                     </div>
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Principal Reduction:</span>
+//                       <span>
+//                         {formatCurrency(calculationResults.principalReduction)}
+//                       </span>
+//                     </div>
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Principal Balance:</span>
+//                       <span>
+//                         {formatCurrency(calculationResults.principalBalance)}
+//                       </span>
+//                     </div>
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Costs After Judgment:</span>
+//                       <span>
+//                         {formatCurrency(calculationResults.costsAfterJudgment)}
+//                       </span>
+//                     </div>
+//                   </div>
+//                   <div className="space-y-4">
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Daily Interest:</span>
+//                       <span>
+//                         {formatCurrency(calculationResults.dailyInterest)}
+//                       </span>
+//                     </div>
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Interest Accrued:</span>
+//                       <span>
+//                         {formatCurrency(calculationResults.interestAccrued)}
+//                       </span>
+//                     </div>
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Interest to Date:</span>
+//                       <span>
+//                         {formatCurrency(calculationResults.interestToDate)}
+//                       </span>
+//                     </div>
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Total Interest:</span>
+//                       <span>
+//                         {formatCurrency(calculationResults.totalInterest)}
+//                       </span>
+//                     </div>
+//                   </div>
+//                   <div className="space-y-4">
+//                     <div className="flex justify-between">
+//                       <span className="font-medium">Days:</span>
+//                       <span>{calculationResults.days}</span>
+//                     </div>
+//                     <Separator />
+//                     <div className="flex justify-between text-lg font-bold">
+//                       <span>GRAND TOTAL:</span>
+//                       <span className="text-primary">
+//                         {formatCurrency(calculationResults.grandTotal)}
+//                       </span>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </CardContent>
+//             </Card>
+//             <div className="flex space-x-2 pt-4">
+//               <Button
+//                 type="submit"
+//                 className="flex-1 hover:bg-primary/80"
+//                 disabled={isLoading}
+//               >
+//                 {isLoading ? "Adding..." : "Add Case"}
+//               </Button>
+//               <Button
+//                 type="button"
+//                 variant="outline"
+//                 className="flex-1"
+//                 onClick={() => onOpenChange(false)}
+//               >
+//                 Cancel
+//               </Button>
+//             </div>
+//           </form>
+//         </Form>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// };
+// export default AddCaseModal;
 import { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -24,6 +500,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/calculations";
+import { usePostCaseMutation } from "@/store/services/case";
 
 import { Textarea } from "../ui/textarea";
 
@@ -39,19 +516,16 @@ const caseSchema = z.object({
   endDate: z.string().optional(),
   paymentAmount: z.number().optional(),
   cost: z.number().optional(),
+  debtorInfo: z.string().optional(),
 });
 
 interface AddCaseModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: CaseData) => void;
+  onSubmit: (data: any) => void;
 }
 
-export function AddCaseModal({
-  open,
-  onOpenChange,
-  onSubmit,
-}: AddCaseModalProps) {
+const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
   const [calculationResults, setCalculationResults] = useState({
     judgmentAmount: 0,
     principalReduction: 0,
@@ -69,7 +543,7 @@ export function AddCaseModal({
     resolver: zodResolver(caseSchema),
     defaultValues: {
       caseName: "",
-      courtName: "", // ✅
+      courtName: "",
       courtCaseNumber: "",
       judgmentAmount: 0,
       interestRate: 10,
@@ -77,6 +551,7 @@ export function AddCaseModal({
       endDate: new Date().toISOString().split("T")[0],
       paymentAmount: 0,
       cost: 0,
+      debtorInfo: "",
     },
   });
 
@@ -119,7 +594,13 @@ export function AddCaseModal({
     });
   }, [watchedValues]);
 
-  const handleSubmit = (data: z.infer<typeof caseSchema>) => {
+  const [postCase, { isLoading }] = usePostCaseMutation();
+
+  const handleSubmit = async (data: z.infer<typeof caseSchema>) => {
+    const token =
+      localStorage.getItem("access") || localStorage.getItem("authToken") || "";
+
+    // Prepare payload in snake_case and string values for numbers
     const newCase: CaseData = {
       id: Date.now().toString(),
       caseName: data.caseName,
@@ -132,11 +613,20 @@ export function AddCaseModal({
       accruedInterest: calculationResults.totalInterest,
       principalBalance: calculationResults.principalBalance,
       payoffAmount: calculationResults.grandTotal,
+      isEnded: false, // Optional field
+      debtorInfo: data.debtorInfo || "", // Optional
+      interestRate: data.interestRate,
     };
 
-    onSubmit(newCase);
-    form.reset();
-    onOpenChange(false);
+    try {
+      const res = await postCase({ token, data: newCase }).unwrap();
+      toast.success("Case added successfully!");
+      onSubmit(res);
+      form.reset();
+      onOpenChange(false);
+    } catch (error: any) {
+      toast.error(error?.data?.detail || "Failed to add case");
+    }
   };
 
   const handleCalculate = () => form.trigger();
@@ -350,10 +840,22 @@ export function AddCaseModal({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Textarea
-                  placeholder="Enter any additional notes or actions here"
-                  className="w-full md:w-1/2 lg:w-full"
-                  rows={3}
+                <FormField
+                  control={form.control}
+                  name="debtorInfo"
+                  render={({ field }) => (
+                    <FormItem className="w-full md:w-1/2 lg:w-full">
+                      <FormLabel>Notes or Actions</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter any additional notes or actions here"
+                          rows={3}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </CardContent>
             </Card>
@@ -437,9 +939,14 @@ export function AddCaseModal({
             </Card>
 
             <div className="flex space-x-2 pt-4">
-              <Button type="submit" className="flex-1 hover:bg-primary/80">
-                Add Case
+              <Button
+                type="submit"
+                className="flex-1 hover:bg-primary/80"
+                disabled={isLoading}
+              >
+                {isLoading ? "Adding..." : "Add Case"}
               </Button>
+
               <Button
                 type="button"
                 variant="outline"
@@ -454,4 +961,6 @@ export function AddCaseModal({
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default AddCaseModal;

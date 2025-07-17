@@ -2,26 +2,34 @@ import { useState } from "react";
 
 import { Toaster, toast } from "sonner";
 
-import { AddCaseModal } from "@/components/case/AddCaseModal";
-import { CaseDetails } from "@/components/case/CaseDetails";
-import { CaseList } from "@/components/case/CaseList";
+import AddCaseModal from "@/components/case/AddCaseModal";
+import CaseDetails from "@/components/case/CaseDetails";
+import CaseList from "@/components/case/CaseList";
 import { EmptyState } from "@/components/case/EmptyState";
 import { TransactionForm } from "@/components/transaction/TransactionForm";
 import { TransactionsTable } from "@/components/transaction/TransactionsTable";
 import { mockCases, mockTransactions } from "@/data/mockData";
+import { useGetCaseByIdQuery, useGetCaseQuery } from "@/store/services/case";
 
 const Home = () => {
+  const token = localStorage.getItem("access") || "";
+  const { data: casesData = [], isLoading, error } = useGetCaseQuery(token);
+  const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
+
+  const { data: selectedCase } = useGetCaseByIdQuery(
+    { token, id: selectedCaseId! },
+    { skip: !selectedCaseId }
+  );
+
   const [cases, setCases] = useState<CaseData[]>(mockCases);
   const [transactions, setTransactions] =
     useState<Transaction[]>(mockTransactions);
-  const [selectedCaseId, setSelectedCaseId] = useState<string | null>("1");
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
   const [isAddCaseModalOpen, setIsAddCaseModalOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<
     Transaction | undefined
   >();
 
-  const selectedCase = cases.find((c) => c.id === selectedCaseId);
   const caseTransactions = transactions.filter(
     (t) => t.caseId === selectedCaseId
   );
@@ -36,18 +44,10 @@ const Home = () => {
 
   const handleDeleteCase = (caseId: string) => {
     setCases((prev) => prev.filter((c) => c.id !== caseId));
-    setTransactions((prev) => prev.filter((t) => t.caseId !== caseId));
 
     if (selectedCaseId === caseId) {
-      const remainingCases = cases.filter((c) => c.id !== caseId);
-      setSelectedCaseId(
-        remainingCases.length > 0 ? remainingCases[0].id : null
-      );
+      setSelectedCaseId(cases.length > 1 ? cases[0].id : null);
     }
-
-    toast.success("Case deleted successfully!", {
-      className: "bg-primary p-3 text-white",
-    });
   };
 
   const handleAddCaseSubmit = (newCase: CaseData) => {
@@ -77,7 +77,6 @@ const Home = () => {
 
   const handleTransactionSubmit = (data: TransactionFormData) => {
     if (editingTransaction) {
-      // Update existing transaction
       setTransactions((prev) =>
         prev.map((t) =>
           t.id === editingTransaction.id
@@ -97,7 +96,6 @@ const Home = () => {
         className: "bg-primary text-white p-3",
       });
     } else {
-      // Add new transaction
       const newTransaction: Transaction = {
         id: Date.now().toString(),
         caseId: selectedCaseId!,
@@ -114,7 +112,6 @@ const Home = () => {
       });
     }
 
-    // Update case data with new calculations
     if (selectedCase) {
       setCases((prev) =>
         prev.map((c) =>
@@ -137,7 +134,6 @@ const Home = () => {
     }
   };
 
-  // Show empty state when no cases exist
   if (cases.length === 0) {
     return (
       <div className="mx-auto h-screen w-full overflow-auto bg-background p-4 md:p-10">
@@ -156,45 +152,45 @@ const Home = () => {
   }
 
   return (
-    <div className="mx-auto h-screen w-full overflow-auto bg-background p-4 md:p-9">
-      <div className="max-w-8xl mx-auto space-y-6">
+    <div className="mx-auto h-screen w-full overflow-auto bg-background p-4">
+      <div className="mx-auto max-w-screen-xl space-y-6">
         <div className="z-10 mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <CaseList
-            cases={cases}
+            cases={casesData}
+            isLoading={isLoading}
+            error={error}
+            //@ts-ignore
             selectedCaseId={selectedCaseId}
+            //@ts-ignore
             onCaseSelect={handleCaseSelect}
             onAddNewCase={handleAddNewCase}
+            //@ts-ignore
             onDeleteCase={handleDeleteCase}
           />
 
-          {selectedCase && (
-            <CaseDetails
-              case={selectedCase}
-              onAddTransaction={handleAddTransaction}
-              onDeleteCase={handleDeleteCase}
-            />
-          )}
+          <CaseDetails
+            //@ts-ignore
+            case={selectedCase ?? null}
+            onAddTransaction={handleAddTransaction}
+            onDeleteCase={handleDeleteCase}
+          />
         </div>
 
-        {selectedCase && (
-          <TransactionsTable
-            transactions={caseTransactions}
-            caseName={selectedCase.caseName}
-            //@ts-ignore
-            onEditTransaction={handleEditTransaction}
-            onDeleteTransaction={handleDeleteTransaction}
-          />
-        )}
+        <TransactionsTable
+          transactions={selectedCase ? caseTransactions : []}
+          caseName={selectedCase?.caseName ?? "No Case Selected"}
+          //@ts-ignore
+          onEditTransaction={handleEditTransaction}
+          onDeleteTransaction={handleDeleteTransaction}
+        />
 
-        {selectedCase && (
-          <TransactionForm
-            open={isTransactionFormOpen}
-            onOpenChange={setIsTransactionFormOpen}
-            onSubmit={handleTransactionSubmit}
-            caseData={selectedCase}
-            editTransaction={editingTransaction}
-          />
-        )}
+        <TransactionForm
+          open={isTransactionFormOpen}
+          onOpenChange={setIsTransactionFormOpen}
+          onSubmit={handleTransactionSubmit}
+          caseData={selectedCase ?? ({} as CaseData)}
+          editTransaction={editingTransaction}
+        />
 
         <AddCaseModal
           open={isAddCaseModalOpen}

@@ -11,6 +11,8 @@ declare type CaseData = {
   principalBalance: number;
   payoffAmount: number;
   isEnded?: boolean;
+  debtorInfo?: string;
+  interestRate: number;
 };
 
 declare type Transaction = {
