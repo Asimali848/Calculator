@@ -8,7 +8,7 @@ import CaseList from "@/components/case/CaseList";
 import { EmptyState } from "@/components/case/EmptyState";
 import { TransactionForm } from "@/components/transaction/TransactionForm";
 import { TransactionsTable } from "@/components/transaction/TransactionsTable";
-import { mockCases, mockTransactions } from "@/data/mockData";
+import { mockTransactions } from "@/data/mockData";
 import { useGetCaseByIdQuery, useGetCaseQuery } from "@/store/services/case";
 
 const Home = () => {
@@ -21,7 +21,7 @@ const Home = () => {
     { skip: !selectedCaseId }
   );
 
-  const [cases, setCases] = useState<CaseData[]>(mockCases);
+  const [cases, setCases] = useState<CaseData[]>(casesData);
   const [transactions, setTransactions] =
     useState<Transaction[]>(mockTransactions);
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
