@@ -62,6 +62,8 @@ export const api = createApi({
     "Variants",
     "Dashboard",
     "Setting",
+    "Transaction",
+    "Transactions",
   ],
   endpoints: () => ({}),
 });

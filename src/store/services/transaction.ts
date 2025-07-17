@@ -1,53 +1,54 @@
 import { api } from "./core";
 
-export const companyApi = api.injectEndpoints({
+export const transactionApi = api.injectEndpoints({
   endpoints: (build) => ({
-    postCompetitors: build.mutation({
+    postTransaction: build.mutation({
       query: ({
         token,
         data,
       }: {
         token: string;
         data: {
-          name: string;
-          website: string;
-          address: string;
-          postal_code: string;
-          website_name: string;
+          case_id: number;
+          transaction_type: string;
+          amount: number;
+          date: string;
+          description: string;
+          new_balance: number;
         };
       }) => ({
-        url: "/competitors/",
+        url: "/docket/api/transactions/create/",
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: data,
       }),
-      invalidatesTags: ["Competitors"],
+      invalidatesTags: ["Transaction"],
     }),
-    getCompetitors: build.query({
+    getTransaction: build.query({
       query: (token: string) => ({
-        url: "/competitors/",
+        url: "/Transaction/",
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
-      providesTags: ["Competitors"],
-      transformResponse: (response: Competitor[]) => response,
+      providesTags: ["Transactions"],
+      transformResponse: (response: Transaction) => response,
     }),
     getCompetitor: build.query({
       query: ({ id, token }: { id: number; token: string }) => ({
-        url: `/competitors/${id}`,
+        url: `/docket/api/cases/${id}/transactions/`,
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
-      providesTags: ["Competitors"],
+      providesTags: ["Transaction"],
       transformResponse: (response: Competitor) => response,
     }),
-    putCompetitors: build.mutation({
+    putTransaction: build.mutation({
       query: ({
         id,
         token,
@@ -64,32 +65,32 @@ export const companyApi = api.injectEndpoints({
           soft_delete: boolean;
         };
       }) => ({
-        url: `/competitors/${id}`,
+        url: `/docket/api/transactions/${id}/update/`,
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: data,
       }),
-      invalidatesTags: ["Competitors"],
+      invalidatesTags: ["Transaction"],
     }),
     deleteCompetitor: build.mutation({
       query: ({ token, id }: { token: string; id: number }) => ({
-        url: `/competitors/${id}`,
+        url: `/Transaction/${id}`,
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
-      invalidatesTags: ["Competitors"],
+      invalidatesTags: ["Transaction"],
     }),
   }),
 });
 
 export const {
-  usePostCompetitorsMutation,
-  useGetCompetitorsQuery,
+  usePostTransactionMutation,
+  useGetTransactionQuery,
+  usePutTransactionMutation,
   useGetCompetitorQuery,
   useDeleteCompetitorMutation,
-  usePutCompetitorsMutation,
-} = companyApi;
+} = transactionApi;

@@ -19,7 +19,7 @@ declare type Transaction = {
   id: string;
   caseId: string;
   date: string;
-  type: "PAYMENT" | "COST" | "INTEREST";
+  type: "PAYMENT" | "COST";
   amount: number;
   accruedInterest: number;
   principalBalance: number;
@@ -27,7 +27,7 @@ declare type Transaction = {
 };
 
 declare type TransactionFormData = {
-  type: "PAYMENT" | "COST" | "INTEREST";
+  type: "PAYMENT" | "COST";
   amount: number;
   date: string;
   description?: string;

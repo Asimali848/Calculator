@@ -1,5 +1,3 @@
-
-
 export const mockTransactions: Transaction[] = [
   {
     id: "1",
