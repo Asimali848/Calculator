@@ -1,20 +1,3 @@
-// declare type CaseData = {
-//   id: string;
-//   caseName: string;
-//   courtName: string;
-//   courtCaseNumber: string;
-//   judgmentAmount: number;
-//   judgmentDate: string;
-//   lastPaymentDate: string;
-//   totalPayments: number;
-//   accruedInterest: number;
-//   principalBalance: number;
-//   payoffAmount: number;
-//   isEnded?: boolean;
-//   debtorInfo?: string;
-//   interestRate: number;
-// };
-
 declare type CaseData = {
   id: string;
   caseName: string;
@@ -30,8 +13,25 @@ declare type CaseData = {
   isEnded?: boolean;
   debtorInfo?: string;
   interestRate: number;
-  caseId: number;
 };
+
+// declare type CaseData = {
+//   id: string;
+//   caseName: string;
+//   courtName: string;
+//   courtCaseNumber: string;
+//   judgmentAmount: number;
+//   judgmentDate: string;
+//   lastPaymentDate: string;
+//   totalPayments: number;
+//   accruedInterest: number;
+//   principalBalance: number;
+//   payoffAmount: number;
+//   isEnded?: boolean;
+//   debtorInfo?: string;
+//   interestRate: number;
+//   caseId: number;
+// };
 
 declare type Transaction = {
   id: string;

@@ -683,7 +683,9 @@ const Home = () => {
           onOpenChange={setIsTransactionFormOpen}
           //@ts-ignore
           onSubmit={handleTransactionSubmit}
+          //@ts-ignore
           caseData={selectedCase ?? ({} as CaseData)}
+          //@ts-ignore
           editTransaction={editingTransaction}
         />
 
