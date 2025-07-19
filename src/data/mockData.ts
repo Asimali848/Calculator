@@ -13,7 +13,7 @@ export const mockTransactions: Transaction[] = [
     id: "2",
     caseId: "1",
     date: "2025-05-15",
-    type: "INTEREST",
+    type: "PAYMENT",
     amount: 1250.75,
     accruedInterest: 3650.22,
     principalBalance: 178901.24,
