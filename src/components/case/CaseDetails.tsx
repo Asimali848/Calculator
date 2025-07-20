@@ -8,14 +8,17 @@ import {
   Trash2,
   TriangleAlert,
 } from "lucide-react";
+import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
 import list from "@/assets/img/list.svg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatDate } from "@/lib/calculations";
+import { setSelectedCase } from "@/store/global";
 import { useDeleteCaseMutation } from "@/store/services/case";
 
+import { TransactionForm } from "../transaction/TransactionForm";
 import {
   Dialog,
   DialogClose,
@@ -58,7 +61,6 @@ function EndCaseDialog({
             Enter the payoff date to generate the payoff statement.
           </DialogDescription>
         </DialogHeader>
-
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between gap-2.5">
             <Label htmlFor="payoff-date">Payoff Date</Label>
@@ -70,7 +72,6 @@ function EndCaseDialog({
               className="w-44 dark:bg-white/20"
             />
           </div>
-
           <div className="space-y-2 rounded-lg bg-muted p-4 text-sm">
             <h4 className="font-semibold">Payoff Summary</h4>
             <div className="grid grid-cols-2 gap-2">
@@ -86,7 +87,6 @@ function EndCaseDialog({
               </span>
             </div>
           </div>
-
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button onClick={onDownload} variant="default" className="flex-1">
               <Download className="mr-2 h-4 w-4" />
@@ -98,7 +98,6 @@ function EndCaseDialog({
     </Dialog>
   );
 }
-
 function DeleteCaseDialog({
   open,
   onOpenChange,
@@ -149,7 +148,6 @@ function DeleteCaseDialog({
     </Dialog>
   );
 }
-
 function CaseDetail({
   label,
   value,
@@ -174,18 +172,12 @@ function CaseDetail({
     </div>
   );
 }
-
 interface CaseDetailsProps {
   case: CaseData;
   onAddTransaction: () => void;
   onDeleteCase: (caseId: string) => void;
 }
-
-const CaseDetails = ({
-  case: caseData,
-  onAddTransaction,
-  onDeleteCase,
-}: CaseDetailsProps) => {
+const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
   if (!caseData) {
     return (
       <Card className="flex h-full flex-col items-center justify-center gap-2 p-10 text-muted-foreground">
@@ -194,17 +186,23 @@ const CaseDetails = ({
       </Card>
     );
   }
-
+  const dispatch = useDispatch();
   const [isEndCaseDialogOpen, setIsEndCaseDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false); // New state for TransactionForm
   const [payoffDate, setPayoffDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const [isCaseEnded, setIsCaseEnded] = useState(!!caseData.isEnded);
   const [showMenu, setShowMenu] = useState(false);
   const [deleteCase, { isLoading: isDeleting }] = useDeleteCaseMutation();
-
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (caseData) {
+      dispatch(setSelectedCase(caseData));
+    }
+  }, [caseData, dispatch]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -215,22 +213,18 @@ const CaseDetails = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
   const handleDownloadPayoffLetter = () => {
     const content = `
-PAYOFF STATEMENT
-
-Case Name: ${caseData.caseName}
-Court Case Number: ${caseData.courtCaseNumber}
-Judgment Date: ${formatDate(caseData.judgmentDate)}
-Judgment Amount: ${formatCurrency(caseData.judgmentAmount)}
-
-Principal Balance: ${formatCurrency(caseData.principalBalance)}
-Accrued Interest: ${formatCurrency(caseData.accruedInterest)}
-Total Payoff Amount: ${formatCurrency(caseData.payoffAmount)}
-
-Payoff Date: ${formatDate(payoffDate)}
-    `;
+  PAYOFF STATEMENT
+  Case Name: ${caseData.caseName}
+  Court Case Number: ${caseData.courtCaseNumber}
+  Judgment Date: ${formatDate(caseData.judgmentDate)}
+  Judgment Amount: ${formatCurrency(caseData.judgmentAmount)}
+  Principal Balance: ${formatCurrency(caseData.principalBalance)}
+  Accrued Interest: ${formatCurrency(caseData.accruedInterest)}
+  Total Payoff Amount: ${formatCurrency(caseData.payoffAmount)}
+  Payoff Date: ${formatDate(payoffDate)}
+      `;
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -241,7 +235,6 @@ Payoff Date: ${formatDate(payoffDate)}
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
   const handleEndCase = () => {
     toast.success(
       `Case "${caseData.caseName}" has been marked as ended with payoff date: ${formatDate(payoffDate)}`,
@@ -250,21 +243,15 @@ Payoff Date: ${formatDate(payoffDate)}
     setIsCaseEnded(true);
     setIsEndCaseDialogOpen(false);
   };
-
   const handleDeleteCase = async () => {
     try {
-      const token = localStorage.getItem("access"); // or "accessToken", depending on your app
-
+      const token = localStorage.getItem("access");
       if (!token) {
         toast.error("User not authenticated");
         return;
       }
-
-      //@ts-ignore
       await deleteCase({ id: caseData.id, token }).unwrap();
-
       onDeleteCase(caseData.id);
-
       toast.success("Case deleted successfully", {
         className: "bg-primary text-white p-3",
       });
@@ -274,12 +261,10 @@ Payoff Date: ${formatDate(payoffDate)}
       });
     }
   };
-
   return (
     <Card className="h-full dark:bg-white/10">
       <CardHeader className="flex flex-row items-center justify-between gap-4 pb-4">
         <CardTitle className="text-xl font-bold">Case Details</CardTitle>
-
         <div className="relative" ref={menuRef}>
           <Button
             variant="default"
@@ -296,7 +281,9 @@ Payoff Date: ${formatDate(payoffDate)}
                 size="sm"
                 onClick={() => {
                   setShowMenu(false);
-                  if (!isCaseEnded) onAddTransaction();
+                  if (!isCaseEnded) {
+                    setIsTransactionFormOpen(true); // Only open from this component
+                  }
                 }}
                 className="flex w-full items-center justify-start gap-2 rounded px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"
                 disabled={isCaseEnded}
@@ -330,37 +317,14 @@ Payoff Date: ${formatDate(payoffDate)}
               </Button>
             </div>
           )}
-
-          <div className="hidden">
-            <EndCaseDialog
-              open={isEndCaseDialogOpen}
-              onOpenChange={setIsEndCaseDialogOpen}
-              disabled={isCaseEnded}
-              payoffDate={payoffDate}
-              setPayoffDate={setPayoffDate}
-              caseData={caseData}
-              onEndCase={handleEndCase}
-              onDownload={handleDownloadPayoffLetter}
-            />
-
-            <DeleteCaseDialog
-              open={isDeleteDialogOpen}
-              onOpenChange={setIsDeleteDialogOpen}
-              caseData={caseData}
-              onDelete={handleDeleteCase}
-              isDeleting={isDeleting}
-            />
-          </div>
         </div>
       </CardHeader>
-
       <CardContent className="space-y-4">
         <div className="my-6 text-center">
           <h2 className="text-2xl font-bold text-primary">
             {caseData.caseName}
           </h2>
         </div>
-
         <div className="grid grid-cols-1 gap-4">
           <div className="space-y-4">
             <CaseDetail
@@ -380,7 +344,6 @@ Payoff Date: ${formatDate(payoffDate)}
               value={formatDate(caseData.lastPaymentDate)}
             />
           </div>
-
           <div className="space-y-4">
             <CaseDetail
               label="Total Payments to Date"
@@ -399,8 +362,37 @@ Payoff Date: ${formatDate(payoffDate)}
           </div>
         </div>
       </CardContent>
+
+      <TransactionForm
+        open={isTransactionFormOpen}
+        onOpenChange={setIsTransactionFormOpen}
+        caseData={caseData}
+        keepOpenAfterSubmit={false}
+      />
+
+      <div className="hidden">
+        <EndCaseDialog
+          open={isEndCaseDialogOpen}
+          onOpenChange={setIsEndCaseDialogOpen}
+          disabled={isCaseEnded}
+          payoffDate={payoffDate}
+          setPayoffDate={setPayoffDate}
+          caseData={caseData}
+          onDownload={() => {
+            handleDownloadPayoffLetter();
+            handleEndCase();
+          }}
+        />
+
+        <DeleteCaseDialog
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          caseData={caseData}
+          onDelete={handleDeleteCase}
+          isDeleting={isDeleting}
+        />
+      </div>
     </Card>
   );
 };
-
 export default CaseDetails;

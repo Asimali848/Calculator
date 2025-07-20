@@ -115,16 +115,47 @@ export const userApi = api.injectEndpoints({
       }),
     }),
 
-    // Update User Profile
+    getProfile: build.query<
+      {
+        status_code: number;
+        message: string;
+        profile: {
+          full_name: string;
+          image: string;
+          email: string;
+          company: string;
+          location: string;
+          phone_number: string;
+          website: string;
+          subscription_plan: string;
+          member_since: string;
+        };
+      },
+      { token: string }
+    >({
+      query: ({ token }) => ({
+        url: "/authentication/api/profile/",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+
     updateUser: build.mutation<
       any,
       {
         token: string;
         body: {
-          username?: string;
-          email?: string;
-          password?: string;
-          avatar?: string;
+          full_name: string;
+          email: string;
+          image: string;
+          company: string;
+          location: string;
+          phone_number: string;
+          website: string;
+          subscription_plan: string;
+          member_since: string;
         };
       }
     >({
@@ -148,4 +179,5 @@ export const {
   usePasswordResetRequestMutation,
   usePasswordResetVerifyMutation,
   useUpdateUserMutation,
+  useGetProfileQuery,
 } = userApi;

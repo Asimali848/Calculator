@@ -32,15 +32,15 @@ export const CaseApi = api.injectEndpoints({
       }) => response.data,
     }),
 
-    postCase: builder.mutation<CaseData, { token: string; data: CaseData }>({
+    postCase: builder.mutation<CaseData, { token: string; data: AddCase }>({
       query: ({ token, data }) => ({
         url: "/docket/api/add-docket/",
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          // REMOVE Content-Type header here
         },
-        body: JSON.stringify(data),
+        body: data, // Let RTKQ handle serialization
       }),
     }),
 

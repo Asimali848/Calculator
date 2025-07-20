@@ -56,8 +56,24 @@ const Navbar = () => {
           <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger>
+              {/* <span
+                className={cn(
+                  "flex items-center justify-center gap-1 rounded-full",
+                  image !== null
+                    ? "bg-secondary dark:bg-secondary p-1"
+                    : "bg-primary dark:bg-primary p-2"
+                )}
+              >
+                {!username ? (
+                  <Landmark className="text-white" />
+                ) : (
+                  <span className="capitalize">
+                    <img src={image} alt="" className="size-10 rounded-full" />
+                  </span>
+                )}
+              </span> */}
+
               <span className="flex items-center justify-center gap-1 rounded-full bg-primary p-2 dark:bg-primary">
-                {/* <ChevronDown className="text-white size-4" />  */}
                 <Landmark className="text-white" />
               </span>
             </DropdownMenuTrigger>
