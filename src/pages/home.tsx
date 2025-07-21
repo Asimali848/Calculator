@@ -125,6 +125,7 @@ const Home = () => {
           <AddCaseModal
             open={isAddCaseModalOpen}
             onOpenChange={setIsAddCaseModalOpen}
+            //@ts-ignore
             onSubmit={handleAddCaseSubmit}
           />
         </div>
@@ -159,6 +160,7 @@ const Home = () => {
         </div>
 
         <TransactionsTable
+          //@ts-ignore
           transactions={selectedCase ? caseTransactions : []}
           caseName={selectedCase?.caseName ?? "No Case Selected"}
           //@ts-ignore
@@ -179,7 +181,9 @@ const Home = () => {
 
         <AddCaseModal
           open={isAddCaseModalOpen}
+          //@ts-ignore
           onOpenChange={setIsAddCaseModalOpen}
+          //@ts-ignore
           onSubmit={handleAddCaseSubmit}
         />
       </div>

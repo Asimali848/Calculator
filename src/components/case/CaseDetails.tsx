@@ -189,7 +189,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
   const dispatch = useDispatch();
   const [isEndCaseDialogOpen, setIsEndCaseDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false); // New state for TransactionForm
+  const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
   const [payoffDate, setPayoffDate] = useState(
     new Date().toISOString().split("T")[0]
   );
@@ -255,6 +255,8 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
       toast.success("Case deleted successfully", {
         className: "bg-primary text-white p-3",
       });
+      window.location.reload();
+      setIsDeleteDialogOpen(false);
     } catch (error) {
       toast.error("Failed to delete case", {
         className: "bg-destructive text-white p-3",
@@ -282,7 +284,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
                 onClick={() => {
                   setShowMenu(false);
                   if (!isCaseEnded) {
-                    setIsTransactionFormOpen(true); // Only open from this component
+                    setIsTransactionFormOpen(true);
                   }
                 }}
                 className="flex w-full items-center justify-start gap-2 rounded px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"

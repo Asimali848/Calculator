@@ -1,12 +1,21 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { Edit, Printer, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -19,18 +28,23 @@ import { formatCurrency, formatDate } from "@/lib/calculations";
 import { truncateString } from "@/lib/utils";
 import type { RootState } from "@/store";
 import { setEditTransactionId } from "@/store/global";
-import { useGetTransactionQuery } from "@/store/services/transaction";
+import {
+  useDeleteTransactionMutation,
+  useGetTransactionQuery,
+} from "@/store/services/transaction";
 
 interface TransactionsTableProps {
-  onEditTransaction: (transaction: TransactionFormData) => void;
-  onDeleteTransaction: (transactionId: string) => void;
+  onEditTransaction: (transaction: any) => void;
 }
 
-const TransactionsTable = ({
-  onEditTransaction,
-  onDeleteTransaction,
-}: TransactionsTableProps) => {
+const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
   const printRef = useRef<HTMLDivElement>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [transactionToDelete, setTransactionToDelete] = useState<number | null>(
+    null
+  );
+  const [deleteTransaction, { isLoading: isDeleting }] =
+    useDeleteTransactionMutation();
 
   const selectedCase = useSelector(
     (state: RootState) => state.global.selectedCase
@@ -39,7 +53,7 @@ const TransactionsTable = ({
   const dispatch = useDispatch();
   const id = Number(selectedCase?.id);
   const token = localStorage.getItem("access") || "";
-  const { data, isLoading } = useGetTransactionQuery(
+  const { data, isLoading, refetch } = useGetTransactionQuery(
     {
       id,
       token,
@@ -88,6 +102,38 @@ const TransactionsTable = ({
     }
   };
 
+  const handleDeleteClick = (transactionId: number) => {
+    setTransactionToDelete(transactionId);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (transactionToDelete && token) {
+      try {
+        await deleteTransaction({
+          token,
+          id: transactionToDelete,
+        }).unwrap();
+
+        // Refresh transaction list
+        refetch();
+
+        toast.success("Transaction deleted successfully");
+      } catch (error) {
+        console.error("Delete transaction error:", error);
+        toast.error("Failed to delete transaction");
+      } finally {
+        setDeleteDialogOpen(false);
+        setTransactionToDelete(null);
+      }
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setTransactionToDelete(null);
+  };
+
   if (!selectedCase) {
     return (
       <Card>
@@ -107,6 +153,38 @@ const TransactionsTable = ({
 
   return (
     <Card>
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this transaction? This action
+              cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start">
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={confirmDelete}
+              disabled={isDeleting}
+              className="w-full"
+            >
+              {isDeleting ? "Deleting..." : "Delete Permanently"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={cancelDelete}
+              disabled={isDeleting}
+              className="mt-2 w-full sm:mt-0"
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <CardHeader>
         <div className="flex justify-end gap-3">
           <Button variant="default" size="sm" onClick={handlePrint}>
@@ -143,6 +221,12 @@ const TransactionsTable = ({
                     Loading...
                   </TableCell>
                 </TableRow>
+              ) : data && data?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="py-10 text-center">
+                    No transactions found.
+                  </TableCell>
+                </TableRow>
               ) : (
                 data?.map((transaction) => (
                   //@ts-ignore
@@ -168,8 +252,9 @@ const TransactionsTable = ({
                       {formatCurrency(transaction.newBalance)}
                     </TableCell>
                     <TableCell className="truncate font-bold">
-                      {truncateString(transaction?.description, 20) ||
-                        "No description"}
+                      {transaction.description
+                        ? truncateString(transaction.description, 20)
+                        : "No description"}
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
@@ -190,7 +275,8 @@ const TransactionsTable = ({
                           variant="ghost"
                           size="sm"
                           //@ts-ignore
-                          onClick={() => onDeleteTransaction(transaction?.id)}
+                          onClick={() => handleDeleteClick(transaction?.id)}
+                          disabled={isDeleting}
                         >
                           <Trash2 className="h-4 w-4 text-red-500 dark:text-red-400" />
                         </Button>
