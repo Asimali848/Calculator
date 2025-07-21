@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
-import { Edit, Printer, Trash2 } from "lucide-react";
+import { Edit, Loader2, Printer, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -30,6 +30,7 @@ import type { RootState } from "@/store";
 import { setEditTransactionId } from "@/store/global";
 import {
   useDeleteTransactionMutation,
+  useDownloadPrintTransactionMutation,
   useGetTransactionQuery,
 } from "@/store/services/transaction";
 
@@ -38,13 +39,14 @@ interface TransactionsTableProps {
 }
 
 const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
-  const printRef = useRef<HTMLDivElement>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [transactionToDelete, setTransactionToDelete] = useState<number | null>(
     null
   );
+  const [isPrinting, setIsPrinting] = useState(false);
   const [deleteTransaction, { isLoading: isDeleting }] =
     useDeleteTransactionMutation();
+  const [downloadPrint] = useDownloadPrintTransactionMutation();
 
   const selectedCase = useSelector(
     (state: RootState) => state.global.selectedCase
@@ -64,31 +66,41 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
     }
   );
 
-  const handlePrint = () => {
-    if (!printRef.current) return;
-    const printContents = printRef.current.innerHTML;
-    const printWindow = window.open("", "", "height=600,width=800");
-    if (!printWindow) return;
+  const handlePrint = async () => {
+    if (!selectedCase || !token) {
+      toast.error("No case selected or missing token");
+      return;
+    }
 
-    printWindow.document.write("<html><head><title>Print Transactions</title>");
-    printWindow.document.write(`
-      <style>
-        body { font-family: sans-serif; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        h2, h3 { text-align: center; margin: 0; }
-      </style>
-    `);
-    printWindow.document.write("</head><body>");
-    printWindow.document.write(`<h2>Recent Transactions</h2>`);
-    printWindow.document.write(`<h3>${selectedCase?.caseName ?? ""}</h3>`);
-    printWindow.document.write(printContents);
-    printWindow.document.write("</body></html>");
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+    try {
+      setIsPrinting(true);
+      const toastId = toast.loading("Generating PDF...");
+
+      const pdfBlob = await downloadPrint({
+        token,
+        caseId: selectedCase.id.toString(),
+      }).unwrap();
+
+      // Create download link
+      const url = window.URL.createObjectURL(pdfBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      //@ts-ignore
+      a.download = `transactions-${selectedCase.caseName}-${formatDate(new Date())}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast.success("PDF downloaded successfully", { id: toastId });
+    } catch (error) {
+      console.error("PDF download error:", error);
+      toast.error("Failed to download PDF");
+    } finally {
+      setIsPrinting(false);
+    }
   };
 
   const getTransactionTypeColor = (type: string) => {
@@ -115,9 +127,7 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
           id: transactionToDelete,
         }).unwrap();
 
-        // Refresh transaction list
         refetch();
-
         toast.success("Transaction deleted successfully");
       } catch (error) {
         console.error("Delete transaction error:", error);
@@ -187,9 +197,20 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
 
       <CardHeader>
         <div className="flex justify-end gap-3">
-          <Button variant="default" size="sm" onClick={handlePrint}>
-            <span className="text-md font-semibold">Print</span>
-            <Printer className="ml-2 h-4 w-4" />
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handlePrint}
+            disabled={isPrinting}
+          >
+            {isPrinting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Printer className="mr-2 h-4 w-4" />
+            )}
+            <span className="font-semibold">
+              {isPrinting ? "Generating PDF..." : "Print"}
+            </span>
           </Button>
         </div>
         <CardTitle className="text-center text-xl font-bold">
@@ -201,7 +222,7 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
       </CardHeader>
 
       <CardContent>
-        <div ref={printRef}>
+        <div>
           <Table>
             <TableHeader>
               <TableRow>

@@ -53,12 +53,27 @@ export const CaseApi = api.injectEndpoints({
         },
       }),
     }),
+
+    downloadPayoffStatement: builder.mutation<Blob, { token: string; caseId: string }>({
+      query: ({ token, caseId }) => ({
+        url: `/docket/api/cases/${caseId}/payoff-statement/`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "*/*",
+        },
+        responseHandler: (response) => response.blob(),
+        cache: "no-cache",
+      }),
+    }),
+
   }),
-});
+})
 
 export const {
   useGetCaseQuery,
   useGetCaseByIdQuery,
   usePostCaseMutation,
   useDeleteCaseMutation,
+  useDownloadPayoffStatementMutation,
 } = CaseApi;
