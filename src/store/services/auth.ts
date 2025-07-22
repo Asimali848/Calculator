@@ -168,6 +168,26 @@ export const userApi = api.injectEndpoints({
         body,
       }),
     }),
+
+    changePassword: build.mutation<
+      any,
+      {
+        token: string;
+        body: {
+          current_password: string;
+          new_password: string;
+        };
+      }
+    >({
+      query: ({ token, body }) => ({
+        url: "/authentication/api/change-password/",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body,
+      }),
+    }),
   }),
 });
 
@@ -180,4 +200,5 @@ export const {
   usePasswordResetVerifyMutation,
   useUpdateUserMutation,
   useGetProfileQuery,
+  useChangePasswordMutation,
 } = userApi;

@@ -54,7 +54,10 @@ export const CaseApi = api.injectEndpoints({
       }),
     }),
 
-    downloadPayoffStatement: builder.mutation<Blob, { token: string; caseId: string }>({
+    downloadPayoffStatement: builder.mutation<
+      Blob,
+      { token: string; caseId: string }
+    >({
       query: ({ token, caseId }) => ({
         url: `/docket/api/cases/${caseId}/payoff-statement/`,
         method: "GET",
@@ -66,9 +69,8 @@ export const CaseApi = api.injectEndpoints({
         cache: "no-cache",
       }),
     }),
-
   }),
-})
+});
 
 export const {
   useGetCaseQuery,

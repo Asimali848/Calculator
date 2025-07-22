@@ -280,12 +280,11 @@ export function TransactionForm({
                       <div className="flex space-x-2">
                         <FormControl>
                           <Input
-                            type="number"
-                            step="0.01"
-                            placeholder="0.00"
+                            type="input"
+                            placeholder="0000"
                             {...field}
                             onChange={(e) =>
-                              field.onChange(parseFloat(e.target.value) || 0)
+                              field.onChange(parseFloat(e.target.value) || null)
                             }
                           />
                         </FormControl>

@@ -276,13 +276,61 @@ const Login = () => {
         return;
       }
 
+      // if (isForgot) {
+      //   if (!email)
+      //     return toast.error("Email is required", {
+      //       className: "bg-destructive text-white p-3",
+      //     });
+      //   await passwordResetRequest({ token: "", data: { email } }).unwrap();
+      //   toast.success("Reset link sent to your email.", {
+      //     className: "bg-primary text-white p-3",
+      //   });
+      //   setAuthMode("otp");
+      //   return;
+      // }
+
+      // if (isOtp) {
+      //   if (!email || !otp)
+      //     return toast.error("Provide email and OTP", {
+      //       className: "bg-destructive text-white p-3",
+      //     });
+      //   await verifyEmail({ token: "", data: { email, otp } }).unwrap();
+      //   toast.success("OTP verified. Set your new password.", {
+      //     className: "bg-primary text-white p-3",
+      //   });
+      //   setAuthMode("reset");
+      //   return;
+      // }
+
+      // if (isReset) {
+      //   if (!newPassword || !confirmPassword)
+      //     return toast.error("All password fields required", {
+      //       className: "bg-destructive text-white p-3",
+      //     });
+      //   if (newPassword !== confirmPassword)
+      //     return toast.error("Passwords do not match", {
+      //       className: "bg-destructive text-white p-3",
+      //     });
+      //   await passwordResetVerify({
+      //     token: "",
+      //     //@ts-ignore
+      //     data: { email, code: otp, new_password: newPassword },
+      //   }).unwrap();
+      //   toast.success("Password reset successful. Please login.", {
+      //     className: "bg-primary text-white p-3",
+      //   });
+      //   setAuthMode("login");
+      //   return;
+      // }
       if (isForgot) {
         if (!email)
           return toast.error("Email is required", {
             className: "bg-destructive text-white p-3",
           });
+
+        // Use passwordResetRequest for forgot password
         await passwordResetRequest({ token: "", data: { email } }).unwrap();
-        toast.success("Reset link sent to your email.", {
+        toast.success("OTP sent to your email.", {
           className: "bg-primary text-white p-3",
         });
         setAuthMode("otp");
@@ -294,10 +342,8 @@ const Login = () => {
           return toast.error("Provide email and OTP", {
             className: "bg-destructive text-white p-3",
           });
-        await verifyEmail({ token: "", data: { email, otp } }).unwrap();
-        toast.success("OTP verified. Set your new password.", {
-          className: "bg-primary text-white p-3",
-        });
+
+        // No API call needed here - just transition to reset screen
         setAuthMode("reset");
         return;
       }
@@ -307,15 +353,22 @@ const Login = () => {
           return toast.error("All password fields required", {
             className: "bg-destructive text-white p-3",
           });
+
         if (newPassword !== confirmPassword)
           return toast.error("Passwords do not match", {
             className: "bg-destructive text-white p-3",
           });
+
+        // Use passwordResetVerify with correct payload
         await passwordResetVerify({
           token: "",
-          //@ts-ignore
-          data: { email, code: otp, new_password: newPassword },
+          data: {
+            email,
+            otp,
+            password: newPassword, // Correct field name
+          },
         }).unwrap();
+
         toast.success("Password reset successful. Please login.", {
           className: "bg-primary text-white p-3",
         });
@@ -429,7 +482,7 @@ const Login = () => {
 
         {isOtp && (
           <div className="mb-5 w-full">
-            <Label htmlFor="otp">OTP Code</Label>
+            <Label htmlFor="otp">Password Reset OTP</Label>
             <InputOTP maxLength={6} value={otp} onChange={setOtp}>
               <InputOTPGroup>
                 <InputOTPSlot index={0} />

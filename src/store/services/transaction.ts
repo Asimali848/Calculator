@@ -97,7 +97,10 @@ export const transactionApi = api.injectEndpoints({
       invalidatesTags: ["Transaction"],
     }),
 
-    downloadPrintTransaction: build.mutation<Blob, { token: string; caseId: string }>({
+    downloadPrintTransaction: build.mutation<
+      Blob,
+      { token: string; caseId: string }
+    >({
       query: ({ token, caseId }) => ({
         url: `/docket/api/transactions/${caseId}/download/`,
         method: "GET",
@@ -118,5 +121,5 @@ export const {
   usePutTransactionMutation,
   useGetCaseTransactionsQuery,
   useDeleteTransactionMutation,
-  useDownloadPrintTransactionMutation
+  useDownloadPrintTransactionMutation,
 } = transactionApi;

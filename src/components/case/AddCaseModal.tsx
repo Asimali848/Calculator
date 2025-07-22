@@ -269,14 +269,13 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
                         <FormLabel>Judgment Amount</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
-                            step="0.01"
-                            placeholder="0.00"
+                            type="input"
+                            placeholder="0000"
                             value={field.value}
                             onChange={(e) =>
                               field.onChange(
                                 e.target.value === ""
-                                  ? 0
+                                  ? null
                                   : parseFloat(e.target.value)
                               )
                             }
@@ -294,14 +293,13 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
                         <FormLabel>Interest Rate (%)</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
-                            step="0.01"
-                            placeholder="10.00"
+                            type="input"
+                            placeholder="0000"
                             value={field.value}
                             onChange={(e) =>
                               field.onChange(
                                 e.target.value === ""
-                                  ? 0
+                                  ? null
                                   : parseFloat(e.target.value)
                               )
                             }
@@ -345,14 +343,13 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
                         <FormLabel>Payment Amount</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
-                            step="0.01"
-                            placeholder="0.00"
+                            type="input"
+                            placeholder="0000"
                             value={field.value}
                             onChange={(e) =>
                               field.onChange(
                                 e.target.value === ""
-                                  ? 0
+                                  ? null
                                   : parseFloat(e.target.value)
                               )
                             }
@@ -370,14 +367,13 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
                         <FormLabel>Cost</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
-                            step="0.01"
-                            placeholder="0.00"
+                            type="input"
+                            placeholder="0000"
                             value={field.value}
                             onChange={(e) =>
                               field.onChange(
                                 e.target.value === ""
-                                  ? 0
+                                  ? null
                                   : parseFloat(e.target.value)
                               )
                             }
@@ -387,19 +383,21 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="endDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Last Payment Date</FormLabel>
-                        <FormControl>
-                          <Input type="date" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="hidden">
+                    <FormField
+                      control={form.control}
+                      name="endDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Last Payment Date</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>

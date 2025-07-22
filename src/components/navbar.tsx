@@ -10,32 +10,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 import { ThemeToggle } from "./theme-toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
   const handleHome = () => {
-    // TODO: Clear auth tokens or session if applicable
-    navigate("/home", { replace: true }); // go to login or home
-    window.location.reload(); // force a full reload (optional)
+    navigate("/home", { replace: true });
+    window.location.reload();
   };
   const handleBilling = () => {
-    // TODO: Clear auth tokens or session if applicable
-    navigate("/billing", { replace: true }); // go to login or home
-    window.location.reload(); // force a full reload (optional)
+    navigate("/billing", { replace: true });
+    window.location.reload();
   };
   const handleProfile = () => {
-    navigate("/profile"); // go to Profile or Home
-    window.location.reload(); // force a full reload (optional)
+    navigate("/profile");
+    window.location.reload();
   };
   const handleLogout = () => {
-    // Clear all authentication tokens and user data from localStorage
     localStorage.clear();
-    navigate("/", { replace: true }); // go to login or home
-    window.location.reload(); // force a full reload (optional)
+    navigate("/", { replace: true });
+    window.location.reload();
   };
 
   const userData = JSON.parse(localStorage.getItem("user") || "{}");
@@ -49,19 +46,20 @@ const Navbar = () => {
           <img
             src={logo}
             alt="justicalc"
-            className="h-16 w-full rounded-md p-2 dark:bg-white"
+            className="cursorr-pointer h-16 w-full rounded-md p-2 dark:bg-white"
+            onClick={handleHome}
           />
         </div>
         <div className="flex w-full items-center justify-end gap-2.5">
           <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger>
-              {/* <span
+              <span
                 className={cn(
-                  "flex items-center justify-center gap-1 rounded-full",
+                  "flex shrink-0 items-center justify-center gap-1 rounded-full object-cover",
                   image !== null
-                    ? "bg-secondary dark:bg-secondary p-1"
-                    : "bg-primary dark:bg-primary p-2"
+                    ? "bg-secondary dark:bg-secondary"
+                    : "bg-primary p-2 dark:bg-primary"
                 )}
               >
                 {!username ? (
@@ -71,19 +69,19 @@ const Navbar = () => {
                     <img src={image} alt="" className="size-10 rounded-full" />
                   </span>
                 )}
-              </span> */}
-
+              </span>
+              {/* 
               <span className="flex items-center justify-center gap-1 rounded-full bg-primary p-2 dark:bg-primary">
                 <Landmark className="text-white" />
-              </span>
+              </span> */}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-4">
               <DropdownMenuLabel className="flex items-center justify-between">
                 <span className="capitalize">{username}</span>
-                <Avatar>
+                {/* <Avatar>
                   <AvatarImage className="shrink-0 object-cover" src={image} />
                   <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
+                </Avatar> */}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleHome}>
