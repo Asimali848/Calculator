@@ -10,6 +10,7 @@ import { TransactionForm } from "@/components/transaction/TransactionForm";
 import TransactionsTable from "@/components/transaction/TransactionsTable";
 import { mockTransactions } from "@/data/mockData";
 import { useGetCaseByIdQuery, useGetCaseQuery } from "@/store/services/case";
+import { Loader2 } from "lucide-react";
 
 const Home = () => {
   const token = localStorage.getItem("access") || "";
@@ -111,8 +112,11 @@ const Home = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center w-full">
+        <div className="flex flex-col gap-3 items-center justify-center">
+          <Loader2  className="h-10 w-10 animate-spin text-primary" />
         <p className="text-muted-foreground">Loading cases...</p>
+        </div>
       </div>
     );
   }

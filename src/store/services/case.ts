@@ -56,10 +56,10 @@ export const CaseApi = api.injectEndpoints({
 
     downloadPayoffStatement: builder.mutation<
       Blob,
-      { token: string; caseId: string }
+      { token: string; caseId: string; payoffDate: string } 
     >({
-      query: ({ token, caseId }) => ({
-        url: `/docket/api/cases/${caseId}/payoff-statement/`,
+      query: ({ token, caseId, payoffDate }) => ({
+        url: `/docket/api/cases/${caseId}/payoff-statement/?date=${payoffDate}`,
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
