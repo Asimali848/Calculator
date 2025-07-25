@@ -30,7 +30,7 @@ import { usePostCaseMutation } from "@/store/services/case";
 import { Textarea } from "../ui/textarea";
 
 const roundToSix = (num: number): number => {
-  return parseFloat(num.toFixed(2));
+  return parseFloat(num.toFixed(4));
 };
 
 type CaseData = {

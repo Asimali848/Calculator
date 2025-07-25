@@ -188,7 +188,10 @@ export function TransactionForm({
           },
         });
         toast.success(
-          `Transaction updated successfully. New Balance: ${formatCurrency(newBalance)}`
+          `Transaction updated successfully. New Balance: ${formatCurrency(newBalance)}`,
+          {
+            className: "bg-primary p-3 text-white",
+          }
         );
       } else {
         await postTransaction({
@@ -203,7 +206,10 @@ export function TransactionForm({
           },
         });
         toast.success(
-          `Transaction created successfully. New Balance: ${formatCurrency(newBalance)}`
+          `Transaction created successfully. New Balance: ${formatCurrency(newBalance)}`,
+          {
+            className: "bg-primary p-3 text-white",
+          }
         );
       }
       form.reset();
@@ -216,7 +222,9 @@ export function TransactionForm({
         error?.data?.message ||
         "Failed to submit transaction. Please try again.";
       form.setError("root", { message: errorMessage });
-      toast.error(errorMessage);
+      toast.error(errorMessage, {
+        className: "bg-destructive text-white p-3",
+      });
     }
   };
 

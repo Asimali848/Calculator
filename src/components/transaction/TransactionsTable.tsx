@@ -68,7 +68,9 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
 
   const handlePrint = async () => {
     if (!selectedCase || !token) {
-      toast.error("No case selected or missing token");
+      toast.error("No case selected or missing token", {
+        className: "bg-destructive text-white p-3",
+      });
       return;
     }
 
@@ -94,10 +96,15 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      toast.success("PDF downloaded successfully", { id: toastId });
+      toast.success("PDF downloaded successfully", {
+        id: toastId,
+        className: "bg-primary text-white p-3",
+      });
     } catch (error) {
       console.error("PDF download error:", error);
-      toast.error("Failed to download PDF");
+      toast.error("Failed to download PDF", {
+        className: "bg-destructive text-white p-3",
+      });
     } finally {
       setIsPrinting(false);
     }
@@ -128,10 +135,14 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
         }).unwrap();
 
         refetch();
-        toast.success("Transaction deleted successfully");
+        toast.success("Transaction deleted successfully", {
+          className: "bg-primary text-white p-3",
+        });
       } catch (error) {
         console.error("Delete transaction error:", error);
-        toast.error("Failed to delete transaction");
+        toast.error("Failed to delete transaction", {
+          className: "bg-destructive text-white p-3",
+        });
       } finally {
         setDeleteDialogOpen(false);
         setTransactionToDelete(null);

@@ -70,18 +70,10 @@ const Navbar = () => {
                   </span>
                 )}
               </span>
-              {/* 
-              <span className="flex items-center justify-center gap-1 rounded-full bg-primary p-2 dark:bg-primary">
-                <Landmark className="text-white" />
-              </span> */}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-4">
               <DropdownMenuLabel className="flex items-center justify-between">
                 <span className="capitalize">{username}</span>
-                {/* <Avatar>
-                  <AvatarImage className="shrink-0 object-cover" src={image} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar> */}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleHome}>

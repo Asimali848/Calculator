@@ -35,6 +35,8 @@ export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
   }).format(amount);
 }
 
@@ -54,8 +56,8 @@ type DailyEntry = {
   interest: number;
 };
 
-export function truncateToTwoDecimals(num: number): number {
-  return Math.floor(num * 100) / 100;
+export function truncateToFourDecimals(num: number): number {
+  return Math.floor(num * 10000) / 10000;
 }
 
 export function calculateJudgmentInterest(params: {
@@ -90,7 +92,7 @@ export function calculateJudgmentInterest(params: {
     const currentDateStr = d.toISOString().split("T")[0];
 
     // Accrue daily interest
-    const dailyInterest = truncateToTwoDecimals(
+    const dailyInterest = truncateToFourDecimals(
       (currentPrincipal * annual_interest_rate) / (100 * 365)
     );
     unpaidInterest += dailyInterest;
@@ -130,7 +132,7 @@ export function calculateJudgmentInterest(params: {
 
   return {
     dailyBreakdown: dailyData,
-    totalAccruedInterest: truncateToTwoDecimals(totalAccruedInterest),
-    finalBalance: truncateToTwoDecimals(currentPrincipal + unpaidInterest),
+    totalAccruedInterest: truncateToFourDecimals(totalAccruedInterest),
+    finalBalance: truncateToFourDecimals(currentPrincipal + unpaidInterest),
   };
 }

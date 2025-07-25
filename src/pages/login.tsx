@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Eye, EyeOff, LogIn, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, LogIn, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -52,137 +52,6 @@ const Login = () => {
     usePasswordResetRequestMutation();
   const [passwordResetVerify, { isLoading: isPasswordResetVerifyLoading }] =
     usePasswordResetVerifyMutation();
-
-  //   const handleSubmit = async (e: React.FormEvent) => {
-  //     e.preventDefault();
-  //     try {
-  //       if (isLogin) {
-  //         if (!email || !password)
-  //           return toast.error("Enter email and password", {
-  //             className: "bg-destructive text-white p-3",
-  //           });
-  //         const loginResponse = await login({
-  //           token: "",
-  //           data: { email, password },
-  //         }).unwrap();
-  //         // Try to find the token in several common places
-  //         let token =
-  //           loginResponse?.access ||
-  //           loginResponse?.data?.access ||
-  //           loginResponse?.refresh ||
-  //           loginResponse?.data?.refresh ||
-  //           loginResponse?.data?.user?.username ||
-  //           loginResponse?.data?.user?.email;
-
-  //         if (token) {
-  //           // Always store access token as 'authToken' and 'access' for compatibility
-  //           localStorage.setItem("authToken", token);
-  //           localStorage.setItem("access", token);
-  //           localStorage.setItem("user", JSON.stringify(loginResponse.data.user));
-  //           localStorage.setItem("email", loginResponse.data.user.email);
-
-  //           console.log("authToken:", token);
-  //         } else {
-  //           console.log("No token found in login response:", loginResponse);
-  //         }
-  //         toast.success("Login successful", {
-  //           className: "bg-primary text-white p-3",
-  //         });
-  //         navigate("/home"); // Redirect to dashboard or home page
-  //         return;
-  //       }catch (error: any) {
-  //     const errorMessage =
-  //       error?.data?.message || error?.message || "Login failed. Please try again.";
-
-  //     toast.error(errorMessage, {
-  //       className: "bg-destructive text-white p-3",
-  //     });
-
-  //     console.error("Login error:", error);
-  //   }
-  // }
-  //       if (isRegister) {
-  //         if (!email || !username || !password)
-  //           return toast.error("All fields required", {
-  //             className: "bg-destructive text-white p-3",
-  //           });
-  //         await register({
-  //           token: "",
-  //           data: { email, username, password },
-  //         }).unwrap();
-  //         toast.success("Registration successful! Please verify your email.", {
-  //           className: "bg-primary text-white p-3",
-  //         });
-  //         setAuthMode("verify-user");
-  //         return;
-  //       }
-  //       if (isVerifyUser) {
-  //         if (!email || !otp)
-  //           return toast.error("Provide email and OTP", {
-  //             className: "bg-destructive text-white p-3",
-  //           });
-  //         await verifyEmail({ token: "", data: { email, otp } }).unwrap();
-  //         toast.success("OTP verified. Set your new password.", {
-  //           className: "bg-primary text-white p-3",
-  //         });
-  //         setAuthMode("login");
-  //         return;
-  //       }
-  //       if (isForgot) {
-  //         if (!email)
-  //           return toast.error("Email is required", {
-  //             className: "bg-destructive text-white p-3",
-  //           });
-  //         await passwordResetRequest({ token: "", data: { email } }).unwrap();
-  //         toast.success("Reset link sent to your email.", {
-  //           className: "bg-primary text-white p-3",
-  //         });
-  //         setAuthMode("otp");
-  //         return;
-  //       }
-  //       if (isOtp) {
-  //         if (!email || !otp)
-  //           return toast.error("Provide email and OTP", {
-  //             className: "bg-destructive text-white p-3",
-  //           });
-  //         await verifyEmail({ token: "", data: { email, otp } }).unwrap();
-  //         toast.success("OTP verified. Set your new password.", {
-  //           className: "bg-primary text-white p-3",
-  //         });
-  //         setAuthMode("reset");
-  //         return;
-  //       }
-  //       if (isReset) {
-  //         if (!newPassword || !confirmPassword)
-  //           return toast.error("All password fields required", {
-  //             className: "bg-destructive text-white p-3",
-  //           });
-  //         if (newPassword !== confirmPassword)
-  //           return toast.error("Passwords do not match", {
-  //             className: "bg-destructive text-white p-3",
-  //           });
-  //         await passwordResetVerify({
-  //           token: "",
-  //           //@ts-ignore
-  //           data: { email, code: otp, new_password: newPassword },
-  //         }).unwrap();
-  //         toast.success("Password reset successful. Please login.", {
-  //           className: "bg-primary text-white p-3",
-  //         });
-  //         setAuthMode("login");
-  //         return;
-  //       }
-  //     } catch (err: any) {
-  //       console.error(err);
-  //       const message =
-  //         err?.data?.detail ||
-  //         Object.values(err?.data || {})?.[0] ||
-  //         "An error occurred. Please try again.";
-  //       toast.error(
-  //         typeof message === "string" ? message : "An unexpected error occurred."
-  //       );
-  //     }
-  //   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -275,53 +144,6 @@ const Login = () => {
         setAuthMode("login");
         return;
       }
-
-      // if (isForgot) {
-      //   if (!email)
-      //     return toast.error("Email is required", {
-      //       className: "bg-destructive text-white p-3",
-      //     });
-      //   await passwordResetRequest({ token: "", data: { email } }).unwrap();
-      //   toast.success("Reset link sent to your email.", {
-      //     className: "bg-primary text-white p-3",
-      //   });
-      //   setAuthMode("otp");
-      //   return;
-      // }
-
-      // if (isOtp) {
-      //   if (!email || !otp)
-      //     return toast.error("Provide email and OTP", {
-      //       className: "bg-destructive text-white p-3",
-      //     });
-      //   await verifyEmail({ token: "", data: { email, otp } }).unwrap();
-      //   toast.success("OTP verified. Set your new password.", {
-      //     className: "bg-primary text-white p-3",
-      //   });
-      //   setAuthMode("reset");
-      //   return;
-      // }
-
-      // if (isReset) {
-      //   if (!newPassword || !confirmPassword)
-      //     return toast.error("All password fields required", {
-      //       className: "bg-destructive text-white p-3",
-      //     });
-      //   if (newPassword !== confirmPassword)
-      //     return toast.error("Passwords do not match", {
-      //       className: "bg-destructive text-white p-3",
-      //     });
-      //   await passwordResetVerify({
-      //     token: "",
-      //     //@ts-ignore
-      //     data: { email, code: otp, new_password: newPassword },
-      //   }).unwrap();
-      //   toast.success("Password reset successful. Please login.", {
-      //     className: "bg-primary text-white p-3",
-      //   });
-      //   setAuthMode("login");
-      //   return;
-      // }
       if (isForgot) {
         if (!email)
           return toast.error("Email is required", {
@@ -567,7 +389,14 @@ const Login = () => {
             isPasswordResetVerifyLoading
           }
         >
-          {isForgot || isOtp ? <Mail /> : <LogIn />}
+          {isForgot || isOtp ? (
+            <Mail />
+          ) : isLoginLoading ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <LogIn />
+          )}
+
           {isLogin
             ? "Login"
             : isRegister

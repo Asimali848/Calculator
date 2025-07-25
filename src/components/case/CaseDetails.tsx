@@ -229,7 +229,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
     try {
       const token = localStorage.getItem("access");
       if (!token) {
-        toast.error("User not authenticated");
+        toast.error("User not authenticated", { className: "bg-destructive text-white p-3" });
         return;
       }
       await deleteCase({ id: caseData.id, token }).unwrap();
