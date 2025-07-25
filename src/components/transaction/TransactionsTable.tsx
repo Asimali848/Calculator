@@ -1,8 +1,7 @@
 import { useState } from "react";
 
 import { Edit, Loader2, Printer, Trash2 } from "lucide-react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
@@ -76,7 +75,6 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
 
     try {
       setIsPrinting(true);
-      const toastId = toast.loading("Generating PDF...");
 
       const pdfBlob = await downloadPrint({
         token,
@@ -97,7 +95,6 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
       document.body.removeChild(a);
 
       toast.success("PDF downloaded successfully", {
-        id: toastId,
         className: "bg-primary text-white p-3",
       });
     } catch (error) {

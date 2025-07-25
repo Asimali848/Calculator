@@ -10,7 +10,6 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const checkAuth = () => {
       setIsLoading(true);
-      // Check for access token in localStorage
       const token = localStorage.getItem("authToken");
       setIsAuthenticated(!!token);
       setIsLoading(false);

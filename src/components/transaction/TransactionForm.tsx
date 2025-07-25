@@ -42,12 +42,22 @@ import {
 } from "@/store/services/transaction";
 
 // Frontend schema
+// const transactionSchema = z.object({
+//   type: z.enum(["PAYMENT", "COST"]),
+//   amount: z.string().min(0.01, "Amount must be greater than 0"),
+//   date: z.string().min(1, "Date is required"),
+//   description: z.string().optional(),
+//   interestRate: z.number().min(0, "Interest rate must be positive"),
+// });
+
 const transactionSchema = z.object({
-  type: z.enum(["PAYMENT", "COST"]),
-  amount: z.number().min(0.01, "Amount must be greater than 0"),
+  type: z.enum(["PAYMENT", "COST"], {
+    required_error: "Transaction type is required",
+  }),
+  amount: z.coerce.number().min(0.01, "Amount must be greater than 0"),
   date: z.string().min(1, "Date is required"),
   description: z.string().optional(),
-  interestRate: z.number().min(0, "Interest rate must be positive"),
+  interestRate: z.coerce.number().min(0, "Interest rate must be positive"),
 });
 
 // Type for frontend form data
@@ -193,6 +203,9 @@ export function TransactionForm({
             className: "bg-primary p-3 text-white",
           }
         );
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       } else {
         await postTransaction({
           token,
@@ -211,6 +224,9 @@ export function TransactionForm({
             className: "bg-primary p-3 text-white",
           }
         );
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
       form.reset();
       if (!keepOpenAfterSubmit) {
@@ -288,7 +304,7 @@ export function TransactionForm({
                       <div className="flex space-x-2">
                         <FormControl>
                           <Input
-                            type="input"
+                            type="text"
                             placeholder="0000"
                             {...field}
                             onChange={(e) =>

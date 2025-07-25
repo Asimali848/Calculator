@@ -38,7 +38,6 @@ export const CaseApi = api.injectEndpoints({
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          // REMOVE Content-Type header here
         },
         body: data, // Let RTKQ handle serialization
       }),
@@ -56,7 +55,7 @@ export const CaseApi = api.injectEndpoints({
 
     downloadPayoffStatement: builder.mutation<
       Blob,
-      { token: string; caseId: string; payoffDate: string } 
+      { token: string; caseId: string; payoffDate: string }
     >({
       query: ({ token, caseId, payoffDate }) => ({
         url: `/docket/api/cases/${caseId}/payoff-statement/?date=${payoffDate}`,

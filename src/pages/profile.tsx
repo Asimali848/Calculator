@@ -39,7 +39,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  useChangePasswordMutation, // Added import
+  useChangePasswordMutation,
+  // Added import
   useGetProfileQuery,
   useUpdateUserMutation,
 } from "@/store/services/auth";

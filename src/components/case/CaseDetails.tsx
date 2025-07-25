@@ -229,7 +229,9 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
     try {
       const token = localStorage.getItem("access");
       if (!token) {
-        toast.error("User not authenticated", { className: "bg-destructive text-white p-3" });
+        toast.error("User not authenticated", {
+          className: "bg-destructive text-white p-3",
+        });
         return;
       }
       await deleteCase({ id: caseData.id, token }).unwrap();
@@ -250,7 +252,9 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
     try {
       const token = localStorage.getItem("access");
       if (!token) {
-        toast.error("User not authenticated" , { className: "bg-destructive text-white p-3" });
+        toast.error("User not authenticated", {
+          className: "bg-destructive text-white p-3",
+        });
         return;
       }
 
@@ -366,9 +370,18 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
                   label="Judgment Date"
                   value={formatDate(caseData.judgmentDate)}
                 />
-                <CaseDetail
+                {/* <CaseDetail
                   label="Last Payment Date"
                   value={formatDate(caseData.lastPaymentDate)}
+                />  */}
+
+                <CaseDetail
+                  label="Last Payment Date"
+                  value={
+                    caseData.lastPaymentDate
+                      ? formatDate(caseData.lastPaymentDate)
+                      : "Null"
+                  }
                 />
               </div>
               <div className="space-y-4">

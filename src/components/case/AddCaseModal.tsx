@@ -40,7 +40,7 @@ type CaseData = {
   courtCaseNumber: string;
   judgmentAmount: number;
   judgmentDate: string;
-  lastPaymentDate: string;
+  lastPaymentDate: string | null;
   totalPayments: number;
   accruedInterest: number;
   principalBalance: number;
@@ -72,6 +72,8 @@ interface AddCaseModalProps {
 }
 
 const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
+  const [isEndDateEnabled, setIsEndDateEnabled] = useState(false);
+
   const [calculationResults, setCalculationResults] = useState({
     judgmentAmount: 0,
     principalReduction: 0,
@@ -120,7 +122,7 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
     if (isNaN(finalDate.getTime())) finalDate = new Date();
 
     const timeDiff = finalDate.getTime() - startDate.getTime();
-    const days = Math.max(0, Math.floor(timeDiff / (1000 * 3600 * 24)));
+    const days = Math.max(0, Math.floor(timeDiff / (1000 * 3600 * 24)) + 1);
 
     const dailyInterest = roundToSix(
       (judgmentAmount * (interestRate / 100)) / 365
@@ -159,7 +161,8 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
       courtCaseNumber: data.courtCaseNumber,
       judgmentAmount: roundToSix(data.judgmentAmount),
       judgmentDate: data.judgmentDate,
-      lastPaymentDate: data.endDate || new Date().toISOString().split("T")[0],
+      // lastPaymentDate: data.endDate || new Date().toISOString().split("T")[0],
+      lastPaymentDate: isEndDateEnabled && data.endDate ? data.endDate : null,
       totalPayments: roundToSix(data.paymentAmount || 0),
       accruedInterest: calculationResults.totalInterest,
       principalBalance: calculationResults.principalBalance,
@@ -328,9 +331,22 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg text-primary">
-                  Payment and Cost{" "}
-                  <span className="text-muted-foreground">(Optional)</span>
+                <CardTitle className="flex w-full items-center justify-between text-lg text-primary">
+                  <div>
+                    Payment and Cost{" "}
+                    <span className="text-muted-foreground">(Optional)</span>
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsEndDateEnabled((prev) => !prev)}
+                  >
+                    {isEndDateEnabled
+                      ? "Last_Payment Date Disabled"
+                      : "Last_Payment Date Enabled"}
+                  </Button>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -383,21 +399,24 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
                       </FormItem>
                     )}
                   />
-                  <div className="hidden">
-                    <FormField
-                      control={form.control}
-                      name="endDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Last Payment Date</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="endDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Last Payment Date</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            {...field}
+                            disabled={!isEndDateEnabled}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </CardContent>
             </Card>

@@ -198,7 +198,6 @@ const Login = () => {
         return;
       }
     } catch (err: any) {
-      console.error("Unhandled error:", err);
       const message =
         err?.data?.message ||
         err?.data?.detail ||
