@@ -6,7 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 
 import store from "@/store";
 
-import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "./ui/sonner";
 import { TooltipProvider } from "./ui/tooltip";
 
@@ -20,7 +19,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
       isDangerouslyUseLocalStorage={true}
     >
       <Provider store={store}>
-        <ThemeProvider>
           <BrowserRouter>
             <Toaster
               style={{
@@ -32,7 +30,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
             />
             <TooltipProvider>{children}</TooltipProvider>
           </BrowserRouter>
-        </ThemeProvider>
       </Provider>
     </KindeProvider>
   );

@@ -12,8 +12,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-import { ThemeToggle } from "./theme-toggle";
-
 const Navbar = () => {
   const navigate = useNavigate();
 
@@ -51,7 +49,6 @@ const Navbar = () => {
           />
         </div>
         <div className="flex w-full items-center justify-end gap-2.5">
-          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <span
