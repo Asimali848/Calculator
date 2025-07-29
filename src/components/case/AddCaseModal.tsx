@@ -804,9 +804,9 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
       toast.success("Case added successfully!", {
         className: "bg-primary p-3 text-white",
       });
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 3000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
       //@ts-ignore
       onSubmit(res);
     } catch (error: any) {

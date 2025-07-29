@@ -305,25 +305,193 @@
 
 
 
-// types
-type Transaction = {
+// // types
+// type Transaction = {
+//   date: string; // format: YYYY-MM-DD
+//   type: "payment" | "cost";
+//   amount: number;
+// };
+
+// type DailyEntry = {
+//   date: string;
+//   balance: number;
+//   interest: number;
+// };
+
+// // Utility: Truncate to 4 decimal places
+// export function truncateToFourDecimals(num: number): number {
+//   return Math.floor(num * 10000) / 10000;
+// }
+
+// // Utility: Calculate interest
+// export function calculateInterest(
+//   principal: number,
+//   rate: number,
+//   days: number
+// ): number {
+//   return (principal * (rate / 100) * days) / 365;
+// }
+
+// // Utility: Calculate new balance based on transaction type
+// export function calculateNewBalance(
+//   currentBalance: number,
+//   paymentAmount: number,
+//   accruedInterest: number,
+//   transactionType: "PAYMENT" | "COST" | "INTEREST"
+// ): number {
+//   switch (transactionType) {
+//     case "PAYMENT":
+//       return Math.max(0, currentBalance + accruedInterest - paymentAmount);
+//     case "COST":
+//       return currentBalance + paymentAmount;
+//     case "INTEREST":
+//       return currentBalance + paymentAmount;
+//     default:
+//       return currentBalance;
+//   }
+// }
+
+// // Utility: Total payoff amount
+// export default function calculatePayoffAmount(
+//   principalBalance: number,
+//   accruedInterest: number
+// ): number {
+//   return principalBalance + accruedInterest;
+// }
+
+// // Utility: Format currency (USD, 2-4 decimals)
+// export function formatCurrency(amount: number): string {
+//   return new Intl.NumberFormat("en-US", {
+//     style: "currency",
+//     currency: "USD",
+//     minimumFractionDigits: 2,
+//     maximumFractionDigits: 4,
+//   }).format(amount);
+// }
+
+// // Utility: Format date string (to MM/DD/YYYY)
+// export function formatDate(date: string): string {
+//   return new Date(date).toLocaleDateString("en-US");
+// }
+
+// // 🔍 Core Function: Judgment Interest Calculation
+// export function calculateJudgmentInterest(params: {
+//   judgment_date: string;
+//   end_date: string;
+//   judgment_amount: number;
+//   annual_interest_rate: number;
+//   transactions: Transaction[];
+// }) {
+//   const {
+//     judgment_date,
+//     end_date,
+//     judgment_amount,
+//     annual_interest_rate,
+//     transactions,
+//   } = params;
+
+//   // Sort transactions by date (ascending)
+//   const sortedTransactions = [...transactions].sort(
+//     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+//   );
+
+//   const dailyData: DailyEntry[] = [];
+
+//   let currentPrincipal = judgment_amount;
+//   let totalAccruedInterest = 0;
+//   let unpaidInterest = 0;
+
+//   const start = new Date(judgment_date);
+//   const end = new Date(end_date);
+
+//   // Loop over each day from start to end
+//   for (
+//     let d = new Date(start);
+//     d.getTime() <= end.getTime();
+//     d.setDate(d.getDate() + 1)
+//   ) {
+//     const currentDateStr = d.toISOString().split("T")[0];
+
+//     // 1️⃣ Accrue daily interest
+//     const dailyInterest = truncateToFourDecimals(
+//       (currentPrincipal * annual_interest_rate) / (100 * 365)
+//     );
+//     unpaidInterest += dailyInterest;
+//     totalAccruedInterest += dailyInterest;
+
+//     // 2️⃣ Apply transactions on this date
+//     while (
+//       sortedTransactions.length > 0 &&
+//       sortedTransactions[0].date === currentDateStr
+//     ) {
+//       const txn = sortedTransactions.shift()!;
+
+//       if (txn.type === "payment") {
+//         let payment = txn.amount;
+
+//         // a. Pay unpaid interest first
+//         const interestPaid = Math.min(payment, unpaidInterest);
+//         unpaidInterest -= interestPaid;
+//         payment -= interestPaid;
+
+//         // b. Then apply to principal
+//         const principalPaid = Math.min(payment, currentPrincipal);
+//         currentPrincipal -= principalPaid;
+//         payment -= principalPaid;
+
+//         // c. Any extra payment is ignored
+//       } else if (txn.type === "cost") {
+//         // Costs are added to principal
+//         currentPrincipal += txn.amount;
+//       }
+//     }
+
+//     // 3️⃣ Track daily balance and interest
+//     dailyData.push({
+//       date: currentDateStr,
+//       balance: truncateToFourDecimals(currentPrincipal),
+//       interest: truncateToFourDecimals(unpaidInterest),
+//     });
+//   }
+
+//   return {
+//     dailyBreakdown: dailyData,
+//     totalAccruedInterest: truncateToFourDecimals(totalAccruedInterest),
+//     finalBalance: truncateToFourDecimals(currentPrincipal + unpaidInterest),
+//   };
+// }
+
+
+
+// -----------------&&&&&&&&&&&&&------------------
+
+
+
+// -------------------------
+// Types
+// -------------------------
+export type Transaction = {
   date: string; // format: YYYY-MM-DD
   type: "payment" | "cost";
   amount: number;
 };
 
-type DailyEntry = {
+export type DailyEntry = {
   date: string;
-  balance: number;
-  interest: number;
+  balance: number;   // principal
+  interest: number;  // unpaid accrued interest
 };
 
+// -------------------------
 // Utility: Truncate to 4 decimal places
+// -------------------------
 export function truncateToFourDecimals(num: number): number {
   return Math.floor(num * 10000) / 10000;
 }
 
-// Utility: Calculate interest
+// -------------------------
+// Utility: Calculate simple interest
+// -------------------------
 export function calculateInterest(
   principal: number,
   rate: number,
@@ -332,7 +500,10 @@ export function calculateInterest(
   return (principal * (rate / 100) * days) / 365;
 }
 
+// -------------------------
 // Utility: Calculate new balance based on transaction type
+// Applies payment to interest first, then principal
+// -------------------------
 export function calculateNewBalance(
   currentBalance: number,
   paymentAmount: number,
@@ -340,10 +511,12 @@ export function calculateNewBalance(
   transactionType: "PAYMENT" | "COST" | "INTEREST"
 ): number {
   switch (transactionType) {
-    case "PAYMENT":
-      return Math.max(0, currentBalance + accruedInterest - paymentAmount);
+    case "PAYMENT": {
+      const remainingAfterInterest = Math.max(0, paymentAmount - accruedInterest);
+      const newPrincipal = Math.max(0, currentBalance - remainingAfterInterest);
+      return newPrincipal;
+    }
     case "COST":
-      return currentBalance + paymentAmount;
     case "INTEREST":
       return currentBalance + paymentAmount;
     default:
@@ -351,7 +524,9 @@ export function calculateNewBalance(
   }
 }
 
-// Utility: Total payoff amount
+// -------------------------
+// Utility: Total payoff amount = principal + interest
+// -------------------------
 export default function calculatePayoffAmount(
   principalBalance: number,
   accruedInterest: number
@@ -359,7 +534,9 @@ export default function calculatePayoffAmount(
   return principalBalance + accruedInterest;
 }
 
-// Utility: Format currency (USD, 2-4 decimals)
+// -------------------------
+// Utility: Format currency (USD with 2-4 decimals)
+// -------------------------
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -369,12 +546,17 @@ export function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
+// -------------------------
 // Utility: Format date string (to MM/DD/YYYY)
+// -------------------------
 export function formatDate(date: string): string {
   return new Date(date).toLocaleDateString("en-US");
 }
 
+// -------------------------
 // 🔍 Core Function: Judgment Interest Calculation
+// Accrues daily interest, handles payment toward interest first, then principal
+// -------------------------
 export function calculateJudgmentInterest(params: {
   judgment_date: string;
   end_date: string;
@@ -390,7 +572,6 @@ export function calculateJudgmentInterest(params: {
     transactions,
   } = params;
 
-  // Sort transactions by date (ascending)
   const sortedTransactions = [...transactions].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
@@ -398,13 +579,14 @@ export function calculateJudgmentInterest(params: {
   const dailyData: DailyEntry[] = [];
 
   let currentPrincipal = judgment_amount;
-  let totalAccruedInterest = 0;
   let unpaidInterest = 0;
+  let totalAccruedInterest = 0;
 
   const start = new Date(judgment_date);
   const end = new Date(end_date);
 
-  // Loop over each day from start to end
+  let skipInterestToday = false;
+
   for (
     let d = new Date(start);
     d.getTime() <= end.getTime();
@@ -412,14 +594,18 @@ export function calculateJudgmentInterest(params: {
   ) {
     const currentDateStr = d.toISOString().split("T")[0];
 
-    // 1️⃣ Accrue daily interest
-    const dailyInterest = truncateToFourDecimals(
-      (currentPrincipal * annual_interest_rate) / (100 * 365)
-    );
-    unpaidInterest += dailyInterest;
-    totalAccruedInterest += dailyInterest;
+    // Step 1: Accrue interest (if not skipped from yesterday's payment)
+    if (!skipInterestToday) {
+      const dailyInterest = truncateToFourDecimals(
+        (currentPrincipal * annual_interest_rate) / (100 * 365)
+      );
+      unpaidInterest += dailyInterest;
+      totalAccruedInterest += dailyInterest;
+    }
 
-    // 2️⃣ Apply transactions on this date
+    skipInterestToday = false;
+
+    // Step 2: Apply transactions
     while (
       sortedTransactions.length > 0 &&
       sortedTransactions[0].date === currentDateStr
@@ -429,24 +615,26 @@ export function calculateJudgmentInterest(params: {
       if (txn.type === "payment") {
         let payment = txn.amount;
 
-        // a. Pay unpaid interest first
         const interestPaid = Math.min(payment, unpaidInterest);
         unpaidInterest -= interestPaid;
         payment -= interestPaid;
 
-        // b. Then apply to principal
         const principalPaid = Math.min(payment, currentPrincipal);
         currentPrincipal -= principalPaid;
         payment -= principalPaid;
 
-        // c. Any extra payment is ignored
-      } else if (txn.type === "cost") {
-        // Costs are added to principal
+        // If interest fully cleared, do not accrue again today
+        if (unpaidInterest <= 0) {
+          unpaidInterest = 0;
+          skipInterestToday = true;
+        }
+      }
+
+      if (txn.type === "cost") {
         currentPrincipal += txn.amount;
       }
     }
 
-    // 3️⃣ Track daily balance and interest
     dailyData.push({
       date: currentDateStr,
       balance: truncateToFourDecimals(currentPrincipal),
@@ -458,5 +646,8 @@ export function calculateJudgmentInterest(params: {
     dailyBreakdown: dailyData,
     totalAccruedInterest: truncateToFourDecimals(totalAccruedInterest),
     finalBalance: truncateToFourDecimals(currentPrincipal + unpaidInterest),
+    finalPrincipal: truncateToFourDecimals(currentPrincipal),
+    finalInterest: truncateToFourDecimals(unpaidInterest),
   };
 }
+
