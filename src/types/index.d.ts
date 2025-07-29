@@ -25,6 +25,7 @@ declare type CaseData = {
   isEnded?: boolean;
   debtorInfo?: string;
   interestRate: number;
+  createdAt: string;
 };
 
 // declare type CaseData = {

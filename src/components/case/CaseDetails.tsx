@@ -965,9 +965,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
                 <CaseDetail
                   label="Case Created Date"
                   value={
-                    caseData.lastPaymentDate
-                      ? formatDate(caseData.lastPaymentDate)
-                      : "Null"
+                    caseData.createdAt ? formatDate(caseData.createdAt) : "Null"
                   }
                 />
               </div>

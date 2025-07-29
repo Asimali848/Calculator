@@ -1,5 +1,4 @@
 // import { useEffect, useState } from "react";
-
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import {
 //   Calendar,
@@ -16,7 +15,6 @@
 // import { useNavigate } from "react-router-dom";
 // import { toast } from "sonner";
 // import * as z from "zod";
-
 // import { Avatar, AvatarImage } from "@/components/ui/avatar";
 // import { Badge } from "@/components/ui/badge";
 // import { Button } from "@/components/ui/button";
@@ -44,7 +42,6 @@
 //   useGetProfileQuery,
 //   useUpdateUserMutation,
 // } from "@/store/services/auth";
-
 // const userProfileSchema = z.object({
 //   full_name: z.string().min(2, "Name must be at least 2 characters"),
 //   image: z.string(),
@@ -58,7 +55,6 @@
 //     .optional()
 //     .or(z.literal("")),
 // });
-
 // const passwordSchema = z
 //   .object({
 //     currentPassword: z.string().min(1, "Current password is required"),
@@ -73,25 +69,20 @@
 //     message: "New password must be different from current password",
 //     path: ["newPassword"],
 //   });
-
 // type UserProfileFormData = z.infer<typeof userProfileSchema>;
 // type PasswordFormData = z.infer<typeof passwordSchema>;
-
 // const Profile = () => {
 //   const navigate = useNavigate();
 //   const [isEditing, setIsEditing] = useState(false);
 //   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
 //   const [image, setImage] = useState<string | null>(null);
-
 //   const token = localStorage.getItem("access");
 //   const { data: profileData } = useGetProfileQuery({
 //     token: token || "",
 //   });
-
 //   const [updateUser] = useUpdateUserMutation();
 //   const [changePassword, { isLoading: isChangingPassword }] =
 //     useChangePasswordMutation(); // Added hook
-
 //   const form = useForm<UserProfileFormData>({
 //     resolver: zodResolver(userProfileSchema),
 //     defaultValues: {
@@ -104,7 +95,6 @@
 //       website: "",
 //     },
 //   });
-
 //   const passwordForm = useForm<PasswordFormData>({
 //     resolver: zodResolver(passwordSchema),
 //     defaultValues: {
@@ -113,7 +103,6 @@
 //       confirmPassword: "",
 //     },
 //   });
-
 //   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 //     const file = e.target.files?.[0];
 //     if (file) {
@@ -126,7 +115,6 @@
 //       reader.readAsDataURL(file);
 //     }
 //   };
-
 //   const handleSubmit = async (data: UserProfileFormData) => {
 //     try {
 //       if (!token || !profileData?.profile) {
@@ -135,7 +123,6 @@
 //         });
 //         return;
 //       }
-
 //       const payload = {
 //         ...profileData.profile,
 //         ...data,
@@ -143,12 +130,10 @@
 //         subscription_plan: profileData.profile.subscription_plan,
 //         member_since: profileData.profile.member_since,
 //       };
-
 //       await updateUser({
 //         token,
 //         body: payload,
 //       }).unwrap();
-
 //       toast.success("Profile updated successfully", {
 //         className: "bg-primary text-white p-3",
 //       });
@@ -160,7 +145,6 @@
 //       });
 //     }
 //   };
-
 //   const handlePasswordSubmit = async (data: PasswordFormData) => {
 //     try {
 //       if (!token) {
@@ -169,7 +153,6 @@
 //         });
 //         return;
 //       }
-
 //       // Call the password change API
 //       await changePassword({
 //         token,
@@ -178,7 +161,6 @@
 //           new_password: data.newPassword,
 //         },
 //       }).unwrap();
-
 //       toast.success("Password changed successfully", {
 //         className: "bg-primary text-white p-3",
 //       });
@@ -194,7 +176,6 @@
 //       );
 //     }
 //   };
-
 //   const handleCancel = () => {
 //     if (profileData?.profile) {
 //       form.reset(profileData.profile);
@@ -202,14 +183,12 @@
 //     }
 //     setIsEditing(false);
 //   };
-
 //   useEffect(() => {
 //     if (profileData?.profile) {
 //       form.reset(profileData.profile);
 //       setImage(profileData.profile.image || null);
 //     }
 //   }, [profileData, form]);
-
 //   return (
 //     <div className="mx-auto h-screen w-full overflow-auto bg-background p-4 md:p-10">
 //       <div className="max-w-8xl mx-auto space-y-6">
@@ -238,7 +217,6 @@
 //               </div>
 //             )}
 //           </div>
-
 //           <Form {...form}>
 //             <form
 //               onSubmit={form.handleSubmit(handleSubmit)}
@@ -269,7 +247,6 @@
 //                               </div>
 //                             )}
 //                           </Avatar>
-
 //                           {isEditing && (
 //                             <>
 //                               <input
@@ -289,7 +266,6 @@
 //                             </>
 //                           )}
 //                         </div>
-
 //                         <div className="space-y-2">
 //                           <h1 className="text-2xl font-bold text-foreground">
 //                             {form.watch("full_name")}
@@ -304,7 +280,6 @@
 //                       </div>
 //                     </CardContent>
 //                   </Card>
-
 //                   <Card>
 //                     <CardHeader>
 //                       <CardTitle className="text-lg">Account Details</CardTitle>
@@ -331,7 +306,6 @@
 //                           Upgrade the Plan
 //                         </Button>
 //                       </div>
-
 //                       <div>
 //                         <h4 className="mb-2 font-medium text-foreground">
 //                           Member Since
@@ -343,7 +317,6 @@
 //                           </span>
 //                         </div>
 //                       </div>
-
 //                       <div>
 //                         <h4 className="mb-2 font-medium text-foreground">
 //                           Security
@@ -465,7 +438,6 @@
 //                     </CardContent>
 //                   </Card>
 //                 </div>
-
 //                 <div className="space-y-6 lg:col-span-2">
 //                   <Card>
 //                     <CardHeader>
@@ -488,7 +460,6 @@
 //                           </FormItem>
 //                         )}
 //                       />
-
 //                       {/* Email */}
 //                       <FormField
 //                         control={form.control}
@@ -503,7 +474,6 @@
 //                           </FormItem>
 //                         )}
 //                       />
-
 //                       {/* Company */}
 //                       <FormField
 //                         control={form.control}
@@ -518,7 +488,6 @@
 //                           </FormItem>
 //                         )}
 //                       />
-
 //                       {/* Location */}
 //                       <FormField
 //                         control={form.control}
@@ -533,7 +502,6 @@
 //                           </FormItem>
 //                         )}
 //                       />
-
 //                       {/* Phone Number */}
 //                       <FormField
 //                         control={form.control}
@@ -548,7 +516,6 @@
 //                           </FormItem>
 //                         )}
 //                       />
-
 //                       {/* Website */}
 //                       <FormField
 //                         control={form.control}
@@ -563,7 +530,6 @@
 //                           </FormItem>
 //                         )}
 //                       />
-
 //                       {isEditing && (
 //                         <div className="flex justify-end pt-6">
 //                           <Button
@@ -586,11 +552,9 @@
 //     </div>
 //   );
 // };
-
 // export default Profile;
-
-
 import { useEffect, useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Calendar,
@@ -673,55 +637,52 @@ type PasswordFormData = z.infer<typeof passwordSchema>;
 
 // Helper function to parse location string
 const parseLocation = (location: string) => {
-  const parts = location.split(',').map(part => part.trim());
+  const parts = location.split(",").map((part) => part.trim());
   const n = parts.length;
-  
+
   // Initialize with empty values
-  let street_address = '';
-  let city = '';
-  let state = '';
-  let zip_code = '';
+  let street_address = "";
+  let city = "";
+  let state = "";
+  let zip_code = "";
 
   if (n >= 4) {
     // Case: Street, Area, City, State Zip
-    street_address = parts.slice(0, n - 3).join(', ');
-    city = parts[n - 3] || '';
-    
-    const stateZip = parts[n - 1] || '';
-    const stateZipParts = stateZip.split(' ');
-    zip_code = stateZipParts.pop() || '';
-    state = stateZipParts.join(' ') || parts[n - 2] || '';
-  } 
-  else if (n === 3) {
+    street_address = parts.slice(0, n - 3).join(", ");
+    city = parts[n - 3] || "";
+
+    const stateZip = parts[n - 1] || "";
+    const stateZipParts = stateZip.split(" ");
+    zip_code = stateZipParts.pop() || "";
+    state = stateZipParts.join(" ") || parts[n - 2] || "";
+  } else if (n === 3) {
     // Case: Street, City, State Zip
-    street_address = parts[0] || '';
-    city = parts[1] || '';
-    
-    const stateZip = parts[2] || '';
-    const stateZipParts = stateZip.split(' ');
-    zip_code = stateZipParts.pop() || '';
-    state = stateZipParts.join(' ');
-  } 
-  else if (n === 2) {
+    street_address = parts[0] || "";
+    city = parts[1] || "";
+
+    const stateZip = parts[2] || "";
+    const stateZipParts = stateZip.split(" ");
+    zip_code = stateZipParts.pop() || "";
+    state = stateZipParts.join(" ");
+  } else if (n === 2) {
     // Case: City, State Zip
-    city = parts[0] || '';
-    
-    const stateZip = parts[1] || '';
-    const stateZipParts = stateZip.split(' ');
-    zip_code = stateZipParts.pop() || '';
-    state = stateZipParts.join(' ');
-  } 
-  else if (n === 1) {
+    city = parts[0] || "";
+
+    const stateZip = parts[1] || "";
+    const stateZipParts = stateZip.split(" ");
+    zip_code = stateZipParts.pop() || "";
+    state = stateZipParts.join(" ");
+  } else if (n === 1) {
     // Case: Everything in one string
-    const singlePart = parts[0] || '';
-    const singleParts = singlePart.split(' ');
-    
+    const singlePart = parts[0] || "";
+    const singleParts = singlePart.split(" ");
+
     // Try to extract zip code (last word)
-    zip_code = singleParts.pop() || '';
-    state = singleParts.pop() || '';
-    
+    zip_code = singleParts.pop() || "";
+    state = singleParts.pop() || "";
+
     // The rest is city
-    city = singleParts.join(' ');
+    city = singleParts.join(" ");
   }
 
   return { street_address, city, state, zip_code };
@@ -791,7 +752,8 @@ const Profile = () => {
       }
 
       // Combine address components for backend
-      const location = `${data.street_address}, ${data.city}, ${data.state} ${data.zip_code}`.trim();
+      const location =
+        `${data.street_address}, ${data.city}, ${data.state} ${data.zip_code}`.trim();
 
       const payload = {
         ...profileData.profile,
@@ -856,13 +818,14 @@ const Profile = () => {
   const handleCancel = () => {
     if (profileData?.profile) {
       // Split full name back into first/last
-      const [first_name, ...last_nameParts] = profileData.profile.full_name.split(' ');
-      const last_name = last_nameParts.join(' ');
-      
+      const [first_name, ...last_nameParts] =
+        profileData.profile.full_name.split(" ");
+      const last_name = last_nameParts.join(" ");
+
       // Parse location
-      const location = profileData.profile.location || '';
+      const location = profileData.profile.location || "";
       const { street_address, city, state, zip_code } = parseLocation(location);
-      
+
       form.reset({
         ...profileData.profile,
         first_name,
@@ -870,7 +833,7 @@ const Profile = () => {
         street_address,
         city,
         state,
-        zip_code
+        zip_code,
       });
       setImage(profileData.profile.image || null);
     }
@@ -880,13 +843,14 @@ const Profile = () => {
   useEffect(() => {
     if (profileData?.profile) {
       // Split full name into first/last
-      const [first_name, ...last_nameParts] = profileData.profile.full_name.split(' ');
-      const last_name = last_nameParts.join(' ');
-      
+      const [first_name, ...last_nameParts] =
+        profileData.profile.full_name.split(" ");
+      const last_name = last_nameParts.join(" ");
+
       // Parse location
-      const location = profileData.profile.location || '';
+      const location = profileData.profile.location || "";
       const { street_address, city, state, zip_code } = parseLocation(location);
-      
+
       form.reset({
         ...profileData.profile,
         first_name,
@@ -894,7 +858,7 @@ const Profile = () => {
         street_address,
         city,
         state,
-        zip_code
+        zip_code,
       });
       setImage(profileData.profile.image || null);
     }
@@ -1311,7 +1275,11 @@ const Profile = () => {
                           <FormItem>
                             <FormLabel>Website</FormLabel>
                             <FormControl>
-                              <Input placeholder="https://www.example.com  ||   http://example.com" {...field} disabled={!isEditing} />
+                              <Input
+                                placeholder="https://www.example.com  ||   http://example.com"
+                                {...field}
+                                disabled={!isEditing}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

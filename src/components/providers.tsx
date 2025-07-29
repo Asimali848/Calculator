@@ -19,17 +19,17 @@ const Providers = ({ children }: { children: ReactNode }) => {
       isDangerouslyUseLocalStorage={true}
     >
       <Provider store={store}>
-          <BrowserRouter>
-            <Toaster
-              style={{
-                backgroundColor: "transparent",
-                background: "transparent",
-              }}
-              className="rounded-lg bg-transparent"
-              duration={1300}
-            />
-            <TooltipProvider>{children}</TooltipProvider>
-          </BrowserRouter>
+        <BrowserRouter>
+          <Toaster
+            style={{
+              backgroundColor: "transparent",
+              background: "transparent",
+            }}
+            className="rounded-lg bg-transparent"
+            duration={1300}
+          />
+          <TooltipProvider>{children}</TooltipProvider>
+        </BrowserRouter>
       </Provider>
     </KindeProvider>
   );

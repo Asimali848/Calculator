@@ -1,10 +1,8 @@
 // // import { useEffect } from "react";
-
 // // import { zodResolver } from "@hookform/resolvers/zod";
 // // import { useForm } from "react-hook-form";
 // // import { toast } from "sonner";
 // // import * as z from "zod";
-
 // // import { Button } from "@/components/ui/button";
 // // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // // import {
@@ -40,7 +38,6 @@
 // //   usePostTransactionMutation,
 // //   usePutTransactionMutation,
 // // } from "@/store/services/transaction";
-
 // // // Frontend schema
 // // // const transactionSchema = z.object({
 // // //   type: z.enum(["PAYMENT", "COST"]),
@@ -49,7 +46,6 @@
 // // //   description: z.string().optional(),
 // // //   interestRate: z.number().min(0, "Interest rate must be positive"),
 // // // });
-
 // // const transactionSchema = z.object({
 // //   type: z.enum(["PAYMENT", "COST"], {
 // //     required_error: "Transaction type is required",
@@ -59,7 +55,6 @@
 // //   description: z.string().optional(),
 // //   interestRate: z.coerce.number().min(0, "Interest rate must be positive"),
 // // });
-
 // // // Type for frontend form data
 // // type TransactionFormData = {
 // //   type: "PAYMENT" | "COST";
@@ -70,7 +65,6 @@
 // //   calculatedInterest: number;
 // //   newBalance: number;
 // // };
-
 // // // Type for backend payload
 // // type TransactionPayload = {
 // //   case_id: number; // or number, depending on backend
@@ -80,7 +74,6 @@
 // //   description: string;
 // //   new_balance: string;
 // // };
-
 // // interface TransactionFormProps {
 // //   open: boolean;
 // //   onOpenChange: (open: boolean) => void;
@@ -88,14 +81,12 @@
 // //   editTransaction?: Transaction | null;
 // //   keepOpenAfterSubmit?: boolean;
 // // }
-
 // // interface CaseData {
 // //   id: string; // or number
 // //   caseName: string;
 // //   courtCaseNumber: string;
 // //   principalBalance: number;
 // // }
-
 // // interface Transaction {
 // //   id: string;
 // //   caseId: string;
@@ -104,7 +95,6 @@
 // //   date: string;
 // //   description?: string;
 // // }
-
 // // export function TransactionForm({
 // //   open,
 // //   onOpenChange,
@@ -117,7 +107,6 @@
 // //   const [putTransaction, { isLoading: isPutting }] =
 // //     usePutTransactionMutation();
 // //   const isLoading = isPosting || isPutting;
-
 // //   const form = useForm<TransactionFormData>({
 // //     //@ts-ignore
 // //     resolver: zodResolver(transactionSchema),
@@ -129,9 +118,7 @@
 // //       interestRate: 10,
 // //     },
 // //   });
-
 // //   const watchedValues = form.watch();
-
 // //   useEffect(() => {
 // //     if (editTransaction) {
 // //       form.reset({
@@ -151,20 +138,17 @@
 // //       });
 // //     }
 // //   }, [editTransaction, form]);
-
 // //   const calculatedInterest = calculateInterest(
 // //     caseData.principalBalance,
 // //     watchedValues.interestRate || 10,
 // //     30
 // //   );
-
 // //   const newBalance = calculateNewBalance(
 // //     caseData.principalBalance,
 // //     watchedValues.amount || 0,
 // //     calculatedInterest,
 // //     watchedValues.type || "PAYMENT"
 // //   );
-
 // //   const handleSubmit = async (data: TransactionFormData) => {
 // //     const token = localStorage.getItem("access");
 // //     if (!token) {
@@ -173,7 +157,6 @@
 // //       });
 // //       return;
 // //     }
-
 // //     const payload: TransactionPayload = {
 // //       case_id: Number(caseData.id),
 // //       transaction_type: data.type,
@@ -182,7 +165,6 @@
 // //       description: data.description || "",
 // //       new_balance: newBalance.toFixed(2),
 // //     };
-
 // //     try {
 // //       if (editTransaction && editTransaction.id) {
 // //         await putTransaction({
@@ -243,7 +225,6 @@
 // //       });
 // //     }
 // //   };
-
 // //   return (
 // //     <Sheet open={open} onOpenChange={onOpenChange}>
 // //       <SheetContent className="h-full w-full overflow-y-auto">
@@ -256,7 +237,6 @@
 // //             {caseData.id})
 // //           </SheetDescription>
 // //         </SheetHeader>
-
 // //         <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-1">
 // //           <div className="space-y-6">
 // //             <Form {...form}>
@@ -269,7 +249,6 @@
 // //                     {form.formState.errors.root.message}
 // //                   </div>
 // //                 )}
-
 // //                 <FormField
 // //                   control={form.control}
 // //                   name="type"
@@ -294,7 +273,6 @@
 // //                     </FormItem>
 // //                   )}
 // //                 />
-
 // //                 <FormField
 // //                   control={form.control}
 // //                   name="amount"
@@ -317,7 +295,6 @@
 // //                     </FormItem>
 // //                   )}
 // //                 />
-
 // //                 <FormField
 // //                   control={form.control}
 // //                   name="date"
@@ -331,7 +308,6 @@
 // //                     </FormItem>
 // //                   )}
 // //                 />
-
 // //                 <FormField
 // //                   control={form.control}
 // //                   name="description"
@@ -348,7 +324,6 @@
 // //                     </FormItem>
 // //                   )}
 // //                 />
-
 // //                 <Card>
 // //                   <CardHeader>
 // //                     <CardTitle className="text-sm">Calculations</CardTitle>
@@ -368,7 +343,6 @@
 // //                     </div>
 // //                   </CardContent>
 // //                 </Card>
-
 // //                 <div className="flex flex-col space-y-2 pt-5 sm:space-x-2 sm:space-y-0 md:flex-row">
 // //                   <Button type="submit" className="flex-1" disabled={isLoading}>
 // //                     {editTransaction
@@ -396,21 +370,12 @@
 // //     </Sheet>
 // //   );
 // // }
-
-
-
 // // ===================###################===================
-
-
-
-
 // import { useEffect } from "react";
-
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { useForm } from "react-hook-form";
 // import { toast } from "sonner";
 // import * as z from "zod";
-
 // import { Button } from "@/components/ui/button";
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import {
@@ -446,7 +411,6 @@
 //   usePostTransactionMutation,
 //   usePutTransactionMutation,
 // } from "@/store/services/transaction";
-
 // const transactionSchema = z.object({
 //   type: z.enum(["PAYMENT", "COST"], {
 //     required_error: "Transaction type is required",
@@ -456,7 +420,6 @@
 //   description: z.string().optional(),
 //   interestRate: z.coerce.number().min(0, "Interest rate must be positive"),
 // });
-
 // type TransactionFormData = {
 //   type: "PAYMENT" | "COST";
 //   amount: number;
@@ -464,7 +427,6 @@
 //   description?: string;
 //   interestRate: number;
 // };
-
 // type TransactionPayload = {
 //   case_id: number;
 //   transaction_type: string;
@@ -473,7 +435,6 @@
 //   description: string;
 //   new_balance: string;
 // };
-
 // interface TransactionFormProps {
 //   open: boolean;
 //   onOpenChange: (open: boolean) => void;
@@ -481,7 +442,6 @@
 //   editTransaction?: Transaction | null;
 //   keepOpenAfterSubmit?: boolean;
 // }
-
 // interface CaseData {
 //   id: string;
 //   caseName: string;
@@ -489,7 +449,6 @@
 //   principalBalance: number;
 //   judgmentDate: string;
 // }
-
 // interface Transaction {
 //   id: string;
 //   caseId: string;
@@ -498,14 +457,12 @@
 //   date: string;
 //   description?: string;
 // }
-
 // function getDaysBetween(startDate: string, endDate: string): number {
 //   const start = new Date(startDate);
 //   const end = new Date(endDate);
 //   const msPerDay = 1000 * 60 * 60 * 24;
 //   return Math.max(0, Math.floor((end.getTime() - start.getTime()) / msPerDay));
 // }
-
 // export function TransactionForm({
 //   open,
 //   onOpenChange,
@@ -516,7 +473,6 @@
 //   const [postTransaction, { isLoading: isPosting }] = usePostTransactionMutation();
 //   const [putTransaction, { isLoading: isPutting }] = usePutTransactionMutation();
 //   const isLoading = isPosting || isPutting;
-
 //   const form = useForm<TransactionFormData>({
 //     resolver: zodResolver(transactionSchema),
 //     defaultValues: {
@@ -527,9 +483,7 @@
 //       interestRate: 10,
 //     },
 //   });
-
 //   const watchedValues = form.watch();
-
 //   useEffect(() => {
 //     if (editTransaction) {
 //       form.reset({
@@ -549,7 +503,6 @@
 //       });
 //     }
 //   }, [editTransaction, form]);
-
 //   const days = getDaysBetween(caseData.judgmentDate, watchedValues.date);
 //   const calculatedInterest = calculateInterest(
 //     caseData.principalBalance,
@@ -562,7 +515,6 @@
 //     calculatedInterest,
 //     watchedValues.type || "PAYMENT"
 //   );
-
 //   const handleSubmit = async (data: TransactionFormData) => {
 //     const token = localStorage.getItem("access");
 //     if (!token) {
@@ -571,7 +523,6 @@
 //       });
 //       return;
 //     }
-
 //     const payload: TransactionPayload = {
 //       case_id: Number(caseData.id),
 //       transaction_type: data.type,
@@ -580,7 +531,6 @@
 //       description: data.description || "",
 //       new_balance: newBalance.toFixed(2),
 //     };
-
 //     try {
 //       if (editTransaction && editTransaction.id) {
 //         await putTransaction({
@@ -620,7 +570,6 @@
 //       toast.error(errorMessage, { className: "bg-destructive text-white p-3" });
 //     }
 //   };
-
 //   return (
 //     <Sheet open={open} onOpenChange={onOpenChange}>
 //       <SheetContent className="h-full w-full overflow-y-auto">
@@ -632,7 +581,6 @@
 //             {caseData.caseName} - {caseData.courtCaseNumber} (Case ID: {caseData.id})
 //           </SheetDescription>
 //         </SheetHeader>
-
 //         <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-1">
 //           <div className="space-y-6">
 //             <Form {...form}>
@@ -642,7 +590,6 @@
 //                     {form.formState.errors.root.message}
 //                   </div>
 //                 )}
-
 //                 <FormField
 //                   control={form.control}
 //                   name="type"
@@ -664,7 +611,6 @@
 //                     </FormItem>
 //                   )}
 //                 />
-
 //                 <FormField
 //                   control={form.control}
 //                   name="amount"
@@ -685,7 +631,6 @@
 //                     </FormItem>
 //                   )}
 //                 />
-
 //                 <FormField
 //                   control={form.control}
 //                   name="date"
@@ -699,7 +644,6 @@
 //                     </FormItem>
 //                   )}
 //                 />
-
 //                 <FormField
 //                   control={form.control}
 //                   name="description"
@@ -713,7 +657,6 @@
 //                     </FormItem>
 //                   )}
 //                 />
-
 //                 <Card>
 //                   <CardHeader>
 //                     <CardTitle className="text-sm">Calculations</CardTitle>
@@ -733,7 +676,6 @@
 //                     </div>
 //                   </CardContent>
 //                 </Card>
-
 //                 <div className="flex flex-col gap-2.5 md:flex-row pt-5">
 //                   <Button type="submit" className="flex-1" disabled={isLoading}>
 //                     {editTransaction
@@ -765,15 +707,15 @@
 
 
 
+
+
+
 // ------------------- &&&&&&&&&&&&&& -------------------
-
-
 // import { useEffect, useState } from "react";
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { useForm } from "react-hook-form";
 // import { toast } from "sonner";
 // import * as z from "zod";
-
 // import { Button } from "@/components/ui/button";
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import {
@@ -809,7 +751,6 @@
 //   usePostTransactionMutation,
 //   usePutTransactionMutation,
 // } from "@/store/services/transaction";
-
 // const transactionSchema = z.object({
 //   type: z.enum(["PAYMENT", "COST"], {
 //     required_error: "Transaction type is required",
@@ -819,9 +760,7 @@
 //   description: z.string().optional(),
 //   interestRate: z.coerce.number().min(0, "Interest rate must be positive"),
 // });
-
 // type TransactionFormData = z.infer<typeof transactionSchema>;
-
 // type TransactionPayload = {
 //   case_id: number;
 //   transaction_type: string;
@@ -830,7 +769,6 @@
 //   description: string;
 //   new_balance: string;
 // };
-
 // interface TransactionFormProps {
 //   open: boolean;
 //   onOpenChange: (open: boolean) => void;
@@ -838,7 +776,6 @@
 //   editTransaction?: Transaction | null;
 //   keepOpenAfterSubmit?: boolean;
 // }
-
 // interface CaseData {
 //   id: string;
 //   caseName: string;
@@ -846,7 +783,6 @@
 //   principalBalance: number;
 //   judgmentDate: string;
 // }
-
 // interface Transaction {
 //   id: string;
 //   caseId: string;
@@ -855,13 +791,11 @@
 //   date: string;
 //   description?: string;
 // }
-
 // function getDaysBetween(startDate: string, endDate: string): number {
 //   const start = new Date(startDate);
 //   const end = new Date(endDate);
 //   return Math.max(0, Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
 // }
-
 // export function TransactionForm({
 //   open,
 //   onOpenChange,
@@ -872,12 +806,10 @@
 //   const [postTransaction, { isLoading: isPosting }] = usePostTransactionMutation();
 //   const [putTransaction, { isLoading: isPutting }] = usePutTransactionMutation();
 //   const isLoading = isPosting || isPutting;
-
 //   const [currentPrincipal, setCurrentPrincipal] = useState(caseData.principalBalance);
 //   const [accruedInterest, setAccruedInterest] = useState(
 //     calculateInterest(caseData.principalBalance, 10, getDaysBetween(caseData.judgmentDate, new Date().toISOString().split("T")[0]))
 //   );
-
 //   const form = useForm<TransactionFormData>({
 //     resolver: zodResolver(transactionSchema),
 //     defaultValues: {
@@ -888,30 +820,25 @@
 //       interestRate: 10,
 //     },
 //   });
-
 //   const watchedValues = form.watch();
-
 //   useEffect(() => {
 //     const days = getDaysBetween(caseData.judgmentDate, watchedValues.date);
 //     setAccruedInterest(
 //       calculateInterest(currentPrincipal, watchedValues.interestRate, days)
 //     );
 //   }, [watchedValues.date, watchedValues.interestRate, currentPrincipal, caseData.judgmentDate]);
-
 //   const newBalance = calculateNewBalance(
 //     currentPrincipal,
 //     watchedValues.amount,
 //     accruedInterest,
 //     watchedValues.type
 //   );
-
 //   const handleSubmit = async (data: TransactionFormData) => {
 //     const token = localStorage.getItem("access");
 //     if (!token) {
 //       form.setError("root", { message: "Authentication token not found. Please log in." });
 //       return;
 //     }
-
 //     const payload: TransactionPayload = {
 //       case_id: Number(caseData.id),
 //       transaction_type: data.type,
@@ -920,7 +847,6 @@
 //       description: data.description || "",
 //       new_balance: newBalance.toFixed(2),
 //     };
-
 //     try {
 //       if (editTransaction?.id) {
 //         await putTransaction({
@@ -934,7 +860,6 @@
 //           data: { ...payload, amount: +payload.amount, new_balance: +payload.new_balance },
 //         });
 //       }
-
 //       // Update state values
 //       if (data.type === "PAYMENT") {
 //         const interestPaid = Math.min(data.amount, accruedInterest);
@@ -944,12 +869,10 @@
 //       } else if (data.type === "COST") {
 //         setCurrentPrincipal((prev) => prev + data.amount);
 //       }
-
 //       toast.success(
 //         `Transaction ${editTransaction ? "updated" : "created"} successfully. New Balance: ${formatCurrency(newBalance)}`,
 //         { className: "bg-primary p-3 text-white" }
 //       );
-
 //       form.reset();
 //       if (!keepOpenAfterSubmit) onOpenChange(false);
 //     } catch (error: any) {
@@ -958,7 +881,6 @@
 //       toast.error(errorMessage, { className: "bg-destructive text-white p-3" });
 //     }
 //   };
-
 //   return (
 //     <Sheet open={open} onOpenChange={onOpenChange}>
 //       <SheetContent className="h-full w-full overflow-y-auto">
@@ -970,7 +892,6 @@
 //             {caseData.caseName} - {caseData.courtCaseNumber} (Case ID: {caseData.id})
 //           </SheetDescription>
 //         </SheetHeader>
-
 //         <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-1">
 //           <div className="space-y-6">
 //             <Form {...form}>
@@ -980,7 +901,6 @@
 //                     {form.formState.errors.root.message}
 //                   </div>
 //                 )}
-
 //                 <FormField
 //                   control={form.control}
 //                   name="type"
@@ -1002,7 +922,6 @@
 //                     </FormItem>
 //                   )}
 //                 />
-
 //                 <FormField
 //                   control={form.control}
 //                   name="amount"
@@ -1021,7 +940,6 @@
 //                     </FormItem>
 //                   )}
 //                 />
-
 //                 <FormField
 //                   control={form.control}
 //                   name="date"
@@ -1035,7 +953,6 @@
 //                     </FormItem>
 //                   )}
 //                 />
-
 //                 <FormField
 //                   control={form.control}
 //                   name="description"
@@ -1049,7 +966,6 @@
 //                     </FormItem>
 //                   )}
 //                 />
-
 //                 <Card>
 //                   <CardHeader>
 //                     <CardTitle className="text-sm">Calculations</CardTitle>
@@ -1069,7 +985,6 @@
 //                     </div>
 //                   </CardContent>
 //                 </Card>
-
 //                 <div className="flex flex-col gap-2.5 md:flex-row pt-5">
 //                   <Button type="submit" className="flex-1" disabled={isLoading}>
 //                     {editTransaction
@@ -1099,14 +1014,7 @@
 // }
 
 
-
-
-
-
-
-
-
-import { useEffect, useState } from "react";
+// correct ----
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -1138,10 +1046,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  calculateInterest,
-  formatCurrency,
-} from "@/lib/calculations";
+import { formatCurrency } from "@/lib/calculations";
 import {
   usePostTransactionMutation,
   usePutTransactionMutation,
@@ -1193,12 +1098,6 @@ interface Transaction {
   description?: string;
 }
 
-function getDaysBetween(startDate: string, endDate: string): number {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  return Math.max(0, Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
-}
-
 export function TransactionForm({
   open,
   onOpenChange,
@@ -1206,18 +1105,11 @@ export function TransactionForm({
   editTransaction,
   keepOpenAfterSubmit = false,
 }: TransactionFormProps) {
-  const [postTransaction, { isLoading: isPosting }] = usePostTransactionMutation();
-  const [putTransaction, { isLoading: isPutting }] = usePutTransactionMutation();
+  const [postTransaction, { isLoading: isPosting }] =
+    usePostTransactionMutation();
+  const [putTransaction, { isLoading: isPutting }] =
+    usePutTransactionMutation();
   const isLoading = isPosting || isPutting;
-
-  const [currentPrincipal, setCurrentPrincipal] = useState(caseData.principalBalance);
-  const [accruedInterest, setAccruedInterest] = useState(
-    calculateInterest(
-      caseData.principalBalance,
-      10,
-      getDaysBetween(caseData.judgmentDate, new Date().toISOString().split("T")[0])
-    )
-  );
 
   const form = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema),
@@ -1232,36 +1124,79 @@ export function TransactionForm({
 
   const watchedValues = form.watch();
 
-  useEffect(() => {
-    const days = getDaysBetween(caseData.judgmentDate, watchedValues.date);
-    const newInterest = calculateInterest(currentPrincipal, watchedValues.interestRate, days);
-    setAccruedInterest(newInterest);
-  }, [watchedValues.date, watchedValues.interestRate, currentPrincipal, caseData.judgmentDate]);
+  // --- Inline calculation (accurate interest-first handling) ---
+  const formDate = watchedValues.date;
+  const formAmount = watchedValues.amount;
+  const formType = watchedValues.type;
+  const formInterestRate = watchedValues.interestRate;
 
-  // Apply payment first to interest, then principal
-  const amount = watchedValues.amount;
-  let interestPaid = 0;
-  let principalPaid = 0;
+  const start = new Date(caseData.judgmentDate);
+  const end = new Date(formDate);
+  const days = Math.max(
+    0,
+    Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+  );
+
+  const originalPrincipal = caseData.principalBalance;
+  const dailyInterest = (originalPrincipal * formInterestRate) / (100 * 365);
+  const accruedInterest = Math.floor(dailyInterest * days * 10000) / 10000;
+
+  let updatedPrincipal = originalPrincipal;
   let updatedInterest = accruedInterest;
-  let updatedPrincipal = currentPrincipal;
 
-  if (watchedValues.type === "PAYMENT") {
-    interestPaid = Math.min(amount, accruedInterest);
-    principalPaid = Math.min(amount - interestPaid, currentPrincipal);
-    updatedInterest = accruedInterest - interestPaid;
-    updatedPrincipal = currentPrincipal - principalPaid;
-  } else if (watchedValues.type === "COST") {
-    updatedPrincipal = currentPrincipal + amount;
+  if (formType === "PAYMENT") {
+    const interestPaid = Math.min(formAmount, updatedInterest);
+    updatedInterest = Math.max(0, updatedInterest - interestPaid);
+
+    const remaining = formAmount - interestPaid;
+    const principalPaid = Math.min(remaining, updatedPrincipal);
+    updatedPrincipal = Math.max(0, updatedPrincipal - principalPaid);
   }
 
-  const newBalance = updatedPrincipal + updatedInterest;
+  if (formType === "COST") {
+    updatedPrincipal = updatedPrincipal + formAmount;
+  }
+
+  const newBalance =
+    Math.floor((updatedPrincipal + updatedInterest) * 10000) / 10000;
 
   const handleSubmit = async (data: TransactionFormData) => {
     const token = localStorage.getItem("access");
     if (!token) {
-      form.setError("root", { message: "Authentication token not found. Please log in." });
+      form.setError("root", {
+        message: "Authentication token not found. Please log in.",
+      });
       return;
     }
+
+    const start = new Date(caseData.judgmentDate);
+    const end = new Date(data.date);
+    const days = Math.max(
+      0,
+      Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+    );
+
+    const dailyInterest =
+      (caseData.principalBalance * data.interestRate) / (100 * 365);
+    const accruedInterest = Math.floor(dailyInterest * days * 10000) / 10000;
+
+    let principal = caseData.principalBalance;
+    let interest = accruedInterest;
+
+    if (data.type === "PAYMENT") {
+      const interestPaid = Math.min(data.amount, interest);
+      interest = Math.max(0, interest - interestPaid);
+
+      const remaining = data.amount - interestPaid;
+      const principalPaid = Math.min(remaining, principal);
+      principal = Math.max(0, principal - principalPaid);
+    }
+
+    if (data.type === "COST") {
+      principal += data.amount;
+    }
+
+    const finalBalance = Math.floor((principal + interest) * 10000) / 10000;
 
     const payload: TransactionPayload = {
       case_id: Number(caseData.id),
@@ -1269,7 +1204,7 @@ export function TransactionForm({
       amount: data.amount.toFixed(2),
       date: data.date,
       description: data.description || "",
-      new_balance: newBalance.toFixed(2),
+      new_balance: finalBalance.toFixed(2),
     };
 
     try {
@@ -1277,32 +1212,34 @@ export function TransactionForm({
         await putTransaction({
           id: Number(editTransaction.id),
           token,
-          data: { ...payload, amount: +payload.amount, new_balance: +payload.new_balance },
+          data: {
+            ...payload,
+            amount: +payload.amount,
+            new_balance: +payload.new_balance,
+          },
         });
       } else {
         await postTransaction({
           token,
-          data: { ...payload, amount: +payload.amount, new_balance: +payload.new_balance },
+          data: {
+            ...payload,
+            amount: +payload.amount,
+            new_balance: +payload.new_balance,
+          },
         });
       }
 
-      // Update state after successful post
-      if (data.type === "PAYMENT") {
-        setAccruedInterest((prev) => Math.max(0, prev - interestPaid));
-        setCurrentPrincipal((prev) => Math.max(0, prev - principalPaid));
-      } else if (data.type === "COST") {
-        setCurrentPrincipal((prev) => prev + data.amount);
-      }
-
       toast.success(
-        `Transaction ${editTransaction ? "updated" : "created"} successfully. New Balance: ${formatCurrency(newBalance)}`,
+        `Transaction ${editTransaction ? "updated" : "created"} successfully. New Balance: ${formatCurrency(finalBalance)}`,
         { className: "bg-primary p-3 text-white" }
       );
 
       form.reset();
       if (!keepOpenAfterSubmit) onOpenChange(false);
     } catch (error: any) {
-      const errorMessage = error?.data?.message || "Failed to submit transaction. Please try again.";
+      const errorMessage =
+        error?.data?.message ||
+        "Failed to submit transaction. Please try again.";
       form.setError("root", { message: errorMessage });
       toast.error(errorMessage, { className: "bg-destructive text-white p-3" });
     }
@@ -1316,14 +1253,18 @@ export function TransactionForm({
             {editTransaction ? "Edit Transaction" : "Add New Transaction"}
           </SheetTitle>
           <SheetDescription>
-            {caseData.caseName} - {caseData.courtCaseNumber} (Case ID: {caseData.id})
+            {caseData.caseName} - {caseData.courtCaseNumber} (Case ID:{" "}
+            {caseData.id})
           </SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-1">
           <div className="space-y-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="space-y-4"
+              >
                 {form.formState.errors.root && (
                   <div className="text-sm text-red-500">
                     {form.formState.errors.root.message}
@@ -1336,7 +1277,10 @@ export function TransactionForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Transaction Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select transaction type" />
@@ -1363,7 +1307,9 @@ export function TransactionForm({
                           type="number"
                           placeholder="0000"
                           {...field}
-                          onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value) || 0)
+                          }
                         />
                       </FormControl>
                       <FormMessage />
@@ -1392,7 +1338,32 @@ export function TransactionForm({
                     <FormItem>
                       <FormLabel>Description (Optional)</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter description..." {...field} />
+                        <Textarea
+                          placeholder="Enter description..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="interestRate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Annual Interest Rate (%)</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="10"
+                          step="0.01"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value) || 0)
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -1419,15 +1390,15 @@ export function TransactionForm({
                   </CardContent>
                 </Card>
 
-                <div className="flex flex-col gap-2.5 md:flex-row pt-5">
+                <div className="flex flex-col gap-2.5 pt-5 md:flex-row">
                   <Button type="submit" className="flex-1" disabled={isLoading}>
                     {editTransaction
                       ? isLoading
                         ? "Updating..."
                         : "Update Transaction"
                       : isLoading
-                      ? "Submitting..."
-                      : "Add Transaction"}
+                        ? "Submitting..."
+                        : "Add Transaction"}
                   </Button>
                   <Button
                     type="button"

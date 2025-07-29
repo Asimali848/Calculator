@@ -1,10 +1,8 @@
 // import { useEffect, useState } from "react";
-
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { useForm } from "react-hook-form";
 // import { toast } from "sonner";
 // import * as z from "zod";
-
 // import { Button } from "@/components/ui/button";
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import {
@@ -26,13 +24,10 @@
 // import { Separator } from "@/components/ui/separator";
 // import { formatCurrency } from "@/lib/calculations";
 // import { usePostCaseMutation } from "@/store/services/case";
-
 // import { Textarea } from "../ui/textarea";
-
 // const roundToSix = (num: number): number => {
 //   return parseFloat(num.toFixed(2));
 // };
-
 // type CaseData = {
 //   id?: string;
 //   caseName: string;
@@ -49,7 +44,6 @@
 //   isEnded?: boolean;
 //   debtorInfo?: string;
 // };
-
 // const caseSchema = z.object({
 //   caseName: z.string().min(1, "Case name is required"),
 //   courtName: z.string().min(1, "Court name is required"),
@@ -64,16 +58,13 @@
 //   cost: z.number().optional(),
 //   debtorInfo: z.string().optional(),
 // });
-
 // interface AddCaseModalProps {
 //   open: boolean;
 //   onOpenChange: (open: boolean) => void;
 //   onSubmit: (data: CaseData) => void;
 // }
-
 // const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
 //   const [isEndDateEnabled, _] = useState(false);
-
 //   const [calculationResults, setCalculationResults] = useState({
 //     judgmentAmount: 0,
 //     principalReduction: 0,
@@ -86,7 +77,6 @@
 //     days: 0,
 //     grandTotal: 0,
 //   });
-
 //   const form = useForm<z.infer<typeof caseSchema>>({
 //     resolver: zodResolver(caseSchema),
 //     defaultValues: {
@@ -102,9 +92,7 @@
 //       debtorInfo: "",
 //     },
 //   });
-
 //   const watchedValues = form.watch();
-
 //   useEffect(() => {
 //     const {
 //       judgmentAmount = 0,
@@ -114,16 +102,12 @@
 //       judgmentDate,
 //       endDate,
 //     } = watchedValues;
-
 //     let startDate = new Date(judgmentDate);
 //     let finalDate = new Date(endDate || new Date());
-
 //     if (isNaN(startDate.getTime())) startDate = new Date();
 //     if (isNaN(finalDate.getTime())) finalDate = new Date();
-
 //     const timeDiff = finalDate.getTime() - startDate.getTime();
 //     const days = Math.max(0, Math.floor(timeDiff / (1000 * 3600 * 24)) + 1);
-
 //     const dailyInterest = roundToSix(
 //       (judgmentAmount * (interestRate / 100)) / 365
 //     );
@@ -135,7 +119,6 @@
 //     );
 //     const totalInterest = roundToSix(interestAccrued);
 //     const grandTotal = roundToSix(principalBalance + totalInterest);
-
 //     setCalculationResults({
 //       judgmentAmount,
 //       principalReduction,
@@ -149,12 +132,9 @@
 //       grandTotal,
 //     });
 //   }, [watchedValues]);
-
 //   const [postCase, { isLoading }] = usePostCaseMutation();
-
 //   const handleSubmit = async (data: z.infer<typeof caseSchema>) => {
 //     const token = localStorage.getItem("access") || "";
-
 //     const newCase: CaseData = {
 //       caseName: data.caseName,
 //       courtName: data.courtName,
@@ -171,7 +151,6 @@
 //       isEnded: false,
 //       debtorInfo: data.debtorInfo || "",
 //     };
-
 //     try {
 //       //@ts-ignore
 //       const res = await postCase({ token, data: newCase }).unwrap();
@@ -195,7 +174,6 @@
 //       );
 //     }
 //   };
-
 //   return (
 //     <Dialog open={open} onOpenChange={onOpenChange}>
 //       <DialogContent className="max-h-[90dvh] max-w-6xl overflow-y-auto">
@@ -328,13 +306,6 @@
 //                 </div>
 //               </CardContent>
 //             </Card>
-
-
-
-
-
-
-
 //             {/* <Card>
 //               <CardHeader>
 //                 <CardTitle className="flex w-full items-center justify-between text-lg text-primary">
@@ -342,7 +313,6 @@
 //                     Payment and Cost{" "}
 //                     <span className="text-muted-foreground">(Optional)</span>
 //                   </div>
-
 //                   <Button
 //                     type="button"
 //                     variant="outline"
@@ -405,7 +375,6 @@
 //                       </FormItem>
 //                     )}
 //                   />
-
 //                   <FormField
 //                     control={form.control}
 //                     name="endDate"
@@ -426,22 +395,6 @@
 //                 </div>
 //               </CardContent>
 //             </Card> */}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //             <Card>
 //               <CardHeader>
 //                 <CardTitle className="text-lg text-primary">
@@ -468,39 +421,6 @@
 //                 />
 //               </CardContent>
 //             </Card>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //             <Card>
 //               <CardHeader>
 //                 <CardTitle className="text-center text-lg">Results</CardTitle>
@@ -575,7 +495,6 @@
 //                 </div>
 //               </CardContent>
 //             </Card>
-
 //             <div className="flex space-x-2 pt-4">
 //               <Button
 //                 type="submit"
@@ -599,13 +518,9 @@
 //     </Dialog>
 //   );
 // };
-
 // export default AddCaseModal;
-
-
-
-
 import { useEffect, useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -634,7 +549,7 @@ import { formatCurrency } from "@/lib/calculations";
 import { usePostCaseMutation } from "@/store/services/case";
 
 const roundToSix = (num: number): number => {
-  return parseFloat(num.toFixed(2));
+  return parseFloat(num.toFixed(4));
 };
 
 type CaseData = {
@@ -738,7 +653,9 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
     if (isNaN(finalDate.getTime())) finalDate = new Date();
 
     const timeDiff = finalDate.getTime() - startDate.getTime();
-    const days = Math.max(0, Math.floor(timeDiff / (1000 * 3600 * 24)) + 1);
+
+    // const days = Math.max(0, Math.floor(timeDiff / (1000 * 3600 * 24)) +1 );
+    const days = Math.max(0, Math.floor(timeDiff / (1000 * 3600 * 24)));
 
     const dailyInterest = roundToSix(
       (judgmentAmount * (interestRate / 100)) / 365
@@ -770,15 +687,17 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
 
   const handleSubmit = async (data: z.infer<typeof caseSchema>) => {
     const token = localStorage.getItem("access") || "";
-    
+
     // Combine debtor info into a single string
     const debtorInfo = [
       data.debtorFirm,
       data.debtorStreet,
       `${data.debtorCity}, ${data.debtorState} ${data.debtorZip}`,
       `Phone: ${data.debtorPhone}`,
-      `Email: ${data.debtorEmail}`
-    ].filter(Boolean).join('\n');
+      `Email: ${data.debtorEmail}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
 
     const newCase: CaseData = {
       caseName: data.caseName,
@@ -982,7 +901,10 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
                       <FormItem>
                         <FormLabel>Street Address</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter street address" {...field} />
+                          <Input
+                            placeholder="Enter street address"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
