@@ -443,7 +443,7 @@ import { setSelectedCase } from "@/store/global";
 import {
   useDeleteCaseMutation,
   useDownloadPayoffStatementMutation,
-  // useUpdateCaseMutation, // Added update mutation
+  useEditCaseMutation,
 } from "@/store/services/case";
 
 import { TransactionForm } from "../transaction/TransactionForm";
@@ -607,7 +607,7 @@ function EditCaseDialog({
   const handleSubmit = () => {
     onUpdate({
       ...formData,
-      judgmentDate: new Date(formData.judgmentDate).toISOString(),
+      judgmentDate: formData.judgmentDate,
     });
   };
 
@@ -746,7 +746,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
   );
   const [showMenu, setShowMenu] = useState(false);
   const [deleteCase, { isLoading: isDeleting }] = useDeleteCaseMutation();
-  // const [updateCase, { isLoading: isUpdating }] = useUpdateCaseMutation(); // Added for updates
+  const [editCase, { isLoading: isUpdating }] = useEditCaseMutation(); // ✅
   const [downloadPayoffStatement] = useDownloadPayoffStatementMutation();
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -792,36 +792,37 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
   };
 
   // Added function to handle case updates
-  // const handleUpdateCase = async (updatedData: any) => {
-  //   try {
-  //     const token = localStorage.getItem("access");
-  //     if (!token) {
-  //       toast.error("User not authenticated", {
-  //         className: "bg-destructive text-white p-3",
-  //       });
-  //       return;
-  //     }
+  const handleUpdateCase = async (updatedData: any) => {
+    try {
+      const token = localStorage.getItem("access");
+      if (!token) {
+        toast.error("User not authenticated", {
+          className: "bg-destructive text-white p-3",
+        });
+        return;
+      }
 
-  //     const response = await updateCase({
-  //       id: caseData.id,
-  //       token,
-  //       data: updatedData
-  //     }).unwrap();
+      const response = await editCase({
+        id: caseData.id,
+        token,
+        data: updatedData,
+      }).unwrap();
 
-  //     toast.success("Case updated successfully", {
-  //       className: "bg-primary text-white p-3",
-  //     });
+      if (response) {
+        toast.success("Case updated successfully", {
+          className: "bg-primary text-white p-3",
+        });
+      }
 
-  //     // Update the case in the UI
-  //     onUpdateCase(response);
-  //     setIsEditDialogOpen(false);
-
-  //   } catch (error) {
-  //     toast.error("Failed to update case", {
-  //       className: "bg-destructive text-white p-3",
-  //     });
-  //   }
-  // };
+      // Optionally update UI here (refetch, patch state, reload, etc.)
+      window.location.reload();
+      setIsEditDialogOpen(false);
+    } catch (error) {
+      toast.error("Failed to update case", {
+        className: "bg-destructive text-white p-3",
+      });
+    }
+  };
 
   const handleDownloadPayoffStatement = async () => {
     try {
@@ -1028,8 +1029,8 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
           open={isEditDialogOpen}
           onOpenChange={setIsEditDialogOpen}
           caseData={caseData}
-          // onUpdate={handleUpdateCase}
-          // isUpdating={isUpdating}
+          onUpdate={handleUpdateCase}
+          isUpdating={isUpdating}
         />
       </div>
     </Card>

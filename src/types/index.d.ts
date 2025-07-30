@@ -97,3 +97,11 @@ declare type AddCase = {
   isEnded: boolean;
   debtorInfo: string;
 };
+
+declare type EditCase = {
+  caseName: string;
+  courtName: string;
+  courtCaseNumber: string;
+  judgmentAmount: number;
+  judgmentDate: string;
+}
