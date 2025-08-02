@@ -562,7 +562,7 @@ export function TransactionForm({
                           placeholder="0000"
                           {...field}
                           onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value) || 0)
+                            field.onChange(parseFloat(e.target.value))
                           }
                         />
                       </FormControl>
