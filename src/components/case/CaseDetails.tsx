@@ -956,11 +956,11 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
             </div>
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-4">
-                {/* <CaseDetail
-                  label="Court Name & Case no."
-                  value={caseData.courtName + " / " + caseData.courtCaseNumber}
-                /> */}
-                <div className="flex w-full items-center justify-between">
+                <CaseDetail
+                  label="Court/Case Number "
+                  value={caseData.courtName + " Case No. " + caseData.courtCaseNumber}
+                />
+                {/* <div className="flex w-full items-center justify-between">
                   <span>
                     <strong> {caseData.courtName} </strong>{" "}
                     <span className="text-gray-500"> Case no </span>
@@ -968,7 +968,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
                   <span>
                     {caseData.courtCaseNumber}
                   </span>
-                </div>
+                </div> */}
                 <CaseDetail
                   label="Judgment Amount"
                   value={formatCurrencyintwo(caseData.judgmentAmount)}

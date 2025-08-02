@@ -724,13 +724,33 @@ export default function calculatePayoffAmount(
 //     maximumFractionDigits: 4,
 //   }).format(amount);
 // }
+
+
+// export function formatCurrency(amount: number): string {
+//   const truncated = truncateToFourDecimals(amount).toFixed(4); // force 4 digits
+//   return `$${truncated}`;
+// }
 export function formatCurrency(amount: number): string {
-  const truncated = truncateToFourDecimals(amount).toFixed(4); // force 4 digits
-  return `$${truncated}`;
+  const truncated = truncateToFourDecimals(amount).toFixed(4); // keep as a number
+  const formatted = new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+    //@ts-ignore
+  }).format(truncated);
+  return `$${formatted}`;
 }
+// export function formatCurrencyintwo(amount: number): string {
+//   const truncated = truncateToFourDecimals(amount).toFixed(2); // force 4 digits
+//   return `$${truncated}`;
+// }
 export function formatCurrencyintwo(amount: number): string {
-  const truncated = truncateToFourDecimals(amount).toFixed(2); // force 4 digits
-  return `$${truncated}`;
+  const truncated = truncateToFourDecimals(amount).toFixed(2); // still a number
+  const formatted = new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    //@ts-ignore
+  }).format(truncated);
+  return `$${formatted}`;
 }
 
 // -------------------------

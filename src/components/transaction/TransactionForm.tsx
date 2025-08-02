@@ -602,7 +602,7 @@ export function TransactionForm({
                   )}
                 />
 
-                <div className="flex flex-col gap-2.5 pt-5 md:flex-row">
+                <div className="flex flex-col gap-2.5 pt-16 md:flex-row">
                   <Button type="submit" className="flex-1" disabled={isLoading}>
                     {editTransaction
                       ? isLoading

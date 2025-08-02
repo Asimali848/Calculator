@@ -38,7 +38,7 @@ const Navbar = () => {
   const image = userData?.image || "https://github.com/leerob.png";
 
   return (
-    <nav className="h-18 w-full px-5 py-2 text-center">
+    <nav className="h-16 w-full px-5 py-1 text-center">
       <div className="flex items-center justify-between gap-5">
         <div className="flex items-start justify-center gap-2.5">
           <img

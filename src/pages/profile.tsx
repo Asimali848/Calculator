@@ -613,8 +613,7 @@ const userProfileSchema = z.object({
   website: z
     .string()
     .url("Please enter a valid website URL")
-    .optional()
-    .or(z.literal("")),
+    .optional(),
 });
 
 const passwordSchema = z
