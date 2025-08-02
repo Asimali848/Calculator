@@ -14,7 +14,6 @@ export const transactionApi = api.injectEndpoints({
           amount: number;
           date: string;
           description: string;
-          new_balance: number;
         };
       }) => ({
         url: "/docket/api/transactions/create/",
@@ -73,7 +72,6 @@ export const transactionApi = api.injectEndpoints({
           amount: number;
           date: string;
           description: string;
-          new_balance: number;
         };
       }) => ({
         url: `/docket/api/transactions/${id}/update/`,

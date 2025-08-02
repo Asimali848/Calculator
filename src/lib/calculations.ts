@@ -728,6 +728,10 @@ export function formatCurrency(amount: number): string {
   const truncated = truncateToFourDecimals(amount).toFixed(4); // force 4 digits
   return `$${truncated}`;
 }
+export function formatCurrencyintwo(amount: number): string {
+  const truncated = truncateToFourDecimals(amount).toFixed(2); // force 4 digits
+  return `$${truncated}`;
+}
 
 // -------------------------
 // Utility: Format date string (to MM/DD/YYYY)

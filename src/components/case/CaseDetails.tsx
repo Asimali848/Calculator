@@ -438,7 +438,10 @@ import { toast } from "sonner";
 import list from "@/assets/img/list.svg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatCurrency, formatDate } from "@/lib/calculations";
+import {
+  formatCurrencyintwo,
+  formatDate,
+} from "@/lib/calculations";
 import { setSelectedCase } from "@/store/global";
 import {
   useDeleteCaseMutation,
@@ -504,14 +507,14 @@ function EndCaseDialog({
             <h4 className="font-semibold">Payoff Summary</h4>
             <div className="grid grid-cols-2 gap-2">
               <span className="text-muted-foreground">Principal Balance:</span>
-              <span>{formatCurrency(caseData.principalBalance)}</span>
+              <span>{formatCurrencyintwo(caseData.principalBalance)}</span>
               <span className="text-muted-foreground">Accrued Interest:</span>
-              <span>{formatCurrency(caseData.accruedInterest)}</span>
+              <span>{formatCurrencyintwo(caseData.accruedInterest)}</span>
               <span className="font-semibold text-muted-foreground">
                 Total Payoff:
               </span>
               <span className="font-bold text-primary">
-                {formatCurrency(caseData.payoffAmount)}
+                {formatCurrencyintwo(caseData.payoffAmount)}
               </span>
             </div>
           </div>
@@ -664,6 +667,7 @@ function EditCaseDialog({
                 value={formData.judgmentAmount}
                 onChange={handleChange}
                 className="mt-1"
+                disabled
               />
             </div>
 
@@ -676,6 +680,7 @@ function EditCaseDialog({
                 value={formData.judgmentDate}
                 onChange={handleChange}
                 className="mt-1"
+                disabled
               />
             </div>
           </div>
@@ -815,7 +820,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
       }
 
       // Optionally update UI here (refetch, patch state, reload, etc.)
-      window.location.reload();
+       window.location.reload();
       setIsEditDialogOpen(false);
     } catch (error) {
       toast.error("Failed to update case", {
@@ -951,13 +956,22 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
             </div>
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-4">
-                <CaseDetail
+                {/* <CaseDetail
                   label="Court Name & Case no."
-                  value={caseData.courtName + " - " + caseData.courtCaseNumber}
-                />
+                  value={caseData.courtName + " / " + caseData.courtCaseNumber}
+                /> */}
+                <div className="flex w-full items-center justify-between">
+                  <span>
+                    <strong> {caseData.courtName} </strong>{" "}
+                    <span className="text-gray-500"> Case no </span>
+                  </span>
+                  <span>
+                    {caseData.courtCaseNumber}
+                  </span>
+                </div>
                 <CaseDetail
                   label="Judgment Amount"
-                  value={formatCurrency(caseData.judgmentAmount)}
+                  value={formatCurrencyintwo(caseData.judgmentAmount)}
                 />
                 <CaseDetail
                   label="Judgment Date"
@@ -973,15 +987,15 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
               <div className="space-y-4">
                 <CaseDetail
                   label="Total Payments to Date"
-                  value={formatCurrency(caseData.totalPayments)}
+                  value={formatCurrencyintwo(caseData.totalPayments)}
                 />
                 <CaseDetail
                   label="Accrued Interest"
-                  value={formatCurrency(caseData.accruedInterest)}
+                  value={formatCurrencyintwo(caseData.accruedInterest)}
                 />
                 <CaseDetail
                   label="Today's Payoff"
-                  value={formatCurrency(caseData.payoffAmount)}
+                  value={formatCurrencyintwo(caseData.payoffAmount)}
                   bold
                   primary
                 />

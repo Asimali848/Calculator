@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatCurrency, formatDate } from "@/lib/calculations";
+import { formatCurrencyintwo, formatDate } from "@/lib/calculations";
 import { truncateString } from "@/lib/utils";
 import type { RootState } from "@/store";
 import { setEditTransactionId } from "@/store/global";
@@ -272,13 +272,13 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
                       </Badge>
                     </TableCell>
                     <TableCell className="font-medium">
-                      {formatCurrency(transaction.amount)}
+                      {formatCurrencyintwo(transaction.amount)}
                     </TableCell>
-                    <TableCell className="font-medium">
-                      {formatCurrency(transaction.interestRate)}
+                    <TableCell className="font-medium items-center justify-center flex">
+                     {transaction.interestRate} %
                     </TableCell>
                     <TableCell className="font-bold">
-                      {formatCurrency(transaction.newBalance)}
+                      {formatCurrencyintwo(transaction.newBalance)}
                     </TableCell>
                     <TableCell className="truncate font-bold">
                       {transaction.description
