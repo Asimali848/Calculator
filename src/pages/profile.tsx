@@ -103,18 +103,18 @@
 //       confirmPassword: "",
 //     },
 //   });
-//   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (file) {
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         const base64Image = reader.result as string;
-//         setImage(base64Image);
-//         form.setValue("image", base64Image, { shouldValidate: true });
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   };
+// const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//   const file = e.target.files?.[0];
+//   if (file) {
+//     const reader = new FileReader();
+//     reader.onloadend = () => {
+//       const base64Image = reader.result as string;
+//       setImage(base64Image);
+//       form.setValue("image", base64Image, { shouldValidate: true });
+//     };
+//     reader.readAsDataURL(file);
+//   }
+// };
 //   const handleSubmit = async (data: UserProfileFormData) => {
 //     try {
 //       if (!token || !profileData?.profile) {
@@ -228,43 +228,43 @@
 //                     <CardContent className="pt-6">
 //                       <div className="flex flex-col items-center space-y-3 text-center">
 //                         <div className="relative">
-//                           <Avatar className="h-24 w-24">
-//                             {image ? (
-//                               <AvatarImage
-//                                 src={image}
-//                                 alt="Profile"
-//                                 className="object-cover"
-//                               />
-//                             ) : profileData?.profile?.image ? (
-//                               <AvatarImage
-//                                 src={profileData?.profile.image}
-//                                 alt="Profile"
-//                                 className="object-cover"
-//                               />
-//                             ) : (
-//                               <div className="flex h-full w-full items-center justify-center rounded-full bg-muted">
-//                                 <Landmark className="h-10 w-10 text-muted-foreground" />
-//                               </div>
-//                             )}
-//                           </Avatar>
-//                           {isEditing && (
-//                             <>
-//                               <input
-//                                 type="file"
-//                                 accept="image/*"
-//                                 id="profile-pic-upload"
-//                                 className="hidden"
-//                                 onChange={handleImageChange}
-//                               />
-//                               <label
-//                                 htmlFor="profile-pic-upload"
-//                                 className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-primary p-1 text-white shadow-md"
-//                                 title="Change profile picture"
-//                               >
-//                                 <Camera className="h-4 w-4" />
-//                               </label>
-//                             </>
-//                           )}
+// <Avatar className="h-24 w-24">
+//   {image ? (
+//     <AvatarImage
+//       src={image}
+//       alt="Profile"
+//       className="object-cover"
+//     />
+//   ) : profileData?.profile?.image ? (
+//     <AvatarImage
+//       src={profileData?.profile.image}
+//       alt="Profile"
+//       className="object-cover"
+//     />
+//   ) : (
+//     <div className="flex h-full w-full items-center justify-center rounded-full bg-muted">
+//       <Landmark className="h-10 w-10 text-muted-foreground" />
+//     </div>
+//   )}
+// </Avatar>
+// {isEditing && (
+//   <>
+//     <input
+//       type="file"
+//       accept="image/*"
+//       id="profile-pic-upload"
+//       className="hidden"
+//       onChange={handleImageChange}
+//     />
+//     <label
+//       htmlFor="profile-pic-upload"
+//       className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-primary p-1 text-white shadow-md"
+//       title="Change profile picture"
+//     >
+//       <Camera className="h-4 w-4" />
+//     </label>
+//   </>
+// )}
 //                         </div>
 //                         <div className="space-y-2">
 //                           <h1 className="text-2xl font-bold text-foreground">
@@ -600,20 +600,17 @@ import {
 } from "@/store/services/auth";
 
 const userProfileSchema = z.object({
-  first_name: z.string().min(1, "First name is required"),
-  last_name: z.string().min(1, "Last name is required"),
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
   image: z.string(),
-  email: z.string().email("Please enter a valid email address"),
-  company: z.string().min(1, "Company is required"),
-  street_address: z.string().min(1, "Street address is required"),
-  city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State is required"),
-  zip_code: z.string().min(1, "Zip code is required"),
-  phone_number: z.string().min(10, "Please enter a valid phone number"),
-  website: z
-    .string()
-    .url("Please enter a valid website URL")
-    .optional(),
+  email: z.string().optional(),
+  company: z.string().optional(),
+  street_address: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  zip_code: z.string().optional(),
+  phone_number: z.string().optional(),
+  website: z.string().url("Please enter a valid website URL").optional(),
 });
 
 const passwordSchema = z
@@ -691,7 +688,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const token = localStorage.getItem("access");
   const { data: profileData } = useGetProfileQuery({
@@ -731,13 +729,9 @@ const Profile = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Image = reader.result as string;
-        setImage(base64Image);
-        form.setValue("image", base64Image, { shouldValidate: true });
-      };
-      reader.readAsDataURL(file);
+      setImage(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
     }
   };
 
@@ -755,11 +749,13 @@ const Profile = () => {
         `${data.street_address}, ${data.city}, ${data.state} ${data.zip_code}`.trim();
 
       const payload = {
-        ...profileData.profile,
-        ...data,
         full_name: `${data.first_name} ${data.last_name}`,
+        email: data.email || "",
+        image: image || undefined,
+        company: data.company || "",
         location,
-        image: data.image,
+        phone_number: data.phone_number || "",
+        website: data.website || "",
         subscription_plan: profileData.profile.subscription_plan,
         member_since: profileData.profile.member_since,
       };
@@ -834,7 +830,9 @@ const Profile = () => {
         state,
         zip_code,
       });
-      setImage(profileData.profile.image || null);
+      // Reset file upload states
+      setImage(null);
+      setPreview(null);
     }
     setIsEditing(false);
   };
@@ -859,9 +857,18 @@ const Profile = () => {
         state,
         zip_code,
       });
-      setImage(profileData.profile.image || null);
+      // Don't set image state with profile data - image state is only for new file uploads
+      // The existing profile image is displayed directly from profileData.profile.image
     }
   }, [profileData, form]);
+
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   return (
     <div className="mx-auto h-screen w-full overflow-auto bg-background p-4 md:p-10">
@@ -903,7 +910,7 @@ const Profile = () => {
                     <CardContent className="pt-6">
                       <div className="flex flex-col items-center space-y-3 text-center">
                         <div className="relative">
-                          <Avatar className="h-24 w-24">
+                          {/* <Avatar className="h-24 w-24">
                             {image ? (
                               <AvatarImage
                                 src={image}
@@ -913,6 +920,44 @@ const Profile = () => {
                             ) : profileData?.profile?.image ? (
                               <AvatarImage
                                 src={profileData?.profile.image}
+                                alt="Profile"
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center rounded-full bg-muted">
+                                <Landmark className="h-10 w-10 text-muted-foreground" />
+                              </div>
+                            )}
+                          </Avatar>
+
+                          {isEditing && (
+                            <>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                id="profile-pic-upload"
+                                className="hidden"
+                                onChange={handleImageChange}
+                              />
+                              <label
+                                htmlFor="profile-pic-upload"
+                                className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-primary p-1 text-white shadow-md"
+                                title="Change profile picture"
+                              >
+                                <Camera className="h-4 w-4" />
+                              </label>
+                            </>
+                          )} */}
+                          <Avatar className="h-24 w-24">
+                            {preview ? (
+                              <AvatarImage
+                                src={preview}
+                                alt="Profile"
+                                className="object-cover"
+                              />
+                            ) : profileData?.profile?.image ? (
+                              <AvatarImage
+                                src={profileData.profile.image}
                                 alt="Profile"
                                 className="object-cover"
                               />

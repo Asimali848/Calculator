@@ -142,6 +142,34 @@ export const userApi = api.injectEndpoints({
       }),
     }),
 
+    // updateUser: build.mutation<
+    //   any,
+    //   {
+    //     token: string;
+    //     body: {
+    //       full_name: string;
+    //       email: string;
+    //       image: string;
+    //       company: string;
+    //       location: string;
+    //       phone_number: string;
+    //       website: string;
+    //       subscription_plan: string;
+    //       member_since: string;
+    //     };
+    //   }
+    // >({
+    //   query: ({ token, body }) => ({
+    //     url: "/authentication/api/profile/update/",
+    //     method: "PUT",
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     body,
+    //   }),
+    // }),
+
+    // services/auth.ts
     updateUser: build.mutation<
       any,
       {
@@ -149,7 +177,7 @@ export const userApi = api.injectEndpoints({
         body: {
           full_name: string;
           email: string;
-          image: string;
+          image?: File;
           company: string;
           location: string;
           phone_number: string;
@@ -159,15 +187,32 @@ export const userApi = api.injectEndpoints({
         };
       }
     >({
-      query: ({ token, body }) => ({
-        url: "/authentication/api/profile/update/",
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body,
-      }),
+      query: ({ token, body }) => {
+        const formData = new FormData();
+        formData.append("full_name", body.full_name);
+        formData.append("email", body.email);
+        if (body.image) {
+          formData.append("image", body.image); // Direct file object
+        }
+        formData.append("company", body.company);
+        formData.append("location", body.location);
+        formData.append("phone_number", body.phone_number);
+        formData.append("website", body.website);
+        formData.append("subscription_plan", body.subscription_plan);
+        formData.append("member_since", body.member_since);
+
+        return {
+          url: "/authentication/api/profile/update/",
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // Don't set Content-Type for FormData - let browser set it with boundary
+          },
+          body: formData,
+        };
+      },
     }),
+
 
     changePassword: build.mutation<
       any,

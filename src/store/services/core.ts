@@ -10,7 +10,7 @@ const baseQuery = fetchBaseQuery({
    * prepareHeaders: (headers, { getState }) => {...}
    * change the function definition below to the above example if you need to access global store
    */
-  prepareHeaders: (headers) => {
+  prepareHeaders: (headers, { endpoint }) => {
     /**
      * Add Global Headers Here
      * Any Header Value that needs to be added to every request must be added here.
@@ -26,8 +26,13 @@ const baseQuery = fetchBaseQuery({
 
     /**
      * Example headers Usage
+     * Only set Content-Type to application/json for non-FormData requests
      */
-    headers.append("Content-Type", "application/json");
+
+    // Skip setting Content-Type for updateUser mutation (it uses FormData)
+    if (endpoint !== 'updateUser') {
+      headers.set("Content-Type", "application/json");
+    }
 
     return headers;
   },

@@ -10,10 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { cn, truncateString } from "@/lib/utils";
+import { useGetProfileQuery } from "@/store/services/auth";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("access") || "";
+  const { data } = useGetProfileQuery({ token });
 
   const handleHome = () => {
     navigate("/home", { replace: true });
@@ -33,9 +36,9 @@ const Navbar = () => {
     window.location.reload();
   };
 
-  const userData = JSON.parse(localStorage.getItem("user") || "{}");
-  const username = userData?.username || "User";
-  const image = userData?.image || "https://github.com/leerob.png";
+  const profile = data?.profile;
+  const username = profile?.full_name || "User";
+  const image = profile?.image || "https://github.com/leerob.png";
 
   return (
     <nav className="h-16 w-full px-5 py-1 text-center">
@@ -70,7 +73,7 @@ const Navbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-4">
               <DropdownMenuLabel className="flex items-center justify-between">
-                <span className="capitalize">{username}</span>
+                <span className="capitalize">{truncateString(username, 10)}</span>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleHome}>
