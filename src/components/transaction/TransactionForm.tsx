@@ -488,6 +488,9 @@ export function TransactionForm({
         { className: "bg-primary p-3 text-white" }
       );
       form.reset();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
       if (!keepOpenAfterSubmit) onOpenChange(false);
     } catch (error: any) {
       const errorMessage =

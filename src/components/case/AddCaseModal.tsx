@@ -685,10 +685,64 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
 
   const [postCase, { isLoading }] = usePostCaseMutation();
 
+  // const handleSubmit = async (data: z.infer<typeof caseSchema>) => {
+  //   const token = localStorage.getItem("access") || "";
+
+  //   // Combine debtor info into a single string
+  //   const debtorInfo = [
+  //     data.debtorFirm,
+  //     data.debtorStreet,
+  //     `${data.debtorCity}, ${data.debtorState} ${data.debtorZip}`,
+  //     `Phone: ${data.debtorPhone}`,
+  //     `Email: ${data.debtorEmail}`,
+  //   ]
+  //     .filter(Boolean)
+  //     .join("\n");
+
+  //   const newCase: CaseData = {
+  //     caseName: data.caseName,
+  //     courtName: data.courtName,
+  //     courtCaseNumber: data.courtCaseNumber,
+  //     judgmentAmount: roundToSix(data.judgmentAmount),
+  //     judgmentDate: data.judgmentDate,
+  //     lastPaymentDate: isEndDateEnabled && data.endDate ? data.endDate : null,
+  //     totalPayments: roundToSix(data.paymentAmount || 0),
+  //     accruedInterest: calculationResults.totalInterest,
+  //     principalBalance: calculationResults.principalBalance,
+  //     payoffAmount: calculationResults.grandTotal,
+  //     interestRate: roundToSix(data.interestRate),
+  //     isEnded: false,
+  //     debtorInfo,
+  //   };
+
+  //   try {
+  //     //@ts-ignore
+  //     const res = await postCase({ token, data: newCase }).unwrap();
+  //     form.reset();
+  //     onOpenChange(false);
+  //     toast.success("Case added successfully!", {
+  //       className: "bg-primary p-3 text-white",
+  //     });
+  //     // setTimeout(() => {
+  //     //   window.location.reload();
+  //     // }, 1000);
+  //     //@ts-ignore
+  //     onSubmit(res);
+  //   } catch (error: any) {
+  //     toast.error(
+  //       error?.data?.detail ||
+  //         error?.data?.message ||
+  //         "Failed to add case. Please try again.",
+  //       {
+  //         className: "bg-destructive text-white p-3",
+  //       }
+  //     );
+  //   }
+  // };
+
   const handleSubmit = async (data: z.infer<typeof caseSchema>) => {
     const token = localStorage.getItem("access") || "";
 
-    // Combine debtor info into a single string
     const debtorInfo = [
       data.debtorFirm,
       data.debtorStreet,
@@ -718,25 +772,34 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
     try {
       //@ts-ignore
       const res = await postCase({ token, data: newCase }).unwrap();
+
       form.reset();
       onOpenChange(false);
-      toast.success("Case added successfully!", {
-        className: "bg-primary p-3 text-white",
+
+      toast.success("Case added successfully.", {
+        className: "bg-green-600 p-3 text-white",
       });
+
       setTimeout(() => {
         window.location.reload();
       }, 1000);
+
       //@ts-ignore
       onSubmit(res);
     } catch (error: any) {
-      toast.error(
-        error?.data?.detail ||
-          error?.data?.message ||
-          "Failed to add case. Please try again.",
-        {
+      const statusCode = error?.data?.status_code || error?.status_code;
+
+      if (statusCode === 400) {
+        toast.error("Bad request: Please check your input.", {
           className: "bg-destructive text-white p-3",
-        }
-      );
+        });
+      } else if (statusCode === 500) {
+        toast.error("Server error: Please try again later.", {
+          className: "bg-destructive text-white p-3",
+        });
+      } else {
+        null
+      }
     }
   };
 
