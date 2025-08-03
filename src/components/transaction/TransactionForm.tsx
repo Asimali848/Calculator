@@ -487,7 +487,6 @@ export function TransactionForm({
         `Transaction ${editTransaction ? "updated" : "created"} successfully.`,
         { className: "bg-primary p-3 text-white" }
       );
-
       form.reset();
       if (!keepOpenAfterSubmit) onOpenChange(false);
     } catch (error: any) {

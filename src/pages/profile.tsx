@@ -752,10 +752,10 @@ const Profile = () => {
         full_name: `${data.first_name} ${data.last_name}`,
         email: data.email || "",
         image: image || undefined,
-        company: data.company || "",
+        company: data.company ?? "",
         location,
-        phone_number: data.phone_number || "",
-        website: data.website || "",
+        phone_number: data.phone_number ?? "",
+        website: data.website ?? "",
         subscription_plan: profileData.profile.subscription_plan,
         member_since: profileData.profile.member_since,
       };
@@ -769,6 +769,7 @@ const Profile = () => {
         className: "bg-primary text-white p-3",
       });
       setIsEditing(false);
+      window.location.reload();
     } catch (error: any) {
       console.error("Update error:", error);
       toast.error(error.data?.message || "Failed to update profile", {
@@ -821,44 +822,82 @@ const Profile = () => {
       const location = profileData.profile.location || "";
       const { street_address, city, state, zip_code } = parseLocation(location);
 
+      // form.reset({
+      //   ...profileData.profile,
+      //   first_name,
+      //   last_name,
+      //   street_address,
+      //   city,
+      //   state,
+      //   zip_code,
+      // });
       form.reset({
-        ...profileData.profile,
         first_name,
         last_name,
+        email: profileData.profile.email ?? "",
+        image: profileData.profile.image ?? "",
+        company: profileData.profile.company ?? "",
         street_address,
         city,
         state,
         zip_code,
+        phone_number: profileData.profile.phone_number ?? "",
+        website: profileData.profile.website ?? "",
       });
-      // Reset file upload states
+
       setImage(null);
       setPreview(null);
     }
     setIsEditing(false);
   };
 
+  // useEffect(() => {
+  //   if (profileData?.profile) {
+  //     // Split full name into first/last
+  //     const [first_name, ...last_nameParts] =
+  //       profileData.profile.full_name.split(" ");
+  //     const last_name = last_nameParts.join(" ");
+
+  //     // Parse location
+  //     const location = profileData.profile.location || "";
+  //     const { street_address, city, state, zip_code } = parseLocation(location);
+
+  //     form.reset({
+  //       ...profileData.profile,
+  //       first_name,
+  //       last_name,
+  //       street_address,
+  //       city,
+  //       state,
+  //       zip_code,
+  //     });
+  //     // Don't set image state with profile data - image state is only for new file uploads
+  //     // The existing profile image is displayed directly from profileData.profile.image
+  //   }
+  // }, [profileData, form]);
+
   useEffect(() => {
     if (profileData?.profile) {
-      // Split full name into first/last
       const [first_name, ...last_nameParts] =
         profileData.profile.full_name.split(" ");
       const last_name = last_nameParts.join(" ");
 
-      // Parse location
       const location = profileData.profile.location || "";
       const { street_address, city, state, zip_code } = parseLocation(location);
 
       form.reset({
-        ...profileData.profile,
         first_name,
         last_name,
+        email: profileData.profile.email ?? "",
+        image: profileData.profile.image ?? "",
+        company: profileData.profile.company ?? "",
         street_address,
         city,
         state,
         zip_code,
+        phone_number: profileData.profile.phone_number ?? "",
+        website: profileData.profile.website ?? "",
       });
-      // Don't set image state with profile data - image state is only for new file uploads
-      // The existing profile image is displayed directly from profileData.profile.image
     }
   }, [profileData, form]);
 
@@ -1181,7 +1220,7 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>First Name</FormLabel>
                               <FormControl>
-                                <Input {...field} disabled={!isEditing} />
+                                <Input placeholder="Enter first name" {...field} disabled={!isEditing} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1196,7 +1235,7 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>Last Name</FormLabel>
                               <FormControl>
-                                <Input {...field} disabled={!isEditing} />
+                                <Input placeholder="Enter last name" {...field} disabled={!isEditing} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1227,7 +1266,7 @@ const Profile = () => {
                           <FormItem>
                             <FormLabel>Firm Name</FormLabel>
                             <FormControl>
-                              <Input {...field} disabled={!isEditing} />
+                              <Input placeholder="Enter firm name" {...field} disabled={!isEditing} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1242,7 +1281,7 @@ const Profile = () => {
                           <FormItem>
                             <FormLabel>Street Address</FormLabel>
                             <FormControl>
-                              <Input {...field} disabled={!isEditing} />
+                              <Input placeholder="Enter street address" {...field} disabled={!isEditing} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1258,7 +1297,7 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>City</FormLabel>
                               <FormControl>
-                                <Input {...field} disabled={!isEditing} />
+                                <Input placeholder="Enter city" {...field} disabled={!isEditing} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1273,7 +1312,7 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>State</FormLabel>
                               <FormControl>
-                                <Input {...field} disabled={!isEditing} />
+                                <Input placeholder="Enter state" {...field} disabled={!isEditing} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1288,7 +1327,7 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>Zip Code</FormLabel>
                               <FormControl>
-                                <Input {...field} disabled={!isEditing} />
+                                <Input placeholder="Enter zip code" {...field} disabled={!isEditing} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1304,7 +1343,7 @@ const Profile = () => {
                           <FormItem>
                             <FormLabel>Phone Number</FormLabel>
                             <FormControl>
-                              <Input {...field} disabled={!isEditing} />
+                              <Input placeholder="Enter phone number" {...field} disabled={!isEditing} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

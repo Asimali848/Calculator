@@ -9,7 +9,7 @@ interface EmptyStateProps {
 
 export function EmptyState({ onAddNewCase }: EmptyStateProps) {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center p-8">
+    <div className="flex max-h-[120vh] items-center justify-center">
       <Card className="mx-auto w-full max-w-md border-2 border-dashed border-muted-foreground/25">
         <CardContent className="flex flex-col items-center justify-center space-y-6 p-8 text-center">
           <div className="relative">
