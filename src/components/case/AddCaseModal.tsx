@@ -809,7 +809,7 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">New Case</DialogTitle>
           <DialogDescription>
-            Enter judgment information and payment details to create a new case
+            Enter judgment information
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

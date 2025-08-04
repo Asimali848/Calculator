@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import Logo from "@/assets/img/logo.jpeg";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -216,9 +215,6 @@ const Login = () => {
 
   return (
     <div className="mx-auto flex h-screen w-full items-center justify-center md:w-1/2">
-      <div className="absolute right-5 top-5">
-        <ThemeToggle />
-      </div>
       <form
         onSubmit={handleSubmit}
         className="flex w-full flex-col items-center justify-center p-10 md:w-1/2 md:p-0"

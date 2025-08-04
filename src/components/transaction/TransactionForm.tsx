@@ -509,8 +509,7 @@ export function TransactionForm({
             {editTransaction ? "Edit Transaction" : "Add New Transaction"}
           </SheetTitle>
           <SheetDescription>
-            {caseData.caseName} - {caseData.courtCaseNumber} (Case ID:{" "}
-            {caseData.id})
+            {caseData.caseName} - {caseData.courtCaseNumber}
           </SheetDescription>
         </SheetHeader>
 

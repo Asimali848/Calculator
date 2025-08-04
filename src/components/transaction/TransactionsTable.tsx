@@ -274,8 +274,8 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
                     <TableCell className="font-medium">
                       {formatCurrencyintwo(transaction.amount)}
                     </TableCell>
-                    <TableCell className="font-medium items-center justify-center flex">
-                     {transaction.interestRate} %
+                    <TableCell className="font-medium">
+                     {formatCurrencyintwo(transaction.calculatedInterest)}
                     </TableCell>
                     <TableCell className="font-bold">
                       {formatCurrencyintwo(transaction.newBalance)}

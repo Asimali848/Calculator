@@ -419,13 +419,13 @@
 //   );
 // };
 // export default CaseDetails;
+
 import { useEffect, useRef, useState } from "react";
 
 import {
   Calendar,
   Download,
   Edit,
-  // Added Edit icon
   EllipsisVertical,
   Loader2,
   Plus,
@@ -978,9 +978,9 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
                   value={formatDate(caseData.judgmentDate)}
                 />
                 <CaseDetail
-                  label="Case Created Date"
+                  label="Last Payment Date"
                   value={
-                    caseData.createdAt ? formatDate(caseData.createdAt) : "Null"
+                    caseData.createdAt ? formatDate(caseData.lastPaymentDate) : "Null"
                   }
                 />
               </div>
