@@ -226,7 +226,6 @@
 //       toast.success("Case deleted successfully", {
 //         className: "bg-primary text-white p-3",
 //       });
-//       window.location.reload();
 //       setIsDeleteDialogOpen(false);
 //     } catch (error) {
 //       toast.error("Failed to delete case", {
@@ -787,7 +786,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
       toast.success("Case deleted successfully", {
         className: "bg-primary text-white p-3",
       });
-      window.location.reload();
+      
       setIsDeleteDialogOpen(false);
     } catch (error) {
       toast.error("Failed to delete case", {
@@ -820,7 +819,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
       }
 
       // Optionally update UI here (refetch, patch state, reload, etc.)
-       window.location.reload();
+       
       setIsEditDialogOpen(false);
     } catch (error) {
       toast.error("Failed to update case", {

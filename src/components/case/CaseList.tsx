@@ -26,13 +26,14 @@ const CaseList = ({
   const token =
     localStorage.getItem("authToken") || localStorage.getItem("access") || "";
   const {
-    data: cases = [],
-    isLoading,
-    isError,
-    refetch,
-  } = useGetCaseQuery(token, {
-    refetchOnMountOrArgChange: true,
-  });
+  data: cases = [],
+  isLoading,
+  isError,
+  refetch,
+} = useGetCaseQuery(token, {
+  refetchOnMountOrArgChange: true,
+  pollingInterval: 5000, // ← fetches data every 5 seconds
+});
   const [isAddCaseModalOpen, setIsAddCaseModalOpen] = useState(false);
 
   const handleAddNewCaseClick = () => {

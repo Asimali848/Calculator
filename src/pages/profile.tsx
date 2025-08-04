@@ -768,8 +768,6 @@ const Profile = () => {
       toast.success("Profile updated successfully", {
         className: "bg-primary text-white p-3",
       });
-      setIsEditing(false);
-      window.location.reload();
     } catch (error: any) {
       console.error("Update error:", error);
       toast.error(error.data?.message || "Failed to update profile", {

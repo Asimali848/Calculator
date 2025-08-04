@@ -17,9 +17,16 @@ const Home = () => {
   const { data: casesData = [], isLoading, error } = useGetCaseQuery(token);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
 
+  // const { data: selectedCase } = useGetCaseByIdQuery(
+  //   { token, id: selectedCaseId ?? "" },
+  //   { skip: !selectedCaseId }
+  // );
   const { data: selectedCase } = useGetCaseByIdQuery(
     { token, id: selectedCaseId ?? "" },
-    { skip: !selectedCaseId }
+    {
+      skip: !selectedCaseId,
+      pollingInterval: 3000, // Poll every 5 seconds (adjust as needed)
+    }
   );
 
   const [transactions, setTransactions] =

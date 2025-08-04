@@ -590,10 +590,15 @@ const caseSchema = z.object({
   debtorEmail: z.string().optional(),
 });
 
+// interface AddCaseModalProps {
+//   open: boolean;
+//   onOpenChange: (open: boolean) => void;
+//   onSubmit: (data: CaseData) => void;
+// }
 interface AddCaseModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: CaseData) => void;
+  onSubmit: () => void; // ✅ Rename for clarity
 }
 
 const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
@@ -780,12 +785,11 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
         className: "bg-green-600 p-3 text-white",
       });
 
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000);
 
-      //@ts-ignore
-      onSubmit(res);
+      onSubmit();
     } catch (error: any) {
       const statusCode = error?.data?.status_code || error?.status_code;
 

@@ -20,7 +20,6 @@ const Navbar = () => {
 
   const handleHome = () => {
     navigate("/home", { replace: true });
-    window.location.reload();
   };
   const handleBilling = () => {
     navigate("/billing", { replace: true });
