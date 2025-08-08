@@ -775,21 +775,26 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
     };
 
     try {
-      //@ts-ignore
-      const res = await postCase({ token, data: newCase }).unwrap();
+      // Check if first case before submitting
+      const isFirstCase = !localStorage.getItem("hasAddedCaseBefore");
 
-      form.reset();
-      onOpenChange(false);
+      //@ts-ignore
+      await postCase({ token, data: newCase }).unwrap();
 
       toast.success("Case added successfully.", {
         className: "bg-green-600 p-3 text-white",
       });
+      if (isFirstCase) {
+        window.location.reload();
+      }
+      // Mark that the user has added a case
+      localStorage.setItem("hasAddedCaseBefore", "true");
 
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 1000);
-
+      form.reset();
+      onOpenChange(false);
       onSubmit();
+
+      // Reload only if it's the first case
     } catch (error: any) {
       const statusCode = error?.data?.status_code || error?.status_code;
 
@@ -801,20 +806,78 @@ const AddCaseModal = ({ open, onOpenChange, onSubmit }: AddCaseModalProps) => {
         toast.error("Server error: Please try again later.", {
           className: "bg-destructive text-white p-3",
         });
-      } else {
-        null
       }
     }
   };
+
+  // const handleSubmit = async (data: z.infer<typeof caseSchema>) => {
+  //   const token = localStorage.getItem("access") || "";
+
+  //   const debtorInfo = [
+  //     data.debtorFirm,
+  //     data.debtorStreet,
+  //     `${data.debtorCity}, ${data.debtorState} ${data.debtorZip}`,
+  //     `Phone: ${data.debtorPhone}`,
+  //     `Email: ${data.debtorEmail}`,
+  //   ]
+  //     .filter(Boolean)
+  //     .join("\n");
+
+  //   const newCase: CaseData = {
+  //     caseName: data.caseName,
+  //     courtName: data.courtName,
+  //     courtCaseNumber: data.courtCaseNumber,
+  //     judgmentAmount: roundToSix(data.judgmentAmount),
+  //     judgmentDate: data.judgmentDate,
+  //     lastPaymentDate: isEndDateEnabled && data.endDate ? data.endDate : null,
+  //     totalPayments: roundToSix(data.paymentAmount || 0),
+  //     accruedInterest: calculationResults.totalInterest,
+  //     principalBalance: calculationResults.principalBalance,
+  //     payoffAmount: calculationResults.grandTotal,
+  //     interestRate: roundToSix(data.interestRate),
+  //     isEnded: false,
+  //     debtorInfo,
+  //   };
+
+  //   try {
+  //     //@ts-ignore
+  //     const res = await postCase({ token, data: newCase }).unwrap();
+
+  //     toast.success("Case added successfully.", {
+  //       className: "bg-green-600 p-3 text-white",
+  //     });
+
+  //     form.reset();
+  //     onOpenChange(false);
+
+  //     // setTimeout(() => {
+  //     //   window.location.reload();
+  //     // }, 1000);
+
+  //     onSubmit();
+  //   } catch (error: any) {
+  //     const statusCode = error?.data?.status_code || error?.status_code;
+
+  //     if (statusCode === 400) {
+  //       toast.error("Bad request: Please check your input.", {
+  //         className: "bg-destructive text-white p-3",
+  //       });
+  //     } else if (statusCode === 500) {
+  //       toast.error("Server error: Please try again later.", {
+  //         className: "bg-destructive text-white p-3",
+  //       });
+  //     } else {
+  //       null
+  //     }
+  //   }
+  // };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90dvh] max-w-6xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">New Case</DialogTitle>
-          <DialogDescription>
-            Enter judgment information
-          </DialogDescription>
+          <DialogDescription>Enter judgment information</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form

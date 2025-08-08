@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Edit, Loader2, Printer, Trash2 } from "lucide-react";
+import { Edit, Loader2, Printer } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
@@ -118,10 +118,10 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
     }
   };
 
-  const handleDeleteClick = (transactionId: number) => {
-    setTransactionToDelete(transactionId);
-    setDeleteDialogOpen(true);
-  };
+  // const handleDeleteClick = (transactionId: number) => {
+  //   setTransactionToDelete(transactionId);
+  //   setDeleteDialogOpen(true);
+  // };
 
   const confirmDelete = async () => {
     if (transactionToDelete && token) {
@@ -275,7 +275,7 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
                       {formatCurrencyintwo(transaction.amount)}
                     </TableCell>
                     <TableCell className="font-medium">
-                     {formatCurrencyintwo(transaction.calculatedInterest)}
+                      {formatCurrencyintwo(transaction.calculatedInterest)}
                     </TableCell>
                     <TableCell className="font-bold">
                       {formatCurrencyintwo(transaction.newBalance)}
@@ -300,7 +300,7 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
                         >
                           <Edit className="h-4 w-4 text-green-600 dark:text-green-400" />
                         </Button>
-                        <Button
+                        {/* <Button
                           variant="ghost"
                           size="sm"
                           //@ts-ignore
@@ -308,7 +308,7 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
                           disabled={isDeleting}
                         >
                           <Trash2 className="h-4 w-4 text-red-500 dark:text-red-400" />
-                        </Button>
+                        </Button> */}
                       </div>
                     </TableCell>
                   </TableRow>

@@ -567,6 +567,7 @@ import {
   Star,
   X,
 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -690,6 +691,9 @@ const Profile = () => {
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const token = localStorage.getItem("access");
   const { data: profileData } = useGetProfileQuery({
@@ -1087,7 +1091,7 @@ const Profile = () => {
                           <span className="text-sm text-muted-foreground">
                             Password protected
                           </span>
-                          <Dialog
+                          {/* <Dialog
                             open={isPasswordDialogOpen}
                             onOpenChange={setIsPasswordDialogOpen}
                           >
@@ -1194,6 +1198,176 @@ const Profile = () => {
                                 </form>
                               </Form>
                             </DialogContent>
+                          </Dialog> */}
+                          <Dialog
+                            open={isPasswordDialogOpen}
+                            onOpenChange={setIsPasswordDialogOpen}
+                          >
+                            <DialogTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="hover:bg-primary hover:text-white"
+                                type="button"
+                              >
+                                <LockKeyholeOpen className="mr-2 h-4 w-4" />
+                                Change Password
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-md">
+                              <DialogHeader>
+                                <DialogTitle>Change Password</DialogTitle>
+                                <DialogDescription>
+                                  Enter your current password and choose a new
+                                  one.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <Form {...passwordForm}>
+                                <form
+                                  onSubmit={passwordForm.handleSubmit(
+                                    handlePasswordSubmit
+                                  )}
+                                  className="space-y-4"
+                                >
+                                  {/* Current Password */}
+                                  <FormField
+                                    control={passwordForm.control}
+                                    name="currentPassword"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>Current Password</FormLabel>
+                                        <FormControl>
+                                          <div className="relative">
+                                            <Input
+                                              {...field}
+                                              type={
+                                                showCurrent
+                                                  ? "text"
+                                                  : "password"
+                                              }
+                                              placeholder="Enter current password"
+                                            />
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                setShowCurrent(!showCurrent)
+                                              }
+                                              className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                                            >
+                                              {showCurrent ? (
+                                                <EyeOff className="h-4 w-4 ml-2 bg-white"  />
+                                              ) : (
+                                                <Eye className="h-4 w-4 ml-2 bg-white"  />
+                                              )}
+                                            </button>
+                                          </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+
+                                  {/* New Password */}
+                                  <FormField
+                                    control={passwordForm.control}
+                                    name="newPassword"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>New Password</FormLabel>
+                                        <FormControl>
+                                          <div className="relative">
+                                            <Input
+                                              {...field}
+                                              type={
+                                                showNew ? "text" : "password"
+                                              }
+                                              placeholder="Enter new password"
+                                            />
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                setShowNew(!showNew)
+                                              }
+                                              className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                                            >
+                                              {showNew ? (
+                                                <EyeOff className="h-4 w-4 ml-2 bg-white"  />
+                                              ) : (
+                                                <Eye className="h-4 w-4 ml-2 bg-white"  />
+                                              )}
+                                            </button>
+                                          </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+
+                                  {/* Confirm Password */}
+                                  <FormField
+                                    control={passwordForm.control}
+                                    name="confirmPassword"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>
+                                          Confirm New Password
+                                        </FormLabel>
+                                        <FormControl>
+                                          <div className="relative">
+                                            <Input
+                                              {...field}
+                                              type={
+                                                showConfirm
+                                                  ? "text"
+                                                  : "password"
+                                              }
+                                              placeholder="Confirm new password"
+                                            />
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                setShowConfirm(!showConfirm)
+                                              }
+                                              className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                                            >
+                                              {showConfirm ? (
+                                                <EyeOff className="h-4 w-4 ml-2 bg-white"  />
+                                              ) : (
+                                                <Eye className="h-4 w-4 ml-2 bg-white"  />
+                                              )}
+                                            </button>
+                                          </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+
+                                  {/* Actions */}
+                                  <div className="flex justify-end space-x-2 pt-4">
+                                    <Button
+                                      type="button"
+                                      variant="outline"
+                                      onClick={() => {
+                                        passwordForm.reset();
+                                        setIsPasswordDialogOpen(false);
+                                      }}
+                                      disabled={isChangingPassword}
+                                    >
+                                      Cancel
+                                    </Button>
+                                    <Button
+                                      type="submit"
+                                      disabled={isChangingPassword}
+                                    >
+                                      {isChangingPassword
+                                        ? "Changing..."
+                                        : "Change Password"}
+                                    </Button>
+                                  </div>
+                                </form>
+                              </Form>
+                            </DialogContent>
                           </Dialog>
                         </div>
                       </div>
@@ -1218,7 +1392,11 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>First Name</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter first name" {...field} disabled={!isEditing} />
+                                <Input
+                                  placeholder="Enter first name"
+                                  {...field}
+                                  disabled={!isEditing}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1233,7 +1411,11 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>Last Name</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter last name" {...field} disabled={!isEditing} />
+                                <Input
+                                  placeholder="Enter last name"
+                                  {...field}
+                                  disabled={!isEditing}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1264,7 +1446,11 @@ const Profile = () => {
                           <FormItem>
                             <FormLabel>Firm Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter firm name" {...field} disabled={!isEditing} />
+                              <Input
+                                placeholder="Enter firm name"
+                                {...field}
+                                disabled={!isEditing}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1279,7 +1465,11 @@ const Profile = () => {
                           <FormItem>
                             <FormLabel>Street Address</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter street address" {...field} disabled={!isEditing} />
+                              <Input
+                                placeholder="Enter street address"
+                                {...field}
+                                disabled={!isEditing}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1295,7 +1485,11 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>City</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter city" {...field} disabled={!isEditing} />
+                                <Input
+                                  placeholder="Enter city"
+                                  {...field}
+                                  disabled={!isEditing}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1310,7 +1504,11 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>State</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter state" {...field} disabled={!isEditing} />
+                                <Input
+                                  placeholder="Enter state"
+                                  {...field}
+                                  disabled={!isEditing}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1325,7 +1523,11 @@ const Profile = () => {
                             <FormItem>
                               <FormLabel>Zip Code</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter zip code" {...field} disabled={!isEditing} />
+                                <Input
+                                  placeholder="Enter zip code"
+                                  {...field}
+                                  disabled={!isEditing}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1341,7 +1543,11 @@ const Profile = () => {
                           <FormItem>
                             <FormLabel>Phone Number</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter phone number" {...field} disabled={!isEditing} />
+                              <Input
+                                placeholder="Enter phone number"
+                                {...field}
+                                disabled={!isEditing}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
