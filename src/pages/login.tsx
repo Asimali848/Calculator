@@ -36,6 +36,9 @@ const Login = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const isLogin = authMode === "login";
   const isVerifyUser = authMode === "verify-user";
   const isRegister = authMode === "register";
@@ -285,7 +288,7 @@ const Login = () => {
           </div>
         )}
 
-        {!isForgot && !isOtp && !isReset && !isVerifyUser && (
+        {/* {!isForgot && !isOtp && !isReset && !isVerifyUser && (
           <div className="mb-5 w-full">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -294,6 +297,26 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
             />
+          </div>
+        )} */}
+        {!isForgot && !isOtp && !isReset && !isVerifyUser && (
+          <div className="mb-5 w-full">
+            <Label htmlFor="password">Password</Label>
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="pr-10"
+              />
+              <div
+                className="absolute right-3 top-2.5 cursor-pointer text-muted-foreground"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </div>
+            </div>
           </div>
         )}
 
