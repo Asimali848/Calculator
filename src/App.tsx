@@ -7,11 +7,13 @@ import Billing from "./pages/billing";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Profile from "./pages/profile";
+import Landing from "./pages/landing";
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<Landing />} />
+      <Route path="/login" element={<Login />} />
       <Route
         element={
           <RouteGuard>

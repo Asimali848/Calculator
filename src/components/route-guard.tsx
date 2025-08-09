@@ -1,42 +1,3 @@
-// import { ReactNode, useEffect, useState } from "react";
-
-// import { Loader2 } from "lucide-react";
-// import { Navigate } from "react-router-dom";
-
-// const RouteGuard = ({ children }: { children: ReactNode }) => {
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-//   useEffect(() => {
-//     const checkAuth = () => {
-//       setIsLoading(true);
-//       const token = localStorage.getItem("authToken") || localStorage.getItem("access");
-
-//       setIsAuthenticated(!!token);
-//       setIsLoading(false);
-//     };
-
-//     checkAuth();
-//   }, []);
-
-//   if (isLoading) {
-//     return (
-//       <div className="flex h-screen w-full items-center justify-center overflow-hidden bg-background">
-//         <Loader2 className="size-16 animate-spin text-primary" />
-//       </div>
-//     );
-//   }
-
-//   if (!isAuthenticated) {
-//     return <Navigate to="/" replace />;
-//   }
-
-//   return <>{children}</>;
-// };
-
-// export default RouteGuard;
-
-
 import { ReactNode, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Navigate } from "react-router-dom";
@@ -87,11 +48,11 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
   }
 
   if (forceLogout) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;

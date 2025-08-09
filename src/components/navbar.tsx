@@ -31,7 +31,7 @@ const Navbar = () => {
   };
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/", { replace: true });
+    navigate("/login", { replace: true });
     window.location.reload();
   };
 
