@@ -26,7 +26,6 @@ export const userApi = api.injectEndpoints({
       }),
     }),
 
-    // Login
     login: build.mutation<
       any,
       TokenPayload<{
@@ -44,7 +43,6 @@ export const userApi = api.injectEndpoints({
       }),
     }),
 
-    // Verify Email
     VerfyEmail: build.mutation<
       any,
       TokenPayload<{
@@ -62,7 +60,6 @@ export const userApi = api.injectEndpoints({
       }),
     }),
 
-    // Regenerate OTP
     RegenOTP: build.mutation<
       any,
       TokenPayload<{
@@ -79,7 +76,6 @@ export const userApi = api.injectEndpoints({
       }),
     }),
 
-    // Request Password Reset
     PasswordResetRequest: build.mutation<
       any,
       TokenPayload<{
@@ -96,7 +92,6 @@ export const userApi = api.injectEndpoints({
       }),
     }),
 
-    // Confirm Password Reset
     PasswordResetVerify: build.mutation<
       any,
       TokenPayload<{
@@ -142,34 +137,7 @@ export const userApi = api.injectEndpoints({
       }),
     }),
 
-    // updateUser: build.mutation<
-    //   any,
-    //   {
-    //     token: string;
-    //     body: {
-    //       full_name: string;
-    //       email: string;
-    //       image: string;
-    //       company: string;
-    //       location: string;
-    //       phone_number: string;
-    //       website: string;
-    //       subscription_plan: string;
-    //       member_since: string;
-    //     };
-    //   }
-    // >({
-    //   query: ({ token, body }) => ({
-    //     url: "/authentication/api/profile/update/",
-    //     method: "PUT",
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //     body,
-    //   }),
-    // }),
 
-    // services/auth.ts
     updateUser: build.mutation<
       any,
       {
@@ -233,6 +201,26 @@ export const userApi = api.injectEndpoints({
         body,
       }),
     }),
+
+
+    stripeCheckout: build.mutation<
+      any,
+      TokenPayload<{
+        price: number;
+        interval: string; // e.g., "year" or "month"
+      }>
+    >({
+      query: ({ token, data }) => ({
+        url: "/stripe/api/checkout/",
+        method: "POST",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: data,
+      }),
+    }),
+
+
   }),
 });
 
@@ -246,4 +234,5 @@ export const {
   useUpdateUserMutation,
   useGetProfileQuery,
   useChangePasswordMutation,
+  useStripeCheckoutMutation, // ⬅️ new hook
 } = userApi;
