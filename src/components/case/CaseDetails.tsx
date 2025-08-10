@@ -991,7 +991,7 @@ const CaseDetails = ({ case: caseData, onDeleteCase }: CaseDetailsProps) => {
                   value={formatCurrencyintwo(caseData.totalPayments)}
                 />
                 <CaseDetail
-                  label="Accrued Interest"
+                  label="Interest to Date"
                   value={formatCurrencyintwo(caseData.accruedInterest)}
                 />
                 <CaseDetail

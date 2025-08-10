@@ -756,8 +756,26 @@ export function formatCurrencyintwo(amount: number): string {
 // -------------------------
 // Utility: Format date string (to MM/DD/YYYY)
 // -------------------------
-export function formatDate(date: string): string {
-  return new Date(date).toLocaleDateString("en-US");
+// export function formatDate(date: string): string {
+//   return new Date(date).toLocaleDateString("en-US");
+// }
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=
+// export function formatDate(date?: string): string {
+//   if (!date) return "--/--/----"; // or some fallback text
+//   const parsed = new Date(date);
+//   return isNaN(parsed.getTime()) ? "" : parsed.toLocaleDateString("en-US");
+// }
+
+// =--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-===-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+export function formatDate(date?: string, timeZone: string = "UTC"): string {
+  if (!date) return "--/--/----"; // No date passed
+  const parsed = new Date(date);
+  if (isNaN(parsed.getTime())) return ""; // Invalid date string
+  
+  return parsed.toLocaleDateString("en-US", {
+    timeZone, // e.g., "UTC", "Asia/Karachi", "America/New_York"
+  });
 }
 
 // -------------------------

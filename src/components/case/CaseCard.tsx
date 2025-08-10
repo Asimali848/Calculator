@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/calculations";
+import { formatCurrencyintwo } from "@/lib/calculations";
 import { cn } from "@/lib/utils";
 
 interface CaseCardProps {
@@ -32,7 +32,7 @@ const CaseCard = ({ case: caseData, isSelected, onClick }: CaseCardProps) => {
         <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground">Payoff Amount</span>
           <span className="text-sm font-bold text-foreground">
-            {formatCurrency(caseData.payoffAmount)}
+            {formatCurrencyintwo(caseData.payoffAmount)}
           </span>
         </div>
       </CardContent>
