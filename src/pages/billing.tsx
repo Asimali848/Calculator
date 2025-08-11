@@ -1,16 +1,14 @@
 // import { useState } from "react";
-
 // import { Check, Package, Rocket } from "lucide-react";
-
 // import { Badge } from "@/components/ui/badge";
 // import { Button } from "@/components/ui/button";
 // import { Card, CardContent, CardHeader } from "@/components/ui/card";
-// import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils"; // <-- import hook
+// import { useStripeCheckoutMutation } from "@/store/services/auth";
 
 // const Billing = () => {
-//   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
-//     "monthly"
-//   );
+//   const [billingCycle, setBillingCycle] = useState<"month" | "year">("month");
+//   const [stripeCheckout, { isLoading }] = useStripeCheckoutMutation();
 
 //   const plans = [
 //     {
@@ -37,7 +35,7 @@
 //       name: "Pro",
 //       description: "For Big Law Firms",
 //       icon: Rocket,
-//       price: { monthly: 129, yearly: 1290 },
+//       price: { month: 129, year: 1290 },
 //       features: [
 //         "Unlimited Cases",
 //         "10 Document Templates",
@@ -51,39 +49,34 @@
 //         "bg-primary/80 text-white border-2 transform scale-105 shadow-2xl hover:bg-primary/80",
 //       popular: true,
 //     },
-//     // {
-//     //   id: "pro",
-//     //   name: "Pro+",
-//     //   description: "For enterprise law firms",
-//     //   icon: Crown,
-//     //   price: { monthly: 229, yearly: 2290 },
-//     //   features: [
-//     //     "Unlimited Cases",
-//     //     "Unlimited Templates",
-//     //     "24/7 Premium Support",
-//     //     "Advanced Analytics",
-//     //     "Custom Integrations",
-//     //     "White Label Solution",
-//     //   ],
-//     //   buttonText: "Subscribe Now",
-//     //   buttonVariant: "default" as const,
-//     //   cardClass: "bg-card border-2 border-muted",
-//     //   popular: false,
-//     // },
 //   ];
+
+//  const handleSubscribe = async (price: number, interval: string) => {
+//   try {
+//     const token = localStorage.getItem("access"); // get token from localStorage
+//     const res: any = await stripeCheckout({
+//       token: token || undefined,
+//       data: { price, interval },
+//     }).unwrap();
+
+//     if (res?.checkout_url) {
+//       window.location.href = res.checkout_url; // redirect to Stripe Checkout
+//     } else {
+//       console.error("Stripe checkout_url not found in response", res);
+//     }
+//   } catch (error) {
+//     console.error("Stripe checkout error:", error);
+//   }
+// };
 
 //   return (
 //     <div className="mx-auto flex h-screen w-full flex-col overflow-auto p-4 md:p-10">
 //       <div className="max-w-8xl mx-auto flex w-full flex-col items-center justify-center">
 //         {/* Header */}
-
 //         <div className="w-full text-center">
-//           <h1 className="text-4xl font-bold text-foreground">
-//             Choose Your Plan
-//           </h1>
+//           <h1 className="text-4xl font-bold text-foreground">Choose Your Plan</h1>
 //           <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
-//             Select the perfect plan for your law firm. Upgrade or downgrade at
-//             any time.
+//             Select the perfect plan for your law firm. Upgrade or downgrade at any time.
 //           </p>
 //         </div>
 
@@ -91,24 +84,21 @@
 //         <div className="flex w-full justify-center gap-2.5 py-5">
 //           <div className="flex rounded-lg bg-muted p-1">
 //             <Button
-//               variant={billingCycle === "monthly" ? "default" : "ghost"}
+//               variant={billingCycle === "month" ? "default" : "ghost"}
 //               size="sm"
-//               onClick={() => setBillingCycle("monthly")}
+//               onClick={() => setBillingCycle("month")}
 //               className="rounded-md"
 //             >
 //               Monthly
 //             </Button>
 //             <Button
-//               variant={billingCycle === "yearly" ? "default" : "ghost"}
+//               variant={billingCycle === "year" ? "default" : "ghost"}
 //               size="sm"
-//               onClick={() => setBillingCycle("yearly")}
+//               onClick={() => setBillingCycle("year")}
 //               className="rounded-md"
 //             >
 //               Yearly
-//               <Badge
-//                 variant="secondary"
-//                 className="ml-2 bg-green-100 text-green-800"
-//               >
+//               <Badge variant="secondary" className="ml-2 bg-green-100 text-green-800">
 //                 Save 20%
 //               </Badge>
 //             </Button>
@@ -209,12 +199,10 @@
 //                         <span
 //                           className={cn(
 //                             "ml-1 text-lg",
-//                             plan.popular
-//                               ? "text-blue-100"
-//                               : "text-muted-foreground"
+//                             plan.popular ? "text-blue-100" : "text-muted-foreground"
 //                           )}
 //                         >
-//                           /{billingCycle === "monthly" ? "m" : "y"}
+//                           /{billingCycle === "month" ? "m" : "y"}
 //                         </span>
 //                       </div>
 //                     )}
@@ -267,13 +255,18 @@
 //                       plan.popular
 //                         ? "border-0 bg-white/30 text-white hover:bg-primary"
 //                         : plan.id === "starter"
-//                           ? "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground"
-//                           : "bg-primary text-primary-foreground hover:bg-primary/70"
+//                         ? "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground"
+//                         : "bg-primary text-primary-foreground hover:bg-primary/70"
 //                     )}
 //                     variant={plan.buttonVariant}
-//                     disabled={plan.id === "starter"}
+//                     disabled={plan.id === "starter" || isLoading}
+//                     onClick={() => {
+//                       if (plan.id !== "starter") {
+//                         handleSubscribe(Number(price), billingCycle);
+//                       }
+//                     }}
 //                   >
-//                     {plan.buttonText}
+//                     {isLoading && plan.id === "normal" ? "Redirecting..." : plan.buttonText}
 //                   </Button>
 //                 </CardContent>
 //               </Card>
@@ -289,18 +282,21 @@
 
 
 
-
 import { useState } from "react";
 import { Check, Package, Rocket } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { cn } from "@/lib/utils"; // <-- import hook
+import { cn } from "@/lib/utils";
 import { useStripeCheckoutMutation } from "@/store/services/auth";
 
 const Billing = () => {
-  const [billingCycle, setBillingCycle] = useState<"month" | "year">("month");
+  const [billingCycle, _] = useState<"month" | "year">("month");
   const [stripeCheckout, { isLoading }] = useStripeCheckoutMutation();
+
+  // ✅ Get user from localStorage
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const isPaidUser = user?.is_paid === true;
 
   const plans = [
     {
@@ -309,7 +305,7 @@ const Billing = () => {
       description: "For growing law firms",
       icon: Package,
       price: { monthly: 0, yearly: 0 },
-      badge: "Current Plan",
+      badge: !isPaidUser ? "Current Plan" : undefined,
       badgeColor: "bg-orange-500",
       features: [
         "3 Cases",
@@ -317,10 +313,11 @@ const Billing = () => {
         "Basic Support",
         "Standard Features",
       ],
-      buttonText: "Current Plan",
-      buttonVariant: "outline" as const,
+      buttonText: !isPaidUser ? "Current Plan" : "Upgrade",
+      buttonVariant: !isPaidUser ? ("default" as const) : ("default" as const),
       cardClass: "bg-card border-2 border-muted",
       popular: false,
+      disabled: !isPaidUser, // starter disabled if not paid
     },
     {
       id: "normal",
@@ -328,6 +325,8 @@ const Billing = () => {
       description: "For Big Law Firms",
       icon: Rocket,
       price: { month: 129, year: 1290 },
+      badge: isPaidUser ? "Current Plan" : undefined, // ✅ show if paid
+      badgeColor: "bg-orange-500",
       features: [
         "Unlimited Cases",
         "10 Document Templates",
@@ -335,31 +334,32 @@ const Billing = () => {
         "Advanced Analytics",
         "Custom Integrations",
       ],
-      buttonText: "Subscribe Now",
-      buttonVariant: "default" as const,
+      buttonText: isPaidUser ? "Current Plan" : "Subscribe Now",
+      buttonVariant: isPaidUser ? ("default" as const) : ("default" as const),
       cardClass:
-        "bg-primary/80 text-white border-2 transform scale-105 shadow-2xl hover:bg-primary/80",
+        "bg-primary text-red-500 border-2 transform scale-105 shadow-2xl hover:bg-primary/80",
       popular: true,
+      disabled: isPaidUser, // ✅ disable if already paid
     },
   ];
 
- const handleSubscribe = async (price: number, interval: string) => {
-  try {
-    const token = localStorage.getItem("access"); // get token from localStorage
-    const res: any = await stripeCheckout({
-      token: token || undefined,
-      data: { price, interval },
-    }).unwrap();
+  const handleSubscribe = async (price: number, interval: string) => {
+    try {
+      const token = localStorage.getItem("access");
+      const res: any = await stripeCheckout({
+        token: token || undefined,
+        data: { price, interval },
+      }).unwrap();
 
-    if (res?.checkout_url) {
-      window.location.href = res.checkout_url; // redirect to Stripe Checkout
-    } else {
-      console.error("Stripe checkout_url not found in response", res);
+      if (res?.checkout_url) {
+        window.location.href = res.checkout_url;
+      } else {
+        console.error("Stripe checkout_url not found in response", res);
+      }
+    } catch (error) {
+      console.error("Stripe checkout error:", error);
     }
-  } catch (error) {
-    console.error("Stripe checkout error:", error);
-  }
-};
+  };
 
   return (
     <div className="mx-auto flex h-screen w-full flex-col overflow-auto p-4 md:p-10">
@@ -373,7 +373,7 @@ const Billing = () => {
         </div>
 
         {/* Billing Toggle */}
-        <div className="flex w-full justify-center gap-2.5 py-5">
+        {/* <div className="flex w-full justify-center gap-2.5 py-5">
           <div className="flex rounded-lg bg-muted p-1">
             <Button
               variant={billingCycle === "month" ? "default" : "ghost"}
@@ -395,10 +395,10 @@ const Billing = () => {
               </Badge>
             </Button>
           </div>
-        </div>
+        </div> */}
 
         {/* Pricing Cards */}
-        <div className="mx-auto grid w-full max-w-4xl grid-cols-1 gap-8 pt-5 md:grid-cols-2">
+        <div className="mx-auto grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-2 pt-20">
           {plans.map((plan) => {
             const Icon = plan.icon;
             const price = plan.price[billingCycle];
@@ -417,7 +417,7 @@ const Billing = () => {
                   </div>
                 )}
 
-                {plan.badge && !plan.popular && (
+                {plan.badge && (
                   <div className="absolute right-4 top-4">
                     <Badge className={cn("text-white", plan.badgeColor)}>
                       {plan.badge}
@@ -426,10 +426,7 @@ const Billing = () => {
                 )}
 
                 <CardHeader
-                  className={cn(
-                    "pb-4 text-center",
-                    plan.popular ? "pt-12" : "pt-6"
-                  )}
+                  className={cn("pb-4 text-center", plan.popular ? "pt-12" : "pt-6")}
                 >
                   <div className="mb-4 flex justify-center">
                     <div
@@ -446,7 +443,6 @@ const Billing = () => {
                       />
                     </div>
                   </div>
-
                   <h3
                     className={cn(
                       "text-2xl font-bold",
@@ -455,7 +451,6 @@ const Billing = () => {
                   >
                     {plan.name}
                   </h3>
-
                   <p
                     className={cn(
                       "text-sm",
@@ -510,7 +505,6 @@ const Billing = () => {
                     >
                       What's Included
                     </h4>
-
                     <ul className="space-y-3">
                       {plan.features.map((feature, index) => (
                         <li key={index} className="flex items-center gap-3">
@@ -542,23 +536,18 @@ const Billing = () => {
 
                   {/* Button */}
                   <Button
-                    className={cn(
-                      "w-full py-3 font-semibold",
-                      plan.popular
-                        ? "border-0 bg-white/30 text-white hover:bg-primary"
-                        : plan.id === "starter"
-                        ? "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground"
-                        : "bg-primary text-primary-foreground hover:bg-primary/70"
-                    )}
+                    className="w-full py-3 font-semibold shadow-none text-white border-2 border-white "
                     variant={plan.buttonVariant}
-                    disabled={plan.id === "starter" || isLoading}
+                    disabled={plan.disabled || isLoading}
                     onClick={() => {
-                      if (plan.id !== "starter") {
+                      if (!plan.disabled) {
                         handleSubscribe(Number(price), billingCycle);
                       }
                     }}
                   >
-                    {isLoading && plan.id === "normal" ? "Redirecting..." : plan.buttonText}
+                    {isLoading && !plan.disabled
+                      ? "Redirecting..."
+                      : plan.buttonText}
                   </Button>
                 </CardContent>
               </Card>
