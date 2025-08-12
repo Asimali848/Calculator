@@ -797,6 +797,8 @@ export function calculateJudgmentInterest(params: {
     transactions,
   } = params;
 
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   const sortedTransactions = [...transactions].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
@@ -815,9 +817,15 @@ export function calculateJudgmentInterest(params: {
   for (
     let d = new Date(start);
     d.getTime() <= end.getTime();
-    d.setDate(d.getDate())
+    // d.setDate(d.getDate())
+    d.setDate(d.getDate() + 1)
   ) {
-    const currentDateStr = d.toISOString().split("T")[0];
+    // const currentDateStr = d.toISOString().split("T")[0];
+    const currentDateStr = new Date(
+      d.toLocaleString("en-US", { timeZone: userTimeZone })
+    )
+      .toISOString()
+      .split("T")[0];
 
     // Step 1: Accrue interest (if not skipped from yesterday's payment)
     if (!skipInterestToday) {
