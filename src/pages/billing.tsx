@@ -280,8 +280,6 @@
 
 // export default Billing;
 
-
-
 import { useState } from "react";
 import { Check, Package, Rocket } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -289,14 +287,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useStripeCheckoutMutation } from "@/store/services/auth";
+import { useGetProfileQuery } from "@/store/services/auth"; // ✅ import the hook
 
 const Billing = () => {
   const [billingCycle, _] = useState<"month" | "year">("month");
   const [stripeCheckout, { isLoading }] = useStripeCheckoutMutation();
 
-  // ✅ Get user from localStorage
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isPaidUser = user?.is_paid === true;
+  // ✅ Get token from localStorage
+  const token = localStorage.getItem("access") || "";
+
+  // ✅ Fetch profile from API
+  const { data: profileData, isLoading: profileLoading } = useGetProfileQuery({ token });
+
+  // ✅ Determine if user is paid based on subscription_plan
+  const subscriptionPlan = profileData?.profile?.subscription_plan;
+  const isPaidUser = subscriptionPlan && subscriptionPlan.toLowerCase() !== "free";
 
   const plans = [
     {
@@ -314,10 +319,10 @@ const Billing = () => {
         "Standard Features",
       ],
       buttonText: !isPaidUser ? "Current Plan" : "Upgrade",
-      buttonVariant: !isPaidUser ? ("default" as const) : ("default" as const),
+      buttonVariant: "default" as const,
       cardClass: "bg-card border-2 border-muted",
       popular: false,
-      disabled: !isPaidUser, // starter disabled if not paid
+      disabled: !isPaidUser, // disable Starter if already free
     },
     {
       id: "normal",
@@ -325,7 +330,7 @@ const Billing = () => {
       description: "For Big Law Firms",
       icon: Rocket,
       price: { month: 129, year: 1290 },
-      badge: isPaidUser ? "Current Plan" : undefined, // ✅ show if paid
+      badge: isPaidUser ? "Current Plan" : undefined,
       badgeColor: "bg-orange-500",
       features: [
         "Unlimited Cases",
@@ -335,17 +340,16 @@ const Billing = () => {
         "Custom Integrations",
       ],
       buttonText: isPaidUser ? "Current Plan" : "Subscribe Now",
-      buttonVariant: isPaidUser ? ("default" as const) : ("default" as const),
+      buttonVariant: "default" as const,
       cardClass:
         "bg-primary text-red-500 border-2 transform scale-105 shadow-2xl hover:bg-primary/80",
       popular: true,
-      disabled: isPaidUser, // ✅ disable if already paid
+      disabled: isPaidUser, // disable Pro if already subscribed
     },
   ];
 
   const handleSubscribe = async (price: number, interval: string) => {
     try {
-      const token = localStorage.getItem("access");
       const res: any = await stripeCheckout({
         token: token || undefined,
         data: { price, interval },
@@ -361,10 +365,17 @@ const Billing = () => {
     }
   };
 
+  if (profileLoading) {
+    return (
+      <div className="flex w-full h-screen items-center justify-center">
+        Loading profile...
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto flex h-screen w-full flex-col overflow-auto p-4 md:p-10">
       <div className="max-w-8xl mx-auto flex w-full flex-col items-center justify-center">
-        {/* Header */}
         <div className="w-full text-center">
           <h1 className="text-4xl font-bold text-foreground">Choose Your Plan</h1>
           <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
@@ -372,32 +383,6 @@ const Billing = () => {
           </p>
         </div>
 
-        {/* Billing Toggle */}
-        {/* <div className="flex w-full justify-center gap-2.5 py-5">
-          <div className="flex rounded-lg bg-muted p-1">
-            <Button
-              variant={billingCycle === "month" ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setBillingCycle("month")}
-              className="rounded-md"
-            >
-              Monthly
-            </Button>
-            <Button
-              variant={billingCycle === "year" ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setBillingCycle("year")}
-              className="rounded-md"
-            >
-              Yearly
-              <Badge variant="secondary" className="ml-2 bg-green-100 text-green-800">
-                Save 20%
-              </Badge>
-            </Button>
-          </div>
-        </div> */}
-
-        {/* Pricing Cards */}
         <div className="mx-auto grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-2 pt-20">
           {plans.map((plan) => {
             const Icon = plan.icon;
@@ -462,7 +447,6 @@ const Billing = () => {
                 </CardHeader>
 
                 <CardContent className="space-y-6">
-                  {/* Price */}
                   <div className="text-center">
                     {price === 0 ? (
                       <div
@@ -495,7 +479,6 @@ const Billing = () => {
                     )}
                   </div>
 
-                  {/* Features */}
                   <div className="space-y-4">
                     <h4
                       className={cn(
@@ -534,9 +517,8 @@ const Billing = () => {
                     </ul>
                   </div>
 
-                  {/* Button */}
                   <Button
-                    className="w-full py-3 font-semibold shadow-none text-white border-2 border-white "
+                    className="w-full py-3 font-semibold shadow-none text-white border-2 border-white"
                     variant={plan.buttonVariant}
                     disabled={plan.disabled || isLoading}
                     onClick={() => {
