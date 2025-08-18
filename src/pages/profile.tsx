@@ -78,19 +78,16 @@ const passwordSchema = z
 type UserProfileFormData = z.infer<typeof userProfileSchema>;
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
-// Helper function to parse location string
 const parseLocation = (location: string) => {
   const parts = location.split(",").map((part) => part.trim());
   const n = parts.length;
 
-  // Initialize with empty values
   let street_address = "";
   let city = "";
   let state = "";
   let zip_code = "";
 
   if (n >= 4) {
-    // Case: Street, Area, City, State Zip
     street_address = parts.slice(0, n - 3).join(", ");
     city = parts[n - 3] || "";
 
@@ -99,7 +96,6 @@ const parseLocation = (location: string) => {
     zip_code = stateZipParts.pop() || "";
     state = stateZipParts.join(" ") || parts[n - 2] || "";
   } else if (n === 3) {
-    // Case: Street, City, State Zip
     street_address = parts[0] || "";
     city = parts[1] || "";
 
@@ -108,7 +104,6 @@ const parseLocation = (location: string) => {
     zip_code = stateZipParts.pop() || "";
     state = stateZipParts.join(" ");
   } else if (n === 2) {
-    // Case: City, State Zip
     city = parts[0] || "";
 
     const stateZip = parts[1] || "";
@@ -116,15 +111,12 @@ const parseLocation = (location: string) => {
     zip_code = stateZipParts.pop() || "";
     state = stateZipParts.join(" ");
   } else if (n === 1) {
-    // Case: Everything in one string
     const singlePart = parts[0] || "";
     const singleParts = singlePart.split(" ");
 
-    // Try to extract zip code (last word)
     zip_code = singleParts.pop() || "";
     state = singleParts.pop() || "";
 
-    // The rest is city
     city = singleParts.join(" ");
   }
 
@@ -370,44 +362,6 @@ const Profile = () => {
                     <CardContent className="pt-6">
                       <div className="flex flex-col items-center space-y-3 text-center">
                         <div className="relative">
-                          {/* <Avatar className="h-24 w-24">
-                            {image ? (
-                              <AvatarImage
-                                src={image}
-                                alt="Profile"
-                                className="object-cover"
-                              />
-                            ) : profileData?.profile?.image ? (
-                              <AvatarImage
-                                src={profileData?.profile.image}
-                                alt="Profile"
-                                className="object-cover"
-                              />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center rounded-full bg-muted">
-                                <Landmark className="h-10 w-10 text-muted-foreground" />
-                              </div>
-                            )}
-                          </Avatar>
-
-                          {isEditing && (
-                            <>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                id="profile-pic-upload"
-                                className="hidden"
-                                onChange={handleImageChange}
-                              />
-                              <label
-                                htmlFor="profile-pic-upload"
-                                className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-primary p-1 text-white shadow-md"
-                                title="Change profile picture"
-                              >
-                                <Camera className="h-4 w-4" />
-                              </label>
-                            </>
-                          )} */}
                           <Avatar className="h-24 w-24">
                             {preview ? (
                               <AvatarImage
@@ -510,114 +464,6 @@ const Profile = () => {
                           <span className="text-sm text-muted-foreground">
                             Password protected
                           </span>
-                          {/* <Dialog
-                            open={isPasswordDialogOpen}
-                            onOpenChange={setIsPasswordDialogOpen}
-                          >
-                            <DialogTrigger asChild>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="hover:bg-primary hover:text-white"
-                                type="button"
-                              >
-                                <LockKeyholeOpen className="mr-2 h-4 w-4" />
-                                Change Password
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-md">
-                              <DialogHeader>
-                                <DialogTitle>Change Password</DialogTitle>
-                                <DialogDescription>
-                                  Enter your current password and choose a new
-                                  one.
-                                </DialogDescription>
-                              </DialogHeader>
-                              <Form {...passwordForm}>
-                                <form
-                                  onSubmit={passwordForm.handleSubmit(
-                                    handlePasswordSubmit
-                                  )}
-                                  className="space-y-4"
-                                >
-                                  <FormField
-                                    control={passwordForm.control}
-                                    name="currentPassword"
-                                    render={({ field }) => (
-                                      <FormItem>
-                                        <FormLabel>Current Password</FormLabel>
-                                        <FormControl>
-                                          <Input
-                                            {...field}
-                                            type="password"
-                                            placeholder="Enter current password"
-                                          />
-                                        </FormControl>
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <FormField
-                                    control={passwordForm.control}
-                                    name="newPassword"
-                                    render={({ field }) => (
-                                      <FormItem>
-                                        <FormLabel>New Password</FormLabel>
-                                        <FormControl>
-                                          <Input
-                                            {...field}
-                                            type="password"
-                                            placeholder="Enter new password"
-                                          />
-                                        </FormControl>
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <FormField
-                                    control={passwordForm.control}
-                                    name="confirmPassword"
-                                    render={({ field }) => (
-                                      <FormItem>
-                                        <FormLabel>
-                                          Confirm New Password
-                                        </FormLabel>
-                                        <FormControl>
-                                          <Input
-                                            {...field}
-                                            type="password"
-                                            placeholder="Confirm new password"
-                                          />
-                                        </FormControl>
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <div className="flex justify-end space-x-2 pt-4">
-                                    <Button
-                                      type="button"
-                                      variant="outline"
-                                      onClick={() => {
-                                        passwordForm.reset();
-                                        setIsPasswordDialogOpen(false);
-                                      }}
-                                      disabled={isChangingPassword}
-                                    >
-                                      Cancel
-                                    </Button>
-                                    <Button
-                                      type="submit"
-                                      disabled={isChangingPassword}
-                                    >
-                                      {isChangingPassword
-                                        ? "Changing..."
-                                        : "Change Password"}
-                                    </Button>
-                                  </div>
-                                </form>
-                              </Form>
-                            </DialogContent>
-                          </Dialog> */}
                           <Dialog
                             open={isPasswordDialogOpen}
                             onOpenChange={setIsPasswordDialogOpen}
@@ -992,17 +838,6 @@ const Profile = () => {
                         )}
                       />
 
-                      {/* {isEditing && (
-                        <div className="flex justify-end pt-6">
-                          <Button
-                            type="submit"
-                            className="flex items-center gap-2"
-                          >
-                            <Save className="h-4 w-4" />
-                            Save Changes
-                          </Button>
-                        </div>
-                      )} */}
                       {isEditing && (
                         <div className="flex justify-end pt-6">
                           <Button

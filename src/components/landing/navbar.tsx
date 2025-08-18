@@ -50,8 +50,6 @@ const Navbar = () => {
           </span>
           <span
             className="hover:cursor-pointer hover:text-primary"
-            // onClick={() => window.open("https://calcjuris.vercel.app/")}
-            // onClick={() => (window.location.href = "https://calcjuris.vercel.app/")}
             onClick={() => navigate("/login")}
           >
             Login
@@ -93,8 +91,6 @@ const Navbar = () => {
                 </span>
                 <span
                   className="hover:cursor-pointer hover:text-primary"
-                  // onClick={() => window.open("https://calcjuris.vercel.app/")}
-                  // onClick={() => (window.location.href = "https://calcjuris.vercel.app/")}
                   onClick={() => navigate("/login")}
                 >
                   Login

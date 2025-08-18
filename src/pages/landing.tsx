@@ -18,19 +18,18 @@ const Landing = () => {
     }
   };
 
-  // Detect scroll position
   useEffect(() => {
     const handleScroll = () => {
       const hero = document.getElementById("hero");
       if (hero) {
         const heroBottom = hero.getBoundingClientRect().bottom;
-        // Show button if Hero is mostly out of view
-        setShowScrollButton(heroBottom < 100); // tweak threshold if needed
+       
+        setShowScrollButton(heroBottom < 100); 
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // run initially
+    handleScroll(); 
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

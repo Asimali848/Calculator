@@ -118,10 +118,6 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
     }
   };
 
-  // const handleDeleteClick = (transactionId: number) => {
-  //   setTransactionToDelete(transactionId);
-  //   setDeleteDialogOpen(true);
-  // };
 
   const confirmDelete = async () => {
     if (transactionToDelete && token) {
@@ -300,15 +296,6 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
                         >
                           <Edit className="h-4 w-4 text-green-600 dark:text-green-400" />
                         </Button>
-                        {/* <Button
-                          variant="ghost"
-                          size="sm"
-                          //@ts-ignore
-                          onClick={() => handleDeleteClick(transaction?.id)}
-                          disabled={isDeleting}
-                        >
-                          <Trash2 className="h-4 w-4 text-red-500 dark:text-red-400" />
-                        </Button> */}
                       </div>
                     </TableCell>
                   </TableRow>

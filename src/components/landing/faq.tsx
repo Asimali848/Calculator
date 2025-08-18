@@ -22,7 +22,6 @@ const Faq = () => {
         </p>
       </div>
 
-      {/* Background Section */}
       <div
         ref={ref}
         className="w-full py-16 sm:py-24 lg:py-32 flex flex-col justify-start items-center transition-all duration-1000 ease-in-out bg-cover bg-center px-4 "
@@ -33,7 +32,6 @@ const Faq = () => {
             "url(https://www.judgmentcalc.com/wp-content/uploads/2025/06/judge-gavel-with-justice-lawyers-having-team-meeti-HMWWXEN.webp)",
         }}
       >
-        {/* Accordion Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 lg:gap-6 w-full mx-auto max-w-screen-2xl ">
           {/* Column 1 */}
           <div className="w-full">

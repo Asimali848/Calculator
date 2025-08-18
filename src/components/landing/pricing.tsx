@@ -35,8 +35,6 @@ const Pricingplan = () => {
               <p>00 Mysql Databases</p>
             </div>
             <Button
-              // onClick={() => window.open("https://calcjuris.vercel.app/")}
-            // onClick={() => (window.location.href = "https://calcjuris.vercel.app/")}
             onClick={() => navigate("/login")}
               className="text-white w-[200px] rounded-md font-medium my-4 sm:my-6 py-4 sm:py-6 border-2 border-primary hover:cursor-pointer hover:bg-white hover:scale-105 hover:text-primary hover:border-primary transition"
             >
@@ -61,8 +59,6 @@ const Pricingplan = () => {
               <p>00 Mysql Databases</p>
             </div>
             <Button
-              // onClick={() => window.open("https://calcjuris.vercel.app/")}
-            // onClick={() => (window.location.href = "https://calcjuris.vercel.app/")}
             onClick={() => navigate("/login")}
               className="text-primary w-[200px] rounded-md font-medium my-4 sm:my-6 py-4 sm:py-6 border-2 border-primary hover:cursor-pointer bg-white hover:text-white hover:border-white hover:scale-105 transition"
             >

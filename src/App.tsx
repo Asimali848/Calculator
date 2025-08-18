@@ -3,11 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import GlobalLayout from "./components/global-layout";
 import RouteGuard from "./components/route-guard";
 import Billing from "./pages/billing";
-// import RouteGuard from "./components/route-guard";
 import Home from "./pages/home";
+import Landing from "./pages/landing";
 import Login from "./pages/login";
 import Profile from "./pages/profile";
-import Landing from "./pages/landing";
 
 const App = () => {
   return (

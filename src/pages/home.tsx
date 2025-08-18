@@ -13,21 +13,17 @@ import { mockTransactions } from "@/data/mockData";
 import { useGetCaseByIdQuery, useGetCaseQuery } from "@/store/services/case";
 
 const Home = () => {
-  // const token = localStorage.getItem("access") || "";
   const token = localStorage.getItem("authToken") || localStorage.getItem("access") || "";
 
   const { data: casesData = [], isLoading, error } = useGetCaseQuery(token);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
 
-  // const { data: selectedCase } = useGetCaseByIdQuery(
-  //   { token, id: selectedCaseId ?? "" },
-  //   { skip: !selectedCaseId }
-  // );
+  
   const { data: selectedCase } = useGetCaseByIdQuery(
     { token, id: selectedCaseId ?? "" },
     {
       skip: !selectedCaseId,
-      pollingInterval: 3000, // Poll every 5 seconds (adjust as needed)
+      pollingInterval: 3000, 
     }
   );
 

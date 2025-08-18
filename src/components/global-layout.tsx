@@ -2,8 +2,6 @@ import { Outlet } from "react-router-dom";
 
 import Navbar from "./navbar";
 
-// import AppSidebar from "./app-sidebar";
-// import Navbar from "./navbar";
 
 const GlobalLayout = () => {
   return (

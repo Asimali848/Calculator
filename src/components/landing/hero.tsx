@@ -38,8 +38,6 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <Button
-            // onClick={() => window.open("https://calcjuris.vercel.app/")}
-            // onClick={() => (window.location.href = "https://calcjuris.vercel.app/")}
             onClick={() => navigate("/login")}
             className="w-[160px] rounded-md border-2 border-primary py-4 text-sm font-medium text-white transition-all hover:scale-105 hover:cursor-pointer hover:border-primary hover:bg-white hover:text-primary sm:w-[180px] sm:py-5 sm:text-base md:w-[200px] md:py-6 md:text-lg"
           >

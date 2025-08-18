@@ -32,7 +32,7 @@ const CaseList = ({
   refetch,
 } = useGetCaseQuery(token, {
   refetchOnMountOrArgChange: true,
-  pollingInterval: 5000, // ← fetches data every 5 seconds
+  pollingInterval: 5000, 
 });
   const [isAddCaseModalOpen, setIsAddCaseModalOpen] = useState(false);
 

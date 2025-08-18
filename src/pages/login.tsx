@@ -288,17 +288,6 @@ const Login = () => {
           </div>
         )}
 
-        {/* {!isForgot && !isOtp && !isReset && !isVerifyUser && (
-          <div className="mb-5 w-full">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-            />
-          </div>
-        )} */}
         {!isForgot && !isOtp && !isReset && !isVerifyUser && (
           <div className="mb-5 w-full">
             <Label htmlFor="password">Password</Label>
