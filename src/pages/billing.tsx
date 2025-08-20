@@ -28,10 +28,10 @@ const Billing = () => {
       badge: !isPaidUser ? "Current Plan" : undefined,
       badgeColor: "bg-orange-500",
       features: [
-        "3 Cases",
-        "2 Document Templates",
         "Basic Support",
-        "Standard Features",
+        "No Usage Limit",
+        "2 Week free trial",
+        "No Credit Card Required",
       ],
       buttonText: !isPaidUser ? "Current Plan" : "Upgrade",
       buttonVariant: "default" as const,
@@ -44,15 +44,13 @@ const Billing = () => {
       name: "Pro",
       description: "For Big Law Firms",
       icon: Rocket,
-      price: { month: 129, year: 1290 },
+      price: { month: 20, year: 1290 },
       badge: isPaidUser ? "Current Plan" : undefined,
       badgeColor: "bg-orange-500",
       features: [
         "Unlimited Cases",
-        "10 Document Templates",
+        "$180 Per Year (save 25%)",
         "Priority Support",
-        "Advanced Analytics",
-        "Custom Integrations",
       ],
       buttonText: isPaidUser ? "Current Plan" : "Subscribe Now",
       buttonVariant: "default" as const,
@@ -101,7 +99,7 @@ const Billing = () => {
         <div className="mx-auto grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-2 pt-20">
           {plans.map((plan) => {
             const Icon = plan.icon;
-            const price = plan.price[billingCycle];
+            const price = plan?.price[billingCycle];
 
             return (
               <Card
@@ -188,7 +186,7 @@ const Billing = () => {
                             plan.popular ? "text-blue-100" : "text-muted-foreground"
                           )}
                         >
-                          /{billingCycle === "month" ? "m" : "y"}
+                          /{billingCycle === "month" ? "mo" : "y"}
                         </span>
                       </div>
                     )}

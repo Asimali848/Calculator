@@ -27,8 +27,9 @@ const Pricingplan = () => {
               <span className="text-3xl sm:text-4xl text-white font-bold">Free</span>
             </div>
             <div className="font-semibold text-base sm:text-lg md:text-xl py-8 sm:py-10 gap-4 flex flex-col">
-              <p>100 GB Space</p>
-              <p>1 Domain Name</p>
+              <p>No Usage Limit</p>
+              <p>2 Week free trial</p>
+              <p>No Credit Card Required</p>
               <p>300 GB Bandwidth</p>
               <p>15 Email Account</p>
               <p>Enhanced Security</p>
@@ -44,14 +45,14 @@ const Pricingplan = () => {
 
           {/* Paid Plan */}
           <div className="bg-primary w-full md:w-[50%] lg:w-[70%] max-w-full rounded-xl p-6 sm:p-8 md:p-10 border border-primary duration-500 drop-shadow-xl hover:scale-105">
-            <p className="text-2xl sm:text-3xl font-bold mb-5 text-white">Basic</p>
+            <p className="text-2xl sm:text-3xl font-bold mb-5 text-white">Paid</p>
             <div className="bg-white py-3 rounded-4xl flex justify-center items-center">
               <span className="text-3xl sm:text-4xl text-primary font-bold">
-                <span className="text-lg sm:text-xl ">$</span>39
+                <span className="text-lg sm:text-xl ">$</span>20 /mo
               </span>
             </div>
             <div className="font-semibold text-base sm:text-lg md:text-xl py-8 sm:py-10 gap-4 flex flex-col text-white">
-              <p>100 GB Space</p>
+              <p>$180 Per Year (save 25%)</p>
               <p>1 Domain Name</p>
               <p>300 GB Bandwidth</p>
               <p>15 Email Account</p>
