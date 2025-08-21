@@ -48,9 +48,9 @@ const Home = () => {
   };
 
   const handleDeleteCase = (caseId: string) => {
-    toast.success("Case deleted (UI only)", {
-      className: "bg-primary text-white p-3",
-    });
+    // toast.success("Case deleted (UI only)", {
+    //   className: "bg-primary text-white p-3",
+    // });
 
     if (selectedCaseId === caseId) {
       setSelectedCaseId(null);
@@ -58,9 +58,9 @@ const Home = () => {
   };
 
   const handleAddCaseSubmit = (newCase: CaseData) => {
-    toast.success("Case added successfully", {
-      className: "bg-primary p-3 text-white",
-    });
+    // toast.success("Case added successfully", {
+    //   className: "bg-primary p-3 text-white",
+    // });
     setSelectedCaseId(newCase.id);
   };
 
@@ -76,9 +76,9 @@ const Home = () => {
 
   const handleDeleteTransaction = (transactionId: string) => {
     setTransactions((prev) => prev.filter((t) => t.id !== transactionId));
-    toast.success("Transaction deleted successfully", {
-      className: "bg-primary p-3 text-white",
-    });
+    // toast.success("Transaction deleted successfully", {
+    //   className: "bg-primary p-3 text-white",
+    // });
   };
 
   const handleTransactionSubmit = (data: TransactionFormData) => {
