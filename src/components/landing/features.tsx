@@ -1,3 +1,6 @@
+import { motion } from "framer-motion";
+import { Calculator, CalendarClock, MousePointerClick, Infinity, } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -5,34 +8,47 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Trophy, Star, Handshake } from "lucide-react";
-import { motion } from "framer-motion";
 
 const features = [
   {
-    icon: <Trophy className="size-8" />,
-    title: "Easy Payment",
-    description:
-      "A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradise.",
+    icon: <Calculator className="size-8" />,
+    title: "Precision Interest Calculations",
+    description: [
+      "Crunches numbers so you don't.",
+      "Interest adds up like magic.",
+      "No spreadsheets, no sweat.",
+      "See exactly what they owe.",
+    ],
   },
   {
-    icon: <Star className="size-8 text-white" />,
-    title: "User Review",
-    description:
-      "A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradise.",
+    icon: <CalendarClock className="size-8 text-white" />,
+    title: "Live Payoff Tracking",
+    description: [
+      "Track every penny from judgment to collection.",
+      "Payments, costs, and credits update in real time.",
+      "Your balance is always current.",
+    ],
     circleBg: "bg-primary",
   },
   {
-    icon: <Handshake className="size-8" />,
-    title: "Communication",
-    description:
-      "A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradise.",
+    icon: <MousePointerClick className="size-8" />,
+    title: "Easy to use",
+    description: [
+      "Built for lawyers, not engineers.",
+      "No manuals. No downloads. No BS.",
+      "Just enter your numbers and go.",
+      "Fast, intuitive, courtroom-ready.",
+    ],
   },
   {
-    icon: <Star className="size-8 text-white" />,
-    title: "User Review",
-    description:
-      "A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradise.",
+    icon: <Infinity className="size-8 text-white" />,
+    title: "Unlimited Cases, Unlimited Transactions",
+    description: [
+      "Stop retyping the same numbers.",
+      "Save every case, payment, and cost.",
+      "Jump back in anytime, fully synced.",
+      "Manage all your judgments in one place.",
+    ],
     circleBg: "bg-primary",
   },
 ];
@@ -54,22 +70,20 @@ const cardVariants = {
 
 const Features = () => {
   return (
-    <div className="w-full h-full max-w-screen-2xl mx-auto bg-white">
-      <div className="w-full flex flex-col justify-start items-center py-16 sm:py-20 md:py-24 gap-8 sm:gap-10">
+    <div className="mx-auto h-full w-full max-w-screen-2xl bg-white">
+      <div className="flex w-full flex-col items-center justify-start gap-8 py-16 sm:gap-10 sm:py-20 md:py-24">
         {/* Heading */}
-        <div className="w-full flex flex-col justify-center items-center gap-3 px-4 text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold">
-            Features
-          </h1>
-          <hr className="w-16 sm:w-20 h-1 bg-primary rounded-full" />
-          <p className="text-sm sm:text-base md:text-lg font-semibold text-gray-500 max-w-xl">
+        <div className="flex w-full flex-col items-center justify-center gap-3 px-4 text-center">
+          <h1 className="text-3xl font-bold sm:text-4xl">Features</h1>
+          <hr className="h-1 w-16 rounded-full bg-primary sm:w-20" />
+          <p className="max-w-xl text-sm font-semibold text-gray-500 sm:text-base md:text-lg">
             Explore your design idea with this simple but eye-catchy minimal
             style with icon and button.
           </p>
         </div>
 
         {/* Feature Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 sm:px-6 md:px-10 w-full max-w-screen-2xl">
+        <div className="grid w-full max-w-screen-2xl grid-cols-1 gap-3 px-4 sm:grid-cols-2 sm:px-6 md:px-10 lg:grid-cols-4">
           {features.map((feature, idx) => (
             <motion.div
               className="w-full"
@@ -81,36 +95,38 @@ const Features = () => {
               //@ts-ignore
               variants={cardVariants}
             >
-              <Card className="text-center w-full items-center justify-center shadow-md border-2 h-auto md:h-[300px] lg:h-[400px] border-primary transition hover:scale-105 duration-300 hover:shadow-2xl hover:shadow-primary/20 p-4">
-                <CardHeader className="flex flex-col items-center w-full gap-4 sm:gap-5">
+              <Card className="h-auto w-full items-center justify-center border-2 border-primary p-3 text-center shadow-md transition duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 md:h-[300px] lg:h-[450px]">
+                <CardHeader className="flex w-full flex-col items-center ">
                   <div
-                    className={`group p-4 sm:p-6 rounded-full transition-colors duration-300 flex items-center justify-center
-                      ${
-                        feature.circleBg
-                          ? "bg-primary"
-                          : "bg-gray-100 hover:bg-primary"
-                      }
-                    `}
+                    className={`group flex items-center justify-center rounded-full p-4 transition-colors duration-300 sm:p-6 ${
+                      feature.circleBg
+                        ? "bg-primary"
+                        : "bg-gray-100 hover:bg-primary"
+                    } `}
                   >
                     <span
-                      className={`size-8 transition-colors duration-300
-                        ${
-                          feature.circleBg
-                            ? "text-white"
-                            : "text-primary group-hover:text-white"
-                        }
-                      `}
+                      className={`size-8 transition-colors duration-300 ${
+                        feature.circleBg
+                          ? "text-white"
+                          : "text-primary group-hover:text-white"
+                      } `}
                     >
                       {feature.icon}
                     </span>
                   </div>
-                  <CardTitle className="flex items-center justify-center font-bold text-base md:text-lg lg:text-2xl w-full">
-                    {feature.title}
-                  </CardTitle>
                 </CardHeader>
+                <CardTitle className="flex h-24 w-full items-center justify-center text-base font-bold md:text-lg lg:text-2xl  ">
+                  {feature.title}
+                </CardTitle>
                 <CardContent>
-                  <CardDescription className="text-sm md:text-lg font-medium text-gray-500 w-full text-center md:text-justify lg:text-center mx-auto">
-                    {feature.description}
+                  <CardDescription className="mx-auto w-full font-medium text-gray-500">
+                    <ul className=" list-disc space-y-2 text-left text-sm ">
+                      {feature.description.map((point, i) => (
+                        <li className="text-sm" key={i}>
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
                   </CardDescription>
                 </CardContent>
               </Card>

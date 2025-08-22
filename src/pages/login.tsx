@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Eye, EyeOff, Loader2, LogIn, Mail } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import Logo from "@/assets/img/logo.jpeg";
@@ -35,7 +35,6 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -222,7 +221,9 @@ const Login = () => {
         onSubmit={handleSubmit}
         className="flex w-full flex-col items-center justify-center p-10 md:w-1/2 md:p-0"
       >
-        <img src={Logo} alt="logo" className="w-24 rounded-xl" />
+        <Link to="/">
+          <img src={Logo} alt="logo" className="w-24 rounded-xl" />
+        </Link>
         <div className="my-10 flex w-full flex-col items-center justify-center gap-2.5">
           <span className="w-full text-center text-[30px] font-bold leading-[30px]">
             {isLogin
