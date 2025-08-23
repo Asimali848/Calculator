@@ -7,11 +7,13 @@ import Home from "./pages/home";
 import Landing from "./pages/landing";
 import Login from "./pages/login";
 import Profile from "./pages/profile";
+import InterestRate from "./pages/interest-rate";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/interest-rate" element={<InterestRate />} />
       <Route path="/login" element={<Login />} />
       <Route
         element={

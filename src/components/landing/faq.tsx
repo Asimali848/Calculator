@@ -155,7 +155,7 @@ const faqs = [
         <br />
         Not sure what rate your jurisdiction uses?{" "}
         <a
-          href="#"
+          href="/interest-rate"
           className="text-primary underline hover:text-primary/80"
         >
           Click here
