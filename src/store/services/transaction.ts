@@ -9,7 +9,7 @@ export const transactionApi = api.injectEndpoints({
       }: {
         token: string;
         data: {
-          case_id: number;
+          case_id: string;
           transaction_type: string;
           amount: number;
           date: string;
@@ -27,7 +27,8 @@ export const transactionApi = api.injectEndpoints({
     }),
 
     getTransaction: build.query({
-      query: ({ id, token }: { id: number; token: string }) => ({
+
+      query: ({ id, token }: { id: string; token: string }) => ({
         url: `/docket/api/cases/${id}/transactions/`,
         method: "GET",
         headers: {
@@ -43,7 +44,7 @@ export const transactionApi = api.injectEndpoints({
     }),
 
     getCaseTransactions: build.query({
-      query: ({ id, token }: { id: number; token: string }) => ({
+      query: ({ id, token }: { id: string; token: string }) => ({
         url: `/docket/api/cases/${id}/transactions/`,
         method: "GET",
         headers: {
@@ -64,10 +65,10 @@ export const transactionApi = api.injectEndpoints({
         token,
         data,
       }: {
-        id: number;
+        id: string;
         token: string;
         data: {
-          case_id: number;
+          case_id: string;
           transaction_type: string;
           amount: number;
           date: string;
@@ -85,7 +86,7 @@ export const transactionApi = api.injectEndpoints({
     }),
 
     deleteTransaction: build.mutation({
-      query: ({ token, id }: { token: string; id: number }) => ({
+      query: ({ token, id }: { token: string; id: string }) => ({
         url: `/docket/api/transactions/${id}/delete/`, // ✅ fixed endpoint path
         method: "DELETE",
         headers: {

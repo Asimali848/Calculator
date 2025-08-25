@@ -52,7 +52,7 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
   );
 
   const dispatch = useDispatch();
-  const id = Number(selectedCase?.id);
+  const id = selectedCase?.id as string;
   const token = localStorage.getItem("access") || "";
   const { data, isLoading, refetch } = useGetTransactionQuery(
     {
@@ -124,7 +124,7 @@ const TransactionsTable = ({ onEditTransaction }: TransactionsTableProps) => {
       try {
         await deleteTransaction({
           token,
-          id: transactionToDelete,
+           id: transactionToDelete.toString(),
         }).unwrap();
 
         refetch();

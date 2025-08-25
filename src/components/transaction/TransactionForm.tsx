@@ -59,7 +59,7 @@ interface TransactionFormProps {
     amount: number;
     date: string;
     description?: string;
-  } | null;
+  };
   keepOpenAfterSubmit?: boolean;
 }
 
@@ -96,7 +96,7 @@ export function TransactionForm({
     }
 
     const payload = {
-      case_id: Number(caseData.id),
+      case_id: caseData.id as string,
       transaction_type: data.type,
       amount: data.amount.toFixed(2),
       date: data.date,
@@ -106,7 +106,7 @@ export function TransactionForm({
     try {
       if (editTransaction?.id) {
         await putTransaction({
-          id: Number(editTransaction.id),
+          id: editTransaction.id.toString(),
           token,
           data: {
             ...payload,
@@ -247,8 +247,8 @@ export function TransactionForm({
                         ? "Updating..."
                         : "Update Transaction"
                       : isLoading
-                      ? "Submitting..."
-                      : "Add Transaction"}
+                        ? "Submitting..."
+                        : "Add Transaction"}
                   </Button>
                   <Button
                     type="button"
