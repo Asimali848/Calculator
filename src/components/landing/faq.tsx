@@ -142,6 +142,8 @@ import {
 } from "@/components/ui/accordion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import bg from "@/assets/img/judge-gavel-with-justice-lawyers-having-team-meeti-HMWWXEN.webp";
+import { Link } from "react-router-dom";
 
 const faqs = [
   {
@@ -149,17 +151,17 @@ const faqs = [
     a: (
       <>
         Yes. JudgmentCalc.com works no matter where your judgment was entered.
-        You control the interest rate that’s applied — whether it’s statutory,
+        You control the interest rate that's applied — whether it's statutory,
         contractual, or court-ordered.
         <br />
         <br />
         Not sure what rate your jurisdiction uses?{" "}
-        <a
-          href="/interest-rate"
+        <Link
+          to="/interest-rate"
           className="text-primary underline hover:text-primary/80"
         >
           Click here
-        </a>{" "}
+        </Link>{" "}
         to view a guide to judgment interest rates by state.
       </>
     ),
@@ -169,7 +171,7 @@ const faqs = [
     a: (
       <>
         Interest is calculated on a daily simple interest basis, using the
-        principal balance and any adjustments you’ve entered. When payments or
+        principal balance and any adjustments you've entered. When payments or
         costs are added, the system automatically updates the balance and applies
         interest going forward — just like a court would.
         <br />
@@ -217,7 +219,7 @@ const faqs = [
       <>
         We offer a free 30-day trial — no credit card required. If you decide not
         to subscribe, your data will be automatically deleted 10 days after the
-        trial ends. We’re sorry to see you go!
+        trial ends. We're sorry to see you go!
         <br />
         <br />
         If you sign up for a paid plan, your subscription will remain active
@@ -237,7 +239,7 @@ const faqs = [
         the system.
         <br />
         <br />
-        You’re always in control. If you cancel your account, your data is
+        You're always in control. If you cancel your account, your data is
         permanently deleted after a short grace period.
       </>
     ),
@@ -266,7 +268,7 @@ const Faq = () => {
           opacity: isInView ? 1 : 0,
           transform: isInView ? "translateY(0px)" : "translateY(50px)",
           backgroundImage:
-            "url(https://www.judgmentcalc.com/wp-content/uploads/2025/06/judge-gavel-with-justice-lawyers-having-team-meeti-HMWWXEN.webp)",
+            bg && `url(${bg})`,
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 lg:gap-6 w-full mx-auto max-w-screen-2xl">

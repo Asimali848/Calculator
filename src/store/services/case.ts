@@ -53,10 +53,7 @@ export const CaseApi = api.injectEndpoints({
       }),
     }),
 
-    downloadPayoffStatement: builder.mutation<
-      Blob,
-      { token: string; caseId: string; payoffDate: string }
-    >({
+    downloadPayoffStatement: builder.mutation<Blob, { token: string; caseId: string; payoffDate: string }>({
       query: ({ token, caseId, payoffDate }) => ({
         url: `/docket/api/cases/${caseId}/payoff-statement/?date=${payoffDate}`,
         method: "GET",
@@ -70,10 +67,7 @@ export const CaseApi = api.injectEndpoints({
     }),
 
     // ✅ New endpoint for editing a case
-    editCase: builder.mutation<
-      CaseData,
-      { token: string; id: string; data: Partial<EditCase> }
-    >({
+    editCase: builder.mutation<CaseData, { token: string; id: string; data: Partial<EditCase> }>({
       query: ({ token, id, data }) => ({
         url: `/docket/api/case/${id}/edit/`,
         method: "PUT", // or "PATCH" depending on your backend
